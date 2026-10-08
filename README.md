@@ -28,7 +28,7 @@ its fanout limit and the **sum** of outgoing wire
 lengths. After routing, each buffer receives the cheapest compatible library type.
 
 Two merge strategies, a direct SRC-to-sinks tree, and separate relay chains from
-SRC to each sink are compared using the actual
+SRC to each sink, and a single multi-output buffer hub are compared using the actual
 objective `w_skew * (T_max - T_min) + buffer_cost`. Every candidate is validated
 for unique coordinates, fixed pins, interior buffers, connectivity, tree
 structure, and driving limits. Output levels are generated from tree depth.
@@ -38,6 +38,10 @@ Consequently, sinks with mixed `(x+y) mod 2` cannot have exact zero skew. One
 strategy balances virtual sink arrivals with parity offsets to target skew 0
 for uniform parity and skew 1 for mixed parity. Separate chains support libraries
 containing only fanout 1 buffers when SRC can drive the required number of branches.
+Near sinks are connected first so short direct branches release budget for longer
+chains. The hub strategy samples sink medians, their bounding-box center, and
+near-source positions; it checks the full fanout and total length before selecting
+a type. Every completed strategy competes on its validated Score.
 This is a heuristic: merge
 placement and relay searches are bounded, and feasibility or optimality is not
 guaranteed. A failed construction reports an error; it does not prove the input
@@ -58,7 +62,8 @@ python3 tests/test_solver.py build/cbi
 Tests independently check serialized output, arrival times, cost, and all tree
 constraints. They cover uniform/mixed parity, relay insertion, boundary pins,
 40 deterministic random sparse inputs, unary buffer libraries with source branching,
-same-boundary connections, malformed input, and output preservation.
+same-boundary connections, occupied source launch points, multi-output hubs with
+fanout/total-length counterexamples, malformed input, and output preservation.
 The supplied grading archive is only a read-only reference and is never executed.
 
 Tester reports belong in `issues/opened/<issue>/README.md`, with reproductions

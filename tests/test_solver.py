@@ -121,6 +121,22 @@ class SolverTests(unittest.TestCase):
                                 source=(2, 10), library=((1, 15, 1),))
         self.assertEqual(skew, 0)
 
+    def test_source_budget_with_occupied_launch(self):
+        for sinks in [[(9, 5), (6, 5)], [(6, 5), (9, 5)]]:
+            _, text = self.run_case([(5, 5)] + sinks, dim=10,
+                                    source=(2, 3), library=((1, 3, 1),))
+            self.assertTrue(text.startswith('.buffer 1\n'))
+
+    def test_multi_output_hub(self):
+        pins = [(5, 1), (4, 5), (5, 6), (6, 5), (5, 4)]
+        skew, text = self.run_case(pins, dim=10, source=(1, 4), library=((4, 20, 10),))
+        self.assertEqual(skew, 0)
+        self.assertTrue(text.startswith('.buffer 1\n'))
+        # A single hub cannot satisfy either of these fanout/total-length limits.
+        for library in [((2, 20, 10),), ((4, 3, 10),)]:
+            _, text = self.run_case(pins, dim=10, source=(1, 4), library=library)
+            self.assertGreater(int(text.splitlines()[0].split()[1]), 1)
+
     def test_same_boundary_relay(self):
         # Each edge's shortest path lies on a forbidden buffer boundary.
         for pins in [[(10, 0), (90, 0)], [(10, 100), (90, 100)],
@@ -140,7 +156,9 @@ class SolverTests(unittest.TestCase):
         bad_cases = [good.replace('20 20', '10 10'), good.replace('20 20', '101 20'),
                      good.replace('fanout 2', 'fanout -2'), good.replace('w_skew 100', 'w_skew nope'),
                      good + 'unexpected\n', good.replace('.pin 2', '.pin 3'),
-                     instance([(0, 0), (2, 2)], dim=2, source=(1, 1), library=((1, 1, 1),))]
+                     instance([(0, 0), (2, 2)], dim=2, source=(1, 1), library=((1, 1, 1),)),
+                     instance([(5, 5), (1, 5), (9, 5)], dim=10, source=(1, 100), library=((1, 3, 1),)),
+                     instance([(5, 5), (1, 5), (9, 5)], dim=10, source=(2, 1), library=((1, 3, 1),))]
         with tempfile.TemporaryDirectory() as folder:
             inp, out = pathlib.Path(folder) / 'in', pathlib.Path(folder) / 'out'
             for bad in bad_cases:

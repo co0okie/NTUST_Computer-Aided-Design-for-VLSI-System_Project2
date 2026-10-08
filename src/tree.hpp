@@ -333,14 +333,70 @@ public:
         auto const count = static_cast<Integer>(p.sinks.size());
         if (count > p.source_limits.fanout || count > p.source_limits.length)
             throw std::runtime_error("SRC cannot drive one relay chain per sink");
+        // Connect near sinks first: they may occupy the only cheap launch
+        // point of a longer branch, and their direct edge saves source budget.
+        std::vector<std::size_t> order;
+        for (std::size_t i = 1; i <= p.sinks.size(); ++i) order.push_back(i);
+        std::stable_sort(order.begin(), order.end(), [&](auto a, auto b) {
+            return distance(p.source, tree[a].position) < distance(p.source, tree[b].position);
+        });
         Integer remaining = p.source_limits.length;
-        for (std::size_t i = 1; i <= p.sinks.size(); ++i) {
-            Integer const branches = count - static_cast<Integer>(i) + 1;
+        for (std::size_t k = 0; k < order.size(); ++k) {
+            Integer const branches = count - static_cast<Integer>(k);
             Integer const budget = remaining / branches;
-            auto const first = route(p.source, i, budget);
+            auto const first = route(p.source, order[k], budget);
             remaining -= distance(p.source, tree[first].position);
             tree[0].children.push_back(first);
         }
+        return finish();
+    }
+
+    Tree build_hub() {
+        auto const count = static_cast<std::uint64_t>(p.sinks.size());
+        if (std::none_of(p.buffer_library.begin(), p.buffer_library.end(),
+                         [&](auto const& type) { return static_cast<std::uint64_t>(type.fanout) >= count; }))
+            throw std::runtime_error("library cannot drive all sinks from one hub");
+        std::vector<Integer> xs, ys;
+        for (auto sink : p.sinks) { xs.push_back(sink.x); ys.push_back(sink.y); }
+        std::sort(xs.begin(), xs.end()); std::sort(ys.begin(), ys.end());
+        std::vector<Position> candidates;
+        for (Position base : {Position{xs[xs.size() / 2], ys[ys.size() / 2]},
+                              Position{xs.front() + (xs.back() - xs.front()) / 2,
+                                       ys.front() + (ys.back() - ys.front()) / 2},
+                              Position{std::clamp(p.source.x, Integer{1}, p.dimensions.x - 1),
+                                       std::clamp(p.source.y, Integer{1}, p.dimensions.y - 1)}}) {
+            for (Integer dx = -2; dx <= 2; ++dx)
+                for (Integer dy = -2; dy <= 2; ++dy)
+                    candidates.push_back({base.x + dx, base.y + dy});
+        }
+        std::optional<Position> best;
+        int best_type = -1;
+        std::tuple<Integer, Integer> best_key;
+        for (auto candidate : candidates) {
+            if (!free(candidate)) continue;
+            Integer total = 0, low = std::numeric_limits<Integer>::max(), high = 0;
+            for (auto sink : p.sinks) {
+                auto const d = distance(candidate, sink);
+                total = add(total, d); low = std::min(low, d); high = std::max(high, d);
+            }
+            for (std::size_t i = 0; i < p.buffer_library.size(); ++i) {
+                auto const& type = p.buffer_library[i];
+                if (static_cast<std::uint64_t>(type.fanout) < count || type.length < total) continue;
+                auto const skew = high - low;
+                if (skew > std::numeric_limits<Integer>::max() / p.skew_weight) continue;
+                auto const score = add(type.cost, skew * p.skew_weight);
+                auto const key = std::make_tuple(score, distance(p.source, candidate));
+                if (!best || key < best_key) {
+                    best = candidate; best_type = static_cast<int>(i); best_key = key;
+                }
+            }
+        }
+        if (!best) throw std::runtime_error("no legal multi-output hub position found");
+        std::vector<std::size_t> children;
+        for (std::size_t i = 1; i <= p.sinks.size(); ++i) children.push_back(i);
+        auto const hub = insert(*best, best_type, std::move(children));
+        auto const first = route(p.source, hub, p.source_limits.length);
+        tree[0].children = {first};
         return finish();
     }
 
@@ -380,6 +436,8 @@ Tree solve(Problem const& p) {
         catch (std::runtime_error const& e) { reason = e.what(); }
     }
     try { consider(Builder(p, false).build_star()); }
+    catch (std::runtime_error const& e) { reason = e.what(); }
+    try { consider(Builder(p, false).build_hub()); }
     catch (std::runtime_error const& e) { reason = e.what(); }
     if (!best) throw std::runtime_error("no legal tree constructed: " + reason);
     return std::move(*best);
