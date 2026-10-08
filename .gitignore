@@ -1,7 +1,29 @@
+# Generated builds, runs, and agent experiments.
 /build/
+/build-*/
+/cmake-build-*/
 /inputs/
 /results/
-/build-*/
+/tmp/
+/cbi
+/CMakeCache.txt
+/CMakeFiles/
+/cmake_install.cmake
+/CTestTestfile.cmake
+/Testing/
 __pycache__/
 *.pyc
-/tmp/
+
+# Local editor state and desktop shortcuts.
+.vscode/
+.idea/
+.DS_Store
+*.swp
+*.swo
+/example/*.url
+
+# Share role definitions, not other local Codex state.
+/.codex/*
+!/.codex/agents/
+/.codex/agents/*
+!/.codex/agents/*.toml

@@ -84,6 +84,18 @@ Tester reports belong in `issues/opened/<issue>/README.md`, with reproductions
 alongside and dated replies in `comments/`. Coder fixes are committed for tester
 review; only tester moves resolved issues to `issues/closed/`.
 
+## Repository contents
+
+Track source, build configuration, tests, documentation, supplied examples, and
+complete issue records (descriptions, comments, reproduction inputs, witness
+outputs and verification helpers). Tester acceptance and moves to `issues/closed/`
+are recorded in Git without changing their decisions. Shared collaboration
+instructions and `.codex/agents/*.toml` role definitions are also tracked.
+
+Generated builds, run directories, and experiments in `tmp/coder/` or
+`tmp/tester/` are ignored, as are local editor state and desktop shortcuts.
+Issue `.cbi` files and example figures remain tracked as reproducible evidence.
+
 ## Submission
 
 Follow `Project2 Requirement.pdf` where packaging instructions differ from the
