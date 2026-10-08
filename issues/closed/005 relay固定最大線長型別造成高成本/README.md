@@ -30,8 +30,8 @@ Builder 建構時 relay_type 固定取 library 最大 length；route 插入一�
 ```sh
 cmake -S . -B tmp/tester/relay-cost-build -DCMAKE_BUILD_TYPE=Release
 cmake --build tmp/tester/relay-cost-build -j2
-./tmp/tester/relay-cost-build/cbi issues/opened/relay固定最大線長型別造成高成本/input001.cbi tmp/tester/relay-cost-output001.cbi
-python3 issues/opened/relay固定最大線長型別造成高成本/verify_witness.py
+./tmp/tester/relay-cost-build/cbi 'issues/closed/005 relay固定最大線長型別造成高成本/input001.cbi' tmp/tester/relay-cost-output001.cbi
+python3 'issues/closed/005 relay固定最大線長型別造成高成本/verify_witness.py'
 ```
 
 驗收：附件合法且 Score=6，保持 arrival=30；增加「長型別確實更划算」、最後一段不足一個 length、relay 位置被 pin 佔用的對照，並核對既有 hub/multi-relay 測試沒有退步。不要執行 grader。

@@ -11,13 +11,14 @@
 
 # Issue 流程
 
-每個 issue 放在 `issues/opened/<問題概述>/`，包含：
+每個 issue 放在 `issues/opened/<NNN 問題概述>/`，包含：
 
 - `README.md`：問題或建議描述。
 - `comments/`：留言串，檔名為 `YYYY-MM-DD HH:MM:SS coder.md` 或 `YYYY-MM-DD HH:MM:SS tester.md`（Asia/Taipei），保留既有留言。
 - 必要的重現測資等資料。
 
-只有 tester 能判定 issue 解決並將整個目錄移至 `issues/closed/`；coder 不得關閉 issue。
+編號為三位數，自 `001` 起，opened 與 closed 共用序列；新 issue 使用下一個未使用編號。
+只有 tester 能判定 issue 解決並將整個目錄移至 `issues/closed/`，保留原編號與留言；coder 不得關閉 issue。
 
 # coder
 

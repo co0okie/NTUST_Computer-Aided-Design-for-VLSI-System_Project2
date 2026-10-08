@@ -98,9 +98,12 @@ distance fallback, branch-type cost tradeoffs with fanout/total-length checks,
 malformed input, and output preservation.
 The supplied grading archive is only a read-only reference and is never executed.
 
-Tester reports belong in `issues/opened/<issue>/README.md`, with reproductions
+Tester reports belong in `issues/opened/<NNN issue>/README.md`, with reproductions
 alongside and dated replies in `comments/`. Coder fixes are committed for tester
-review; only tester moves resolved issues to `issues/closed/`.
+review; only tester moves resolved issues to `issues/closed/`. Three-digit issue
+numbers start at 001 and share one sequence across both states; closing preserves
+the number and comment history. Quote issue paths in shell commands because the
+directory names contain spaces.
 
 ## Repository contents
 

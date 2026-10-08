@@ -21,8 +21,8 @@ SRC=(5,5)，fanout=2，總 outgoing length=2；兩個 sinks=(1,5),(9,5)；buffer
 ```sh
 cmake -S . -B /tmp/cbi-tester-build -DCMAKE_BUILD_TYPE=Release
 cmake --build /tmp/cbi-tester-build -j2
-/tmp/cbi-tester-build/cbi "issues/opened/單輸出buffer庫誤判SRC可分支的合法解/input001.cbi" /tmp/output001.cbi
-python3 "issues/opened/單輸出buffer庫誤判SRC可分支的合法解/verify_witness.py"
+/tmp/cbi-tester-build/cbi "issues/closed/001 單輸出buffer庫誤判SRC可分支的合法解/input001.cbi" /tmp/output001.cbi
+python3 "issues/closed/001 單輸出buffer庫誤判SRC可分支的合法解/verify_witness.py"
 ```
 
 `witness-output001.cbi` 是證明可行／較低 Score 的手工解，並非要求 coder 輸出完全相同拓樸。獨立驗證使用 repository 的 test helper；沒有載入或執行 grader。

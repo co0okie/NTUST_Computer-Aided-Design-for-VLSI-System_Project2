@@ -21,8 +21,8 @@ SRC=(0,0)，S1=(10,0)，SRC 與 unary buffer 的 length 都是 3。最短路徑�
 ```sh
 cmake -S . -B /tmp/cbi-tester-build -DCMAKE_BUILD_TYPE=Release
 cmake --build /tmp/cbi-tester-build -j2
-/tmp/cbi-tester-build/cbi "issues/opened/邊界同軸連線缺少向內繞行的relay/input001.cbi" /tmp/output001.cbi
-python3 "issues/opened/邊界同軸連線缺少向內繞行的relay/verify_witness.py"
+/tmp/cbi-tester-build/cbi "issues/closed/002 邊界同軸連線缺少向內繞行的relay/input001.cbi" /tmp/output001.cbi
+python3 "issues/closed/002 邊界同軸連線缺少向內繞行的relay/verify_witness.py"
 ```
 
 `witness-output001.cbi` 是證明可行／較低 Score 的手工解，並非要求 coder 輸出完全相同拓樸。獨立驗證使用 repository 的 test helper；沒有載入或執行 grader。

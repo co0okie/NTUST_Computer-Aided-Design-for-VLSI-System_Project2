@@ -19,8 +19,8 @@
 ```sh
 cmake -S . -B tmp/tester/hub-review-build -DCMAKE_BUILD_TYPE=Release
 cmake --build tmp/tester/hub-review-build -j2
-./tmp/tester/hub-review-build/cbi issues/opened/hub選點漏算SRC接入relay成本/input001.cbi tmp/tester/output001.cbi
-python3 issues/opened/hub選點漏算SRC接入relay成本/verify_witness.py
+./tmp/tester/hub-review-build/cbi 'issues/closed/004 hub選點漏算SRC接入relay成本/input001.cbi' tmp/tester/output001.cbi
+python3 'issues/closed/004 hub選點漏算SRC接入relay成本/verify_witness.py'
 ```
 
 驗收：此例合法輸出且 Score<=16；原四 sink 等距 issue 的 Score=10 不回退；增加需多個接入 relay 的對照及相容型別重選驗證，確保比較完整 buffer cost，並保留 driving limits。

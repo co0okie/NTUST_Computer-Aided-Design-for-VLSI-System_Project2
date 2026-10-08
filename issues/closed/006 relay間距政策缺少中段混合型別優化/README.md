@@ -23,8 +23,8 @@ Score=13 是此小案例下界：SRC 最多覆蓋 1，buffers 至少要覆蓋 20
 ```sh
 cmake -S . -B tmp/tester/mixed-chain-build -DCMAKE_BUILD_TYPE=Release
 cmake --build tmp/tester/mixed-chain-build -j2
-./tmp/tester/mixed-chain-build/cbi issues/opened/relay間距政策缺少中段混合型別優化/input001.cbi tmp/tester/mixed-output001.cbi
-python3 issues/opened/relay間距政策缺少中段混合型別優化/verify_witness.py
+./tmp/tester/mixed-chain-build/cbi 'issues/closed/006 relay間距政策缺少中段混合型別優化/input001.cbi' tmp/tester/mixed-output001.cbi
+python3 'issues/closed/006 relay間距政策缺少中段混合型別優化/verify_witness.py'
 ```
 
 驗收：附件合法且 Score=13、arrival=21；補混合型別順序、短尾段、固定 pins 擋住理想間距的對照，維持先前 Score=6/4、hub=10/16、多 relay=19 等基準。未要求所有一般 clock trees 達全域最優。

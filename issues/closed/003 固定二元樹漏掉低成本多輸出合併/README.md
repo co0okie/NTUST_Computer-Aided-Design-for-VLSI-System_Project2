@@ -17,8 +17,8 @@ SRC=(5,1)，fanout=1、length=4；四個 sinks 圍繞 (5,5)，各距離 1；T0 f
 ```sh
 cmake -S . -B /tmp/cbi-tester-build -DCMAKE_BUILD_TYPE=Release
 cmake --build /tmp/cbi-tester-build -j2
-/tmp/cbi-tester-build/cbi "issues/opened/固定二元樹漏掉低成本多輸出合併/input001.cbi" /tmp/output001.cbi
-python3 "issues/opened/固定二元樹漏掉低成本多輸出合併/verify_witness.py"
+/tmp/cbi-tester-build/cbi "issues/closed/003 固定二元樹漏掉低成本多輸出合併/input001.cbi" /tmp/output001.cbi
+python3 "issues/closed/003 固定二元樹漏掉低成本多輸出合併/verify_witness.py"
 ```
 
 `witness-output001.cbi` 是證明可行／較低 Score 的手工解，並非要求 coder 輸出完全相同拓樸。獨立驗證使用 repository 的 test helper；沒有載入或執行 grader。
