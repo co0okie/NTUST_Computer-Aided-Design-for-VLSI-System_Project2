@@ -25,8 +25,8 @@ binary/parity建構在每個 `cluster` 只採用單一 `merge_position`；下游
 ## 重現與驗收
 
 ```sh
-./tmp/tester/review-51e094e/build/cbi 'issues/opened/016 局部建構候選無回退漏掉小型合法樹/input001.cbi' tmp/tester/feasible-result.cbi
-python3 'issues/opened/016 局部建構候選無回退漏掉小型合法樹/verify_witness.py'
+./tmp/tester/review-51e094e/build/cbi 'issues/closed/016 局部建構候選無回退漏掉小型合法樹/input001.cbi' tmp/tester/feasible-result.cbi
+python3 'issues/closed/016 局部建構候選無回退漏掉小型合法樹/verify_witness.py'
 ```
 
 驗收：原測資成功输出合法樹；sink順序變更、佔位與總length邊界、不合法試次的狀態隔離、較大輸入的建構工作量上限；001–015分數不退步。避免只把錯誤訊息改為另一種無解文字。
