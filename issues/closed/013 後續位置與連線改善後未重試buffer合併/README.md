@@ -25,10 +25,10 @@ Score17 達到下界：SRC與buffer fanout最多3，一個buffer加SRC最多可�
 ## 重現與驗收
 
 ```sh
-./tmp/tester/review-83e4791/build/cbi 'issues/opened/013 後續位置與連線改善後未重試buffer合併/input001.cbi' tmp/tester/revisit-result.cbi
-c++ -std=c++17 -O2 'issues/opened/013 後續位置與連線改善後未重試buffer合併/repro/revisit.cpp' -o tmp/tester/revisit-check
-./tmp/tester/revisit-check 'issues/opened/013 後續位置與連線改善後未重試buffer合併/input001.cbi' tmp/tester/revisit-actual.cbi tmp/tester/revisit-witness.cbi
-python3 'issues/opened/013 後續位置與連線改善後未重試buffer合併/verify_witness.py'
+./tmp/tester/review-83e4791/build/cbi 'issues/closed/013 後續位置與連線改善後未重試buffer合併/input001.cbi' tmp/tester/revisit-result.cbi
+c++ -std=c++17 -O2 'issues/closed/013 後續位置與連線改善後未重試buffer合併/repro/revisit.cpp' -o tmp/tester/revisit-check
+./tmp/tester/revisit-check 'issues/closed/013 後續位置與連線改善後未重試buffer合併/input001.cbi' tmp/tester/revisit-actual.cbi tmp/tester/revisit-witness.cbi
+python3 'issues/closed/013 後續位置與連線改善後未重試buffer合併/verify_witness.py'
 ```
 
 原commit harness stdout為 `24 17`。驗收：原輸出合法Score17；覆蓋不同sink順序、受parent總length/fanout限制不可合併、改善串接後buffer IDs與level重算、大tree/巨大dimensions工作量上限；001–012分數不退步。

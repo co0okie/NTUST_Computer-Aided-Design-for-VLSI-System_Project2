@@ -268,12 +268,68 @@ Tree swap_leaves(Problem const& p, Tree best, std::size_t* remaining_trials = nu
     return best;
 }
 
+Tree reparent_leaves(Problem const& p, Tree best, std::size_t* remaining_trials = nullptr) {
+    if (best.size() > 512 || p.sinks.size() > 128) return best;
+    auto score = validate_tree(p, best).score;
+    auto const trial_limit = local_trial_limit(p, best, remaining_trials);
+    auto max_fanout = Integer{0};
+    for (auto const& type : p.buffer_library) max_fanout = std::max(max_fanout, type.fanout);
+    std::size_t trials = 0;
+    for (unsigned pass = 0; pass < 8 && trials < trial_limit; ++pass) {
+        std::optional<Tree> improved;
+        auto next_score = score;
+        std::vector<std::size_t> parents(best.size()), slots(best.size());
+        for (std::size_t i = 0; i < best.size(); ++i) {
+            for (std::size_t k = 0; k < best[i].children.size(); ++k) {
+                auto const child = best[i].children[k]; parents[child] = i; slots[child] = k;
+            }
+        }
+        for (std::size_t leaf = 1; leaf <= p.sinks.size() && trials < trial_limit; ++leaf) {
+            auto const from = parents[leaf];
+            // Keep every existing component connected and every buffer nonempty.
+            if (best[from].children.size() == 1) continue;
+            for (std::size_t target = 0; target < best.size() && trials < trial_limit; ++target) {
+                if (target == from || best[target].type == -2) continue;
+                auto const capacity = target == 0 ? p.source_limits.fanout : max_fanout;
+                if (best[target].children.size() >= static_cast<std::uint64_t>(capacity)) continue;
+                ++trials;
+                if (remaining_trials) --*remaining_trials;
+                auto candidate = best;
+                auto& edges = candidate[from].children;
+                edges.erase(edges.begin() + static_cast<std::ptrdiff_t>(slots[leaf]));
+                candidate[target].children.push_back(leaf);
+                try {
+                    select_buffer_types(p, candidate);
+                    auto const metrics = validate_tree(p, candidate);
+                    if (metrics.score < next_score) {
+                        next_score = metrics.score; improved = std::move(candidate);
+                    }
+                } catch (std::runtime_error const&) {}
+            }
+        }
+        if (!improved) break;
+        best = std::move(*improved); score = next_score;
+    }
+    return best;
+}
+
 Tree refine_tree(Problem const& p, Tree best) {
     // Keep the established one-pass result and its budgets as the fallback.
     best = swap_leaves(p, relocate_tree(p, std::move(best)));
     std::size_t remaining_trials = 6144;
     for (unsigned round = 0; round < 3 && remaining_trials; ++round) {
         auto const score = validate_tree(p, best).score;
+        best = improve_tree(p, std::move(best), &remaining_trials);
+        best = relocate_tree(p, std::move(best), &remaining_trials);
+        best = swap_leaves(p, std::move(best), &remaining_trials);
+        if (validate_tree(p, best).score == score) break;
+    }
+    // Preserve the established refinement result before exploring the new
+    // membership move, which can unlock earlier geometry/bypass improvements.
+    remaining_trials = 8192;
+    for (unsigned round = 0; round < 3 && remaining_trials; ++round) {
+        auto const score = validate_tree(p, best).score;
+        best = reparent_leaves(p, std::move(best), &remaining_trials);
         best = improve_tree(p, std::move(best), &remaining_trials);
         best = relocate_tree(p, std::move(best), &remaining_trials);
         best = swap_leaves(p, std::move(best), &remaining_trials);

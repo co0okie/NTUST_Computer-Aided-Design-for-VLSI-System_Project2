@@ -115,10 +115,24 @@ These rounds share 6144 extra evaluations; each individual call still obeys its
 original tree/library-scaled limit and component/sink cutoffs. All three moves
 consume the same remaining counter, including rejected trials. Refinement stops
 when an entire round does not reduce Score or the shared budget is exhausted.
-Only strict, fully validated improvements replace the result. The complete
-local-search evaluation cap is 16384, retaining all original search budgets.
+Only strict, fully validated improvements replace the result. This refinement
+sequence has a cap of 16384, retaining all original search budgets.
 Later geometry or leaf changes can therefore unlock earlier buffer contractions,
 though bounded rounds do not prove convergence or global optimality.
+
+Leaf reparenting then moves one sink to another existing buffer or SRC, using
+spare fanout and wire budget without requiring a reverse exchange. The destination
+may receive a different compatible buffer type; SRC always keeps its input limits.
+Removing an existing parent's last child is rejected, so empty buffers are never
+left behind. Each trial preserves pin/component IDs and validates full weighted
+Score, including all incoming arrival changes and actual source/parent wire totals.
+The move handles at most 128 sinks and 512 components, up to eight passes and 2048
+evaluations per call, further limited by tree/library size and a shared counter.
+After retaining the established refinement result, up to three more rounds run
+reparenting, bypass, relocation and exchange with 8192 shared extra evaluations.
+They stop on no improvement or budget exhaustion; the full local-search cap is
+24576. Output levels are regenerated for depth-changing moves. This preserves
+prior search budgets but remains a bounded heuristic with excluded last-child moves.
 
 All integer Manhattan paths between fixed endpoints have the same length parity.
 Consequently, sinks with mixed `(x+y) mod 2` cannot have exact zero skew. One
@@ -165,6 +179,7 @@ and huge capacities, fixed-topology relocation with reordered sinks, occupied
 targets, boundary pins and huge dimensions, cross-branch leaf exchanges,
 illegal source-budget exchanges and the large-input exchange cutoff,
 merge revisits after later improvements and the 512-component refinement cutoff,
+single-leaf reparenting with remaining capacity and reordered sinks,
 malformed input, and output preservation.
 The supplied grading archive is only a read-only reference and is never executed.
 

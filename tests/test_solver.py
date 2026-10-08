@@ -241,6 +241,15 @@ class SolverTests(unittest.TestCase):
         self.assertEqual((skew, cost), (0, 20))
         self.assertTrue(text.startswith('.buffer 2\n'))
 
+    def test_sink_reparent_uses_remaining_capacity(self):
+        sinks = [(16, 5), (11, 14), (11, 17), (19, 2), (1, 6)]
+        library = ((3, 34, 9),)
+        for order in [sinks, list(reversed(sinks))]:
+            pins = [(17, 2)] + order
+            skew, text = self.run_case(pins, dim=20, source=(3, 45), library=library, weight=1)
+            _, _, cost = check_output(text, pins, 20, (3, 45), library)
+            self.assertLessEqual(skew + cost, 23)
+
     def test_revisit_merge_after_later_improvements(self):
         sinks = [(3, 13), (2, 2), (15, 17), (10, 19), (19, 5), (6, 28)]
         library = ((3, 39, 7),)
