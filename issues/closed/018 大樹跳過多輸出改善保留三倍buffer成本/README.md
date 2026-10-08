@@ -23,8 +23,8 @@ binary Builder固定兩子分支；build_star無法由fanout1的SRC接1024sinks�
 ## 重現與驗收
 
 ```sh
-./tmp/tester/review-fef704e/build/cbi 'issues/opened/018 大樹跳過多輸出改善保留三倍buffer成本/input001.cbi' tmp/tester/large-multiway-result.cbi
-python3 'issues/opened/018 大樹跳過多輸出改善保留三倍buffer成本/verify_witness.py'
+./tmp/tester/review-fef704e/build/cbi 'issues/closed/018 大樹跳過多輸出改善保留三倍buffer成本/input001.cbi' tmp/tester/large-multiway-result.cbi
+python3 'issues/closed/018 大樹跳過多輸出改善保留三倍buffer成本/verify_witness.py'
 ```
 
 驗收：原輸出合法Score341；fanout2/不同library長度與cost組合仍合法且不退步、非完整四象限/不等數量/佔位/邊界點的回退、大輸入時間與memory控制；001–017分數不退步。原建構與全樹後處理不應被新策略較差結果覆寫。
