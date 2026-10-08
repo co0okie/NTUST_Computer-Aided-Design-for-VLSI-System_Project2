@@ -241,6 +241,22 @@ class SolverTests(unittest.TestCase):
         self.assertEqual((skew, cost), (0, 20))
         self.assertTrue(text.startswith('.buffer 2\n'))
 
+    def test_revisit_merge_after_later_improvements(self):
+        sinks = [(3, 13), (2, 2), (15, 17), (10, 19), (19, 5), (6, 28)]
+        library = ((3, 39, 7),)
+        for order in [sinks, list(reversed(sinks))]:
+            pins = [(13, 14)] + order
+            skew, text = self.run_case(pins, dim=30, source=(3, 25), library=library, weight=3)
+            _, _, cost = check_output(text, pins, 30, (3, 25), library)
+            self.assertEqual((skew, cost), (1, 14))
+            self.assertTrue(text.startswith('.buffer 2\n'))
+
+    def test_refinement_large_tree_fallback(self):
+        pins = [(0, 0)] + [(10 * x, 10 * y) for x in range(1, 27) for y in range(1, 11)][:257]
+        _, text = self.run_case(pins, dim=10**12, source=(1, 10**12),
+                                library=((2, 10**12, 1),), weight=1)
+        self.assertGreaterEqual(int(text.splitlines()[0].split()[1]), 256)
+
     def test_cross_branch_sink_exchange(self):
         sinks = [(11, 10), (28, 8), (23, 15), (16, 5), (10, 28)]
         library = ((2, 31, 1),)

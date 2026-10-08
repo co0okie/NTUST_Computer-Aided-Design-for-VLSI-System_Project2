@@ -95,7 +95,7 @@ types and validates the entire tree, including the changed incoming edge and all
 sink arrivals; only strict weighted Score improvements are accepted. The pass
 handles at most 512 components, up to eight rounds and 2048 total evaluations,
 with the same tree/library-scaled budget as bypass search. Earlier search budgets
-remain intact; the total cap including relocation is 8192 local evaluations.
+remain intact; the first-pass cap including relocation is 8192 local evaluations.
 Large dimensions do not increase the sampled neighborhood. This bounded pass
 may stop before finding further valid moves or require moves it does not sample.
 
@@ -106,8 +106,19 @@ swaps preserve a connected acyclic tree, including when the parents have differe
 depths; output levels are regenerated. Same-parent pairs are skipped. The pass
 handles at most 128 sinks and 512 components, with up to eight rounds and 2048
 total evaluations, further reduced by tree/library size. Earlier search budgets
-remain intact, for a total cap of 10240 local evaluations. Only strict improvements
+remain intact, for a first-pass cap of 10240 local evaluations. Only strict improvements
 replace the result; bounded enumeration can miss beneficial exchanges.
+
+After preserving that complete first-pass result, refinement revisits bypass,
+relocation and leaf exchange in that order for up to three additional rounds.
+These rounds share 6144 extra evaluations; each individual call still obeys its
+original tree/library-scaled limit and component/sink cutoffs. All three moves
+consume the same remaining counter, including rejected trials. Refinement stops
+when an entire round does not reduce Score or the shared budget is exhausted.
+Only strict, fully validated improvements replace the result. The complete
+local-search evaluation cap is 16384, retaining all original search budgets.
+Later geometry or leaf changes can therefore unlock earlier buffer contractions,
+though bounded rounds do not prove convergence or global optimality.
 
 All integer Manhattan paths between fixed endpoints have the same length parity.
 Consequently, sinks with mixed `(x+y) mod 2` cannot have exact zero skew. One
@@ -153,6 +164,7 @@ branch-budget allocation with swapped children, occupied launches, short edges
 and huge capacities, fixed-topology relocation with reordered sinks, occupied
 targets, boundary pins and huge dimensions, cross-branch leaf exchanges,
 illegal source-budget exchanges and the large-input exchange cutoff,
+merge revisits after later improvements and the 512-component refinement cutoff,
 malformed input, and output preservation.
 The supplied grading archive is only a read-only reference and is never executed.
 
