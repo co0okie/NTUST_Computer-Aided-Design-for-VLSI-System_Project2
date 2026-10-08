@@ -65,6 +65,13 @@ best trial, preserving balanced alternatives when another bypass raises skew.
 The search handles trees of at most 512 components, with at most 16 passes and
 2048 total trials; the trial budget shrinks with tree size and library size.
 This permits local multi-output merges but remains a bounded heuristic.
+The constructor also retains up to four distinct trees of at most 512 components,
+ranked by initial Score and then deterministically by stored geometry/topology.
+The original winning tree keeps its full local-search budget; other shortlisted
+trees share at most 2048 additional trials. Their improved, fully validated Scores
+compete with that result, so exploring ties cannot worsen the previous winner.
+Exact duplicate stored layouts are skipped. The shortlist is bounded and may
+still omit a topology with greater improvement potential.
 
 All integer Manhattan paths between fixed endpoints have the same length parity.
 Consequently, sinks with mixed `(x+y) mod 2` cannot have exact zero skew. One
@@ -105,6 +112,7 @@ hub routing fallback, short/long relay cost tradeoffs, occupied relay launch
 positions, mixed-type chains in both type orders, partial final segments, huge
 distance fallback, branch-type cost tradeoffs with fanout/total-length checks,
 local multi-output merges with fanout/total-length and weighted-skew checks,
+equal-score construction alternatives that improve differently,
 malformed input, and output preservation.
 The supplied grading archive is only a read-only reference and is never executed.
 

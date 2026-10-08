@@ -241,6 +241,14 @@ class SolverTests(unittest.TestCase):
         self.assertEqual((skew, cost), (0, 20))
         self.assertTrue(text.startswith('.buffer 2\n'))
 
+    def test_equal_score_candidate_improvement(self):
+        pins = [(25, 19), (14, 6), (16, 19), (18, 8), (11, 11),
+                (20, 13), (23, 25), (18, 12), (14, 20)]
+        library = ((2, 15, 1),)
+        skew, text = self.run_case(pins, dim=30, source=(1, 37), library=library, weight=10)
+        _, _, cost = check_output(text, pins, 30, (1, 37), library)
+        self.assertLessEqual(10 * skew + cost, 17)
+
     def test_local_merge_fanout_and_total_length(self):
         pins = [(10, 2), (12, 10), (10, 12), (8, 10), (9, 9)]
         _, text = self.run_case(pins, dim=20, source=(1, 8), library=((2, 100, 10),), weight=1)

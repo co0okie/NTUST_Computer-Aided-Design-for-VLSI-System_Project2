@@ -121,13 +121,14 @@ void select_buffer_types(Problem const& p, Tree& tree) {
     }
 }
 
-Tree improve_tree(Problem const& p, Tree best) {
+Tree improve_tree(Problem const& p, Tree best, std::size_t* remaining_trials = nullptr) {
     // Best-improvement passes prevent an early skew-increasing contraction
     // from hiding a cheaper balanced merge. Bound both tree size and work.
     if (best.size() > 512) return best;
     auto score = validate_tree(p, best).score;
-    auto const trial_limit = std::min(std::size_t{2048},
+    auto trial_limit = std::min(std::size_t{2048},
         std::size_t{2000000} / best.size() / (p.buffer_library.size() + 16));
+    if (remaining_trials) trial_limit = std::min(trial_limit, *remaining_trials);
     std::size_t trials = 0;
     for (unsigned pass = 0; pass < 16 && trials < trial_limit; ++pass) {
         std::optional<Tree> improved;
@@ -140,6 +141,7 @@ Tree improve_tree(Problem const& p, Tree best) {
                     if (relocate && parent == 0) continue;
                     if (trials >= trial_limit) break;
                     ++trials;
+                    if (remaining_trials) --*remaining_trials;
                     Tree candidate = best;
                     auto const children = candidate[victim].children;
                     auto& edges = candidate[parent].children;
@@ -582,12 +584,30 @@ std::vector<int> buffer_policies(Problem const& p, bool branching = false) {
     return policies;
 }
 
+bool tree_less(Tree const& a, Tree const& b) {
+    return std::lexicographical_compare(a.begin(), a.end(), b.begin(), b.end(),
+        [](Node const& x, Node const& y) {
+            return std::tie(x.position.x, x.position.y, x.type, x.children) <
+                   std::tie(y.position.x, y.position.y, y.type, y.children);
+        });
+}
+
 Tree solve(Problem const& p) {
     std::optional<Tree> best;
     Integer best_score = std::numeric_limits<Integer>::max();
     std::string reason;
+    std::vector<std::pair<Integer, Tree>> shortlist;
     auto consider = [&](Tree candidate) {
         auto const metrics = validate_tree(p, candidate);
+        if (candidate.size() <= 512) {
+            auto less = [](auto const& a, auto const& b) {
+                return a.first != b.first ? a.first < b.first : tree_less(a.second, b.second);
+            };
+            std::pair<Integer, Tree> entry{metrics.score, candidate};
+            auto it = std::lower_bound(shortlist.begin(), shortlist.end(), entry, less);
+            if (it == shortlist.end() || less(entry, *it)) shortlist.insert(it, std::move(entry));
+            if (shortlist.size() > 4) shortlist.pop_back();
+        }
         if (!best || metrics.score < best_score) { best_score = metrics.score; best = std::move(candidate); }
     };
     auto direct = initial_tree(p, false);
@@ -608,7 +628,21 @@ Tree solve(Problem const& p) {
         catch (std::runtime_error const& e) { reason = e.what(); }
     }
     if (!best) throw std::runtime_error("no legal tree constructed: " + reason);
-    return improve_tree(p, std::move(*best));
+    // Preserve the previous winner's full improvement budget. Alternatives
+    // share a separate budget, so a new trial cannot regress its result.
+    if (shortlist.empty()) return improve_tree(p, std::move(*best));
+    auto const original = *best;
+    auto improved = improve_tree(p, std::move(*best));
+    best_score = validate_tree(p, improved).score;
+    std::size_t remaining_trials = 2048;
+    for (auto& entry : shortlist) {
+        if (!remaining_trials) break;
+        if (!tree_less(entry.second, original) && !tree_less(original, entry.second)) continue;
+        auto candidate = improve_tree(p, std::move(entry.second), &remaining_trials);
+        auto const score = validate_tree(p, candidate).score;
+        if (score < best_score) { best_score = score; improved = std::move(candidate); }
+    }
+    return improved;
 }
 
 std::string serialize_tree(Problem const& p, Tree const& tree) {

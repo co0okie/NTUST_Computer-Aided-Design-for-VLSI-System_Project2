@@ -23,8 +23,8 @@ cluster 仍只做二元切分及每個根兩個 children，所以四 leaves 至�
 ```sh
 cmake -S . -B tmp/tester/local-multiway-build -DCMAKE_BUILD_TYPE=Release
 cmake --build tmp/tester/local-multiway-build -j2
-./tmp/tester/local-multiway-build/cbi 'issues/opened/008 局部子樹仍固定二元分支漏掉多輸出合併/input001.cbi' tmp/tester/local-multiway-output001.cbi
-python3 'issues/opened/008 局部子樹仍固定二元分支漏掉多輸出合併/verify_witness.py'
+./tmp/tester/local-multiway-build/cbi 'issues/closed/008 局部子樹仍固定二元分支漏掉多輸出合併/input001.cbi' tmp/tester/local-multiway-output001.cbi
+python3 'issues/closed/008 局部子樹仍固定二元分支漏掉多輸出合併/verify_witness.py'
 ```
 
 驗收：附件合法且 Score=20；補 fanout 不足、每條 edge 合法但總 outgoing length 超限、局部合併改變 skew 的對照；維持既有 Score 基準，提供局部搜尋 runtime 的觀察。未要求任意 clock tree 全域最優。
