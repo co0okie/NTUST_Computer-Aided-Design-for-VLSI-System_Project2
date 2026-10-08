@@ -302,6 +302,14 @@ class SolverTests(unittest.TestCase):
                                 library=((2, 10**12, 1),), weight=1)
         self.assertGreaterEqual(int(text.splitlines()[0].split()[1]), 256)
 
+    def test_large_tree_multioutput_contraction(self):
+        sinks = [(x, y) for x in range(1, 64, 2) for y in range(1, 64, 2)]
+        for order in [sinks, list(reversed(sinks))]:
+            pins = [(32, 0)] + order
+            skew, text = self.run_case(pins, dim=64, source=(1, 200), library=((4, 200, 1),))
+            _, _, cost = check_output(text, pins, 64, (1, 200), ((4, 200, 1),))
+            self.assertEqual((skew, cost), (0, 341))
+
     def test_cross_branch_sink_exchange(self):
         sinks = [(11, 10), (28, 8), (23, 15), (16, 5), (10, 28)]
         library = ((2, 31, 1),)

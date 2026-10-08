@@ -97,6 +97,20 @@ most 8192 trials each, including bypass. Phase/call limits still apply; only a
 strictly lower validated final Score replaces the established result. Finite
 representatives and shared budgets can still omit promising constructions.
 
+Trees larger than 512 components receive a separate bottom-up contraction pass,
+without enabling expensive geometry or membership searches. A child buffer is
+bypassed only when every grandchild's direct Manhattan edge equals the old two
+edges' combined length. This preserves all sink arrivals and skew exactly.
+The parent must have a compatible type and summed outgoing length, and its new
+cost must be strictly less than the old parent and removed buffer costs. SRC keeps
+its original limits. Only existing coordinates remain, so contraction cannot
+introduce overlaps. A single copied tree accumulates changes; IDs are compacted,
+types reselected and the complete result validated once before final comparison.
+This pass handles at most 100000 components, 64 library types and degree 64,
+with at most 1048576 contraction work steps counting edge/type examinations.
+Traversal/compaction use linear space and do not copy/validate the tree per trial.
+Triangle equality and one bottom-up sweep deliberately exclude other improvements.
+
 After choosing the improved complete tree, a separate relocation pass adjusts
 buffer positions while preserving topology. It samples radius-two integer offsets,
 alignments with parent/children coordinates, and midpoint positions, with at most
@@ -218,6 +232,7 @@ single-leaf reparenting with remaining capacity and reordered sinks,
 delay relays with even/mixed parity, cost/capacity/boundary and large-integer checks,
 small-forest fallback with reordered sinks,
 full-refinement alternatives with reordered sinks, different weights and costs,
+large-tree multi-output contractions with reordered sinks,
 malformed input, and output preservation.
 The supplied grading archive is only a read-only reference and is never executed.
 

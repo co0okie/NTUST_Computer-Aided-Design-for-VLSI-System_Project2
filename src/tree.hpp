@@ -127,6 +127,93 @@ std::size_t local_trial_limit(Problem const& p, Tree const& tree, std::size_t* r
     return remaining_trials ? std::min(limit, *remaining_trials) : limit;
 }
 
+// Scalable bottom-up contractions for trees excluded from expensive searches.
+// Triangle equality preserves every downstream arrival exactly, so a local
+// cost reduction cannot trade away skew. Compact and validate only once.
+Tree contract_large_tree(Problem const& p, Tree const& original, std::size_t* shared_work = nullptr) {
+    if (original.size() <= 512 || original.size() > component_budget ||
+        p.buffer_library.size() > 64) return original;
+    std::size_t work = shared_work ? std::min(std::size_t{1048576}, *shared_work) : 1048576;
+    auto const start = work;
+    if (!work) return original;
+    auto tree = original;
+    std::vector<std::size_t> order{0};
+    std::vector<Integer> wire(tree.size(), 0);
+    for (std::size_t k = 0; k < order.size(); ++k) {
+        auto const parent = order[k];
+        for (auto child : tree[parent].children) {
+            wire[parent] = add(wire[parent], distance(tree[parent].position, tree[child].position));
+            order.push_back(child);
+        }
+    }
+    std::vector<bool> removed(tree.size(), false);
+    bool changed = false;
+    for (auto it = order.rbegin(); it != order.rend() && work; ++it) {
+        auto const parent = *it;
+        if (tree[parent].type == -2 || tree[parent].children.size() > 64) continue;
+        for (std::size_t slot = 0; slot < tree[parent].children.size() && work;) {
+            --work;
+            auto const child = tree[parent].children[slot];
+            auto const& grandchildren = tree[child].children;
+            auto const degree = tree[parent].children.size() - 1 + grandchildren.size();
+            if (tree[child].type < 0 || degree > 64) { ++slot; continue; }
+            try {
+                auto const edge = distance(tree[parent].position, tree[child].position);
+                Integer length = wire[parent] - edge;
+                bool equal = true;
+                for (auto grandchild : grandchildren) {
+                    if (!work) { equal = false; break; }
+                    --work;
+                    auto const direct = distance(tree[parent].position, tree[grandchild].position);
+                    if (direct != add(edge, distance(tree[child].position, tree[grandchild].position))) {
+                        equal = false; break;
+                    }
+                    length = add(length, direct);
+                }
+                if (!equal) { ++slot; continue; }
+                auto const old_cost = parent == 0 ? 0 : p.buffer_library[static_cast<std::size_t>(tree[parent].type)].cost;
+                auto const saved_cost = add(old_cost, p.buffer_library[static_cast<std::size_t>(tree[child].type)].cost);
+                int type = -1;
+                Integer cost = 0;
+                if (parent == 0) {
+                    if (degree > static_cast<std::uint64_t>(p.source_limits.fanout) || length > p.source_limits.length) {
+                        ++slot; continue;
+                    }
+                } else {
+                    for (std::size_t t = 0; t < p.buffer_library.size() && work; ++t) {
+                        --work;
+                        auto const& buf = p.buffer_library[t];
+                        if (degree <= static_cast<std::uint64_t>(buf.fanout) && length <= buf.length &&
+                            (type < 0 || buf.cost < cost)) { type = static_cast<int>(t); cost = buf.cost; }
+                    }
+                    if (type < 0 || cost >= saved_cost) { ++slot; continue; }
+                }
+                auto children = tree[parent].children;
+                children.erase(children.begin() + static_cast<std::ptrdiff_t>(slot));
+                children.insert(children.begin() + static_cast<std::ptrdiff_t>(slot), grandchildren.begin(), grandchildren.end());
+                tree[parent].children = std::move(children);
+                if (parent != 0) tree[parent].type = type;
+                wire[parent] = length; removed[child] = true; changed = true;
+                // Newly exposed grandchildren were already processed bottom-up.
+                slot += grandchildren.size();
+            } catch (std::runtime_error const&) { ++slot; }
+        }
+    }
+    if (shared_work) *shared_work -= start - work;
+    if (!changed) return original;
+    Tree compact;
+    std::vector<std::size_t> mapping(tree.size());
+    for (std::size_t i = 0; i < tree.size(); ++i)
+        if (!removed[i]) { mapping[i] = compact.size(); compact.push_back(std::move(tree[i])); }
+    for (auto& n : compact)
+        for (auto& child : n.children) child = mapping[child];
+    try {
+        select_buffer_types(p, compact);
+        if (validate_tree(p, compact).score < validate_tree(p, original).score) return compact;
+    } catch (std::runtime_error const&) {}
+    return original;
+}
+
 Tree improve_tree(Problem const& p, Tree best, std::size_t* remaining_trials = nullptr) {
     // Best-improvement passes prevent an early skew-increasing contraction
     // from hiding a cheaper balanced merge. Bound both tree size and work.
@@ -1126,7 +1213,8 @@ Tree solve(Problem const& p) {
     if (!best) throw std::runtime_error("no legal tree constructed: " + reason);
     // Preserve the previous winner's full improvement budget. Alternatives
     // share a separate budget, so a new trial cannot regress its result.
-    if (shortlist.empty() && allocation_shortlist.empty()) return refine_tree(p, improve_tree(p, std::move(*best)));
+    if (shortlist.empty() && allocation_shortlist.empty())
+        return contract_large_tree(p, refine_tree(p, improve_tree(p, std::move(*best))));
     auto const original = *best;
     auto improved = improve_tree(p, std::move(*best));
     best_score = validate_tree(p, improved).score;
@@ -1165,7 +1253,7 @@ Tree solve(Problem const& p) {
         auto const score = validate_tree(p, candidate).score;
         if (score < best_score) { best_score = score; improved = std::move(candidate); }
     }
-    return improved;
+    return contract_large_tree(p, improved);
 }
 
 std::string serialize_tree(Problem const& p, Tree const& tree) {

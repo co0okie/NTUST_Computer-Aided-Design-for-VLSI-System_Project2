@@ -30,10 +30,10 @@ solve先依建構Score維持最多4棵一般候選及4棵allocation候選，對s
 ## 重現與驗收
 
 ```sh
-./tmp/tester/review-1ed4520/build/cbi 'issues/opened/017 完整refinement前依初始Score淘汰可改善候選/input001.cbi' tmp/tester/candidate-result.cbi
-c++ -std=c++17 -O2 'issues/opened/017 完整refinement前依初始Score淘汰可改善候選/repro/star_stages.cpp' -o tmp/tester/star-stages
-./tmp/tester/star-stages 'issues/opened/017 完整refinement前依初始Score淘汰可改善候選/input001.cbi' tmp/tester/star-stage-
-python3 'issues/opened/017 完整refinement前依初始Score淘汰可改善候選/verify_witness.py'
+./tmp/tester/review-1ed4520/build/cbi 'issues/closed/017 完整refinement前依初始Score淘汰可改善候選/input001.cbi' tmp/tester/candidate-result.cbi
+c++ -std=c++17 -O2 'issues/closed/017 完整refinement前依初始Score淘汰可改善候選/repro/star_stages.cpp' -o tmp/tester/star-stages
+./tmp/tester/star-stages 'issues/closed/017 完整refinement前依初始Score淘汰可改善候選/input001.cbi' tmp/tester/star-stage-
+python3 'issues/closed/017 完整refinement前依初始Score淘汰可改善候選/verify_witness.py'
 ```
 
 harness三階段依序輸出：初始23/6/178、bypass23/6/178、完整refinement23/22/27。驗收：原輸出合法Score<=27；sink順序、不同weight/型別cost對候選選擇、候選去重/預算耗盡保留舊結果，以及128/較大sinks效能限制；001–016分數不退步。
