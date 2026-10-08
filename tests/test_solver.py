@@ -241,6 +241,34 @@ class SolverTests(unittest.TestCase):
         self.assertEqual((skew, cost), (0, 20))
         self.assertTrue(text.startswith('.buffer 2\n'))
 
+    def test_branch_budget_allocation(self):
+        library = ((2, 6, 5), (1, 6, 1))
+        for sinks in [[(20, 10), (20, 30)], [(20, 30), (20, 10)]]:
+            pins = [(3, 3)] + sinks
+            skew, text = self.run_case(pins, dim=40, source=(1, 100), library=library, weight=1)
+            _, _, cost = check_output(text, pins, 40, (1, 100), library)
+            self.assertEqual((skew, cost), (0, 8))
+
+    def test_branch_budget_short_distance_and_occupied_launch(self):
+        pins = [(20, 18), (20, 10), (20, 30)]
+        library = ((2, 6, 5), (1, 6, 1))
+        skew, text = self.run_case(pins, dim=40, source=(1, 100), library=library, weight=1)
+        _, _, cost = check_output(text, pins, 40, (1, 100), library)
+        self.assertEqual((skew, cost), (0, 8))
+        pins = [(3, 3), (20, 19), (20, 30)]
+        library = ((2, 12, 5), (1, 6, 1))
+        skew, text = self.run_case(pins, dim=40, source=(1, 100), library=library, weight=1)
+        _, _, cost = check_output(text, pins, 40, (1, 100), library)
+        self.assertEqual((skew, cost), (1, 5))
+
+    def test_branch_budget_huge_length(self):
+        pins = [(3, 3), (20, 10), (20, 10**12 + 30)]
+        library = ((2, 5 * 10**11, 5), (1, 6, 1))
+        dim = 10**12 + 40
+        skew, text = self.run_case(pins, dim=dim, source=(1, 10**12), library=library, weight=1)
+        _, _, cost = check_output(text, pins, dim, (1, 10**12), library)
+        self.assertLessEqual(skew + cost, 20)
+
     def test_equal_score_candidate_improvement(self):
         pins = [(25, 19), (14, 6), (16, 19), (18, 8), (11, 11),
                 (20, 13), (23, 25), (18, 12), (14, 20)]

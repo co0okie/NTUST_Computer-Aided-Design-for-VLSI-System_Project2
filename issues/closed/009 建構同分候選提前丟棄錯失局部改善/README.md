@@ -30,10 +30,10 @@ repro/compare_candidates.cpp 是 tester 測試 harness，直接包含原程式�
 ```sh
 cmake -S . -B tmp/tester/candidate-review-build -DCMAKE_BUILD_TYPE=Release
 cmake --build tmp/tester/candidate-review-build -j2
-./tmp/tester/candidate-review-build/cbi 'issues/opened/009 建構同分候選提前丟棄錯失局部改善/input001.cbi' tmp/tester/candidate-actual.cbi
-c++ -std=c++17 -O2 'issues/opened/009 建構同分候選提前丟棄錯失局部改善/repro/compare_candidates.cpp' -o tmp/tester/compare-candidates
-./tmp/tester/compare-candidates 'issues/opened/009 建構同分候選提前丟棄錯失局部改善/input001.cbi' tmp/tester/candidate-witness.cbi
-python3 'issues/opened/009 建構同分候選提前丟棄錯失局部改善/verify_witness.py'
+./tmp/tester/candidate-review-build/cbi 'issues/closed/009 建構同分候選提前丟棄錯失局部改善/input001.cbi' tmp/tester/candidate-actual.cbi
+c++ -std=c++17 -O2 'issues/closed/009 建構同分候選提前丟棄錯失局部改善/repro/compare_candidates.cpp' -o tmp/tester/compare-candidates
+./tmp/tester/compare-candidates 'issues/closed/009 建構同分候選提前丟棄錯失局部改善/input001.cbi' tmp/tester/candidate-witness.cbi
+python3 'issues/closed/009 建構同分候選提前丟棄錯失局部改善/verify_witness.py'
 ```
 
 驗收：附件合法且 Score<=17；補 parity 順序交換或類似同分形狀的對照，保留原 Score 基準，並觀察多候選局部搜尋的總工作量／runtime。

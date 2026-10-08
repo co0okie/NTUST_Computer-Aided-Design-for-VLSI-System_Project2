@@ -180,6 +180,9 @@ class Builder {
     std::vector<Integer> chain_cost{0};
     std::vector<int> chain_type{-1};
     std::size_t chain_transitions = 0;
+    bool optimize_branch_budget = false;
+    std::size_t allocation_trials = 0;
+    std::size_t construction_limit = component_budget;
 
     // Minimum buffer cost to cover the remaining distance without placement
     // obstacles: C(r) = min_t(cost_t + C(max(0, r - length_t))). Geometry is
@@ -217,7 +220,7 @@ class Builder {
             s.y < p.dimensions.y && !occupied.count({s.x, s.y});
     }
     std::size_t insert(Position s, int type, std::vector<std::size_t> children = {}) {
-        if (tree.size() >= component_budget)
+        if (tree.size() >= construction_limit)
             throw std::runtime_error("construction component budget exceeded");
         occupied.emplace(s.x, s.y);
         tree.push_back({s, type, std::move(children)});
@@ -361,8 +364,8 @@ class Builder {
         if (length > budget) {
             Integer const excess = length - budget;
             auto const necessary = excess / capacity + (excess % capacity != 0 ? 1 : 0);
-            if (tree.size() >= component_budget ||
-                static_cast<std::uint64_t>(necessary) > component_budget - tree.size())
+            if (tree.size() >= construction_limit ||
+                static_cast<std::uint64_t>(necessary) > construction_limit - tree.size())
                 throw std::runtime_error("routing exceeds construction component budget");
         }
         while (distance(parent, target) > budget) {
@@ -377,6 +380,92 @@ class Builder {
         }
         if (last) tree[*last].children = {child};
         return first.value_or(child);
+    }
+
+    void allocate_branch(std::size_t root, std::size_t a, std::size_t b, Integer limit) {
+        auto const s = tree[root].position;
+        auto const da = distance(s, tree[a].position), db = distance(s, tree[b].position);
+        auto const total = std::min(limit, add(da, db));
+        auto const lo = std::max(Integer{1}, total - db);
+        auto const hi = std::min(da, total - 1);
+        if (lo > hi) return;
+        std::set<Integer> budgets;
+        auto offer = [&](Integer x) { if (x >= lo && x <= hi) budgets.insert(x); };
+        offer(lo); offer(hi); offer(std::clamp(total / 2, lo, hi));
+        if (hi - lo <= 64) {
+            for (auto x = lo; x <= hi; ++x) offer(x);
+        } else {
+            // Sample coverage-cost jumps near the middle and both ends.
+            // No loop or allocation scales with a potentially huge length.
+            for (std::size_t i = 0; i < std::min(p.buffer_library.size(), std::size_t{8}); ++i) {
+                auto const cap = p.buffer_library[i].length;
+                for (auto center : {lo, hi, lo + (hi - lo) / 2}) {
+                    for (auto remainder : {da % cap, (total - db) % cap}) {
+                        if (remainder < 0) remainder += cap;
+                        auto x = remainder;
+                        if (center >= remainder) x += ((center - remainder) / cap) * cap;
+                        offer(x); if (x > lo) offer(x - 1);
+                        if (cap <= hi - x) { offer(x + cap); if (x + cap > lo) offer(x + cap - 1); }
+                    }
+                }
+            }
+        }
+        auto estimate = [&](Integer remaining) {
+            if (remaining <= 0) return Integer{0};
+            auto const type = relay_for(remaining);
+            if (mixed_relays && remaining < static_cast<Integer>(chain_cost.size()) &&
+                chain_type[static_cast<std::size_t>(remaining)] >= 0)
+                return chain_cost[static_cast<std::size_t>(remaining)];
+            auto const& buffer = p.buffer_library[static_cast<std::size_t>(type)];
+            auto const count = remaining / buffer.length + (remaining % buffer.length != 0);
+            if (count > std::numeric_limits<Integer>::max() / buffer.cost)
+                return std::numeric_limits<Integer>::max();
+            return count * buffer.cost;
+        };
+        std::vector<std::pair<Integer, Integer>> ranked;
+        for (auto ba : budgets) {
+            auto const ca = estimate(da - ba), cb = estimate(db - (total - ba));
+            auto const cost = ca > std::numeric_limits<Integer>::max() - cb ?
+                std::numeric_limits<Integer>::max() : ca + cb;
+            ranked.emplace_back(cost, ba);
+        }
+        std::sort(ranked.begin(), ranked.end());
+        std::optional<Builder> best;
+        Integer best_cost = std::numeric_limits<Integer>::max();
+        auto path_length = [&](Tree const& routed, std::size_t child, std::size_t target) {
+            Integer length = distance(s, routed[child].position);
+            while (child != target) {
+                if (routed[child].children.size() != 1) throw std::runtime_error("invalid branch relay chain");
+                auto const next = routed[child].children.front();
+                length = add(length, distance(routed[child].position, routed[next].position)); child = next;
+            }
+            return length;
+        };
+        std::size_t evaluated = 0;
+        for (auto const& entry : ranked) {
+            if (evaluated == 8 || allocation_trials == 128) break;
+            ++evaluated; ++allocation_trials;
+            auto trial = *this;
+            trial.construction_limit = 512;
+            try {
+                auto const ca = trial.route(s, a, entry.second);
+                auto const cb = trial.route(s, b, total - entry.second);
+                // Keep child arrival offsets valid; boundary detours fall
+                // back to the original complete construction candidate.
+                if (path_length(trial.tree, ca, a) != da || path_length(trial.tree, cb, b) != db) continue;
+                trial.tree[root].children = {ca, cb};
+                select_buffer_types(p, trial.tree);
+                Integer cost = 0;
+                for (std::size_t i = p.sinks.size() + 1; i < trial.tree.size(); ++i)
+                    cost = add(cost, p.buffer_library[static_cast<std::size_t>(trial.tree[i].type)].cost);
+                if (!best || cost < best_cost) { best_cost = cost; best.emplace(std::move(trial)); }
+            } catch (std::runtime_error const&) {}
+        }
+        if (best) {
+            tree = std::move(best->tree); occupied = std::move(best->occupied);
+            chain_cost = std::move(best->chain_cost); chain_type = std::move(best->chain_type);
+            chain_transitions = best->chain_transitions;
+        }
     }
 
     std::size_t cluster(std::vector<std::size_t> nodes) {
@@ -407,15 +496,19 @@ class Builder {
         Integer ba = limit / 2, bb = limit - ba;
         if (da < ba) { ba = da; bb = limit - ba; }
         if (db < bb) { bb = db; ba = limit - bb; }
-        auto const ca = route(s, a, ba);
-        auto const cb = route(s, b, bb);
-        tree[root].children = {ca, cb};
+        if (optimize_branch_budget && tree.size() <= 512 && allocation_trials < 128)
+            allocate_branch(root, a, b, limit);
+        if (tree[root].children.empty()) {
+            auto const ca = route(s, a, ba);
+            auto const cb = route(s, b, bb);
+            tree[root].children = {ca, cb};
+        }
         tree[root].low = low; tree[root].high = high;
         return root;
     }
 
 public:
-    Builder(Problem const& problem, bool parity, int relay_policy = -1, int branch_policy = -1)
+    Builder(Problem const& problem, bool parity, int relay_policy = -1, int branch_policy = -1, bool optimize_allocation = false)
         : p(problem), tree(initial_tree(p, parity)) {
         if (p.dimensions.x <= 1 || p.dimensions.y <= 1)
             throw std::runtime_error("chip has no interior buffer positions");
@@ -436,6 +529,7 @@ public:
         if (relay_policy >= 0) relay_type = relay_policy;
         mixed_relays = relay_policy <= -2;
         shorter_ties = relay_policy == -3;
+        optimize_branch_budget = optimize_allocation;
     }
     Tree build() {
         if (branching_type < 0 && p.sinks.size() > 1)
@@ -596,19 +690,20 @@ Tree solve(Problem const& p) {
     std::optional<Tree> best;
     Integer best_score = std::numeric_limits<Integer>::max();
     std::string reason;
-    std::vector<std::pair<Integer, Tree>> shortlist;
-    auto consider = [&](Tree candidate) {
+    std::vector<std::pair<Integer, Tree>> shortlist, allocation_shortlist;
+    auto consider = [&](Tree candidate, bool allocation = false) {
         auto const metrics = validate_tree(p, candidate);
         if (candidate.size() <= 512) {
+            auto& candidates = allocation ? allocation_shortlist : shortlist;
             auto less = [](auto const& a, auto const& b) {
                 return a.first != b.first ? a.first < b.first : tree_less(a.second, b.second);
             };
             std::pair<Integer, Tree> entry{metrics.score, candidate};
-            auto it = std::lower_bound(shortlist.begin(), shortlist.end(), entry, less);
-            if (it == shortlist.end() || less(entry, *it)) shortlist.insert(it, std::move(entry));
-            if (shortlist.size() > 4) shortlist.pop_back();
+            auto it = std::lower_bound(candidates.begin(), candidates.end(), entry, less);
+            if (it == candidates.end() || less(entry, *it)) candidates.insert(it, std::move(entry));
+            if (candidates.size() > 4) candidates.pop_back();
         }
-        if (!best || metrics.score < best_score) { best_score = metrics.score; best = std::move(candidate); }
+        if (!allocation && (!best || metrics.score < best_score)) { best_score = metrics.score; best = std::move(candidate); }
     };
     auto direct = initial_tree(p, false);
     for (std::size_t i = 1; i <= p.sinks.size(); ++i) direct[0].children.push_back(i);
@@ -618,8 +713,11 @@ Tree solve(Problem const& p) {
     for (auto policy : buffer_policies(p)) {
         for (auto branch : branches) {
             for (bool parity : {true, false}) {
-                try { consider(Builder(p, parity, policy, branch).build()); }
-                catch (std::runtime_error const& e) { reason = e.what(); }
+                for (bool allocation : {false, true}) {
+                    if (allocation && p.sinks.size() > 128) continue;
+                    try { consider(Builder(p, parity, policy, branch, allocation).build(), allocation); }
+                    catch (std::runtime_error const& e) { reason = e.what(); }
+                }
             }
         }
         try { consider(Builder(p, false, policy).build_star()); }
@@ -627,21 +725,27 @@ Tree solve(Problem const& p) {
         try { consider(Builder(p, false, policy).build_hub()); }
         catch (std::runtime_error const& e) { reason = e.what(); }
     }
+    if (!best && !allocation_shortlist.empty()) best = allocation_shortlist.front().second;
     if (!best) throw std::runtime_error("no legal tree constructed: " + reason);
     // Preserve the previous winner's full improvement budget. Alternatives
     // share a separate budget, so a new trial cannot regress its result.
-    if (shortlist.empty()) return improve_tree(p, std::move(*best));
+    if (shortlist.empty() && allocation_shortlist.empty()) return improve_tree(p, std::move(*best));
     auto const original = *best;
     auto improved = improve_tree(p, std::move(*best));
     best_score = validate_tree(p, improved).score;
     std::size_t remaining_trials = 2048;
-    for (auto& entry : shortlist) {
-        if (!remaining_trials) break;
-        if (!tree_less(entry.second, original) && !tree_less(original, entry.second)) continue;
-        auto candidate = improve_tree(p, std::move(entry.second), &remaining_trials);
-        auto const score = validate_tree(p, candidate).score;
-        if (score < best_score) { best_score = score; improved = std::move(candidate); }
-    }
+    auto improve_shortlist = [&](auto& candidates) {
+        for (auto& entry : candidates) {
+            if (!remaining_trials) break;
+            if (!tree_less(entry.second, original) && !tree_less(original, entry.second)) continue;
+            auto candidate = improve_tree(p, std::move(entry.second), &remaining_trials);
+            auto const score = validate_tree(p, candidate).score;
+            if (score < best_score) { best_score = score; improved = std::move(candidate); }
+        }
+    };
+    improve_shortlist(shortlist);
+    remaining_trials = 2048;
+    improve_shortlist(allocation_shortlist);
     return improved;
 }
 

@@ -51,6 +51,20 @@ branching policy allocates its total outgoing budget across both child routes,
 allowing cheap branch buffers followed by relays. These combinations apply to
 binary/parity trees only; source star and hub searches run once per relay policy.
 
+For inputs with at most 128 sinks, an additional binary candidate searches
+branch outgoing-budget splits. A range of at most 65 integer splits is enumerated;
+larger ranges sample coverage jumps near both ends and the middle for at most
+eight library types. Coverage estimates rank candidates, then each branch tries
+up to eight actual routes in isolated state, with at most 128 routing trials per
+Builder and 512 components per trial. Complete routing reselects buffer types;
+only shortest branch paths are adopted so subtree arrival offsets stay valid.
+Failed/blocked/detouring trials retain ordinary routing. No search scales linearly
+with a large length limit. The original equal-budget candidates and their local
+improvement results remain available. Up to four allocation trees form a separate
+shortlist with 2048 shared local trials, bringing the total local-improvement cap
+to 6144 without displacing the original candidate shortlist. Final comparison
+uses fully validated weighted Score. These bounds leave some allocations unexplored.
+
 Two merge strategies, a direct SRC-to-sinks tree, and separate relay chains from
 SRC to each sink, and a single multi-output buffer hub are compared using the actual
 objective `w_skew * (T_max - T_min) + buffer_cost`. Every candidate is validated
@@ -113,6 +127,8 @@ positions, mixed-type chains in both type orders, partial final segments, huge
 distance fallback, branch-type cost tradeoffs with fanout/total-length checks,
 local multi-output merges with fanout/total-length and weighted-skew checks,
 equal-score construction alternatives that improve differently,
+branch-budget allocation with swapped children, occupied launches, short edges
+and huge capacities,
 malformed input, and output preservation.
 The supplied grading archive is only a read-only reference and is never executed.
 
