@@ -441,6 +441,18 @@ class SolverTests(unittest.TestCase):
             _, _, cost = check_output(text, [(2, 1)] + order, 5, (2, 4), ((2, 5, 1),))
             self.assertLessEqual(100 * skew + cost, 302)
 
+    def test_dense_multiway_forest_fallback(self):
+        cases = [([(1, 1), (1, 3), (2, 1), (3, 1), (3, 3), (2, 3)],
+                  (2, 2), 4, (2, 2), ((3, 4, 1),), 102),
+                 ([(3, 1), (4, 1), (3, 2), (1, 3), (1, 4), (2, 3), (3, 3), (4, 2), (2, 4)],
+                  (1, 1), 5, (3, 4), ((3, 6, 1),), 203)]
+        for sinks, src, dim, limits, library, bound in cases:
+            for order in [sinks, list(reversed(sinks)), sinks[2:] + sinks[:2]]:
+                pins = [src] + order
+                skew, text = self.run_case(pins, dim=dim, source=limits, library=library)
+                _, _, cost = check_output(text, pins, dim, limits, library)
+                self.assertLessEqual(100 * skew + cost, bound)
+
     def test_full_refinement_candidate_diversity(self):
         sinks = [(9, 3), (17, 24), (24, 6)]
         variants = [(((2, 11, 4), (2, 18, 13)), [(1, 21), (10, 27), (100, 117)]),

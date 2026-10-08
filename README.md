@@ -208,6 +208,15 @@ each merge layer, trees contain at most 16 components, and all placement and
 completion trials share a 65,536-attempt budget. It uses direct legal buffer
 edges and may miss solutions requiring relay chains or discarded beam states.
 Existing successful constructions and their optimization budgets are preserved.
+If this binary fallback also fails, a second forest search allows both two-root
+and three-root merges, using only compatible buffer fanout and summed outgoing
+length. It handles at most 12 sinks, 64 types and 24 components, retains at most
+64 states per layer, and samples at most 63 positions per merge. Placement trials
+per layer are capped at 4096 so later layers can still run. It shares a separate
+65536-attempt counter for all placement/completion checks; both fallback stages
+together spend at most 131072 attempts. Earlier successful results are preserved.
+The extended search still samples local positions and direct edges and can miss
+valid forests requiring larger merge arities, relay chains or discarded states.
 This is a heuristic: merge
 placement and relay searches are bounded, and feasibility or optimality is not
 guaranteed. A failed construction reports an error; it does not prove the input
@@ -243,6 +252,7 @@ merge revisits after later improvements and the 512-component refinement cutoff,
 single-leaf reparenting with remaining capacity and reordered sinks,
 delay relays with even/mixed parity, cost/capacity/boundary and large-integer checks,
 small-forest fallback with reordered sinks,
+dense ternary forests with reordered sinks and nine-sink fallback,
 full-refinement alternatives with reordered sinks, different weights and costs,
 large-tree multi-output contractions with reordered sinks,
 subtree/sink exchanges with reordered sinks and buffer type changes,
