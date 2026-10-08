@@ -1,0 +1,3 @@
+*.cbi text eol=lf
+*.plt text eol=lf
+*.url text eol=lf

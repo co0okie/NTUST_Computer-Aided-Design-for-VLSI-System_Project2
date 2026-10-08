@@ -1,0 +1,8 @@
+.buffer 1	# number of clock buffers
+B1 LARGE	49 54	#clock buffer B1
+.e
+
+.level 2		# number of tree levels
+1 SRC:{S4 B1}	# hierarchy
+2 B1:{S1 S2 S3 S5}
+.e
