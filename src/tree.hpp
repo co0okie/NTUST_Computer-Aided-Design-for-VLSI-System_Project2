@@ -319,7 +319,7 @@ Tree relocate_tree(Problem const& p, Tree best, std::size_t* remaining_trials = 
     return best;
 }
 
-Tree swap_leaves(Problem const& p, Tree best, std::size_t* remaining_trials = nullptr) {
+Tree swap_roots(Problem const& p, Tree best, std::size_t* remaining_trials, bool subtrees) {
     if (best.size() > 512 || p.sinks.size() > 128) return best;
     auto score = validate_tree(p, best).score;
     auto const trial_limit = local_trial_limit(p, best, remaining_trials);
@@ -333,11 +333,18 @@ Tree swap_leaves(Problem const& p, Tree best, std::size_t* remaining_trials = nu
                 auto const child = best[i].children[k]; parents[child] = i; slots[child] = k;
             }
         }
-        for (std::size_t a = 1; a <= p.sinks.size() && trials < trial_limit; ++a) {
-            for (std::size_t b = a + 1; b <= p.sinks.size() && trials < trial_limit; ++b) {
+        auto ancestor = [&](std::size_t a, std::size_t b) {
+            while (b) { if (a == b) return true; b = parents[b]; }
+            return false;
+        };
+        auto const end = subtrees ? best.size() - 1 : p.sinks.size();
+        for (std::size_t a = 1; a <= end && trials < trial_limit; ++a) {
+            for (std::size_t b = a + 1; b <= end && trials < trial_limit; ++b) {
                 if (parents[a] == parents[b]) continue;
+                if (subtrees && a <= p.sinks.size() && b <= p.sinks.size()) continue;
                 ++trials;
                 if (remaining_trials) --*remaining_trials;
+                if (subtrees && (ancestor(a, b) || ancestor(b, a))) continue;
                 auto candidate = best;
                 std::swap(candidate[parents[a]].children[slots[a]], candidate[parents[b]].children[slots[b]]);
                 try {
@@ -353,6 +360,14 @@ Tree swap_leaves(Problem const& p, Tree best, std::size_t* remaining_trials = nu
         best = std::move(*improved); score = next_score;
     }
     return best;
+}
+
+Tree swap_leaves(Problem const& p, Tree best, std::size_t* remaining_trials = nullptr) {
+    return swap_roots(p, std::move(best), remaining_trials, false);
+}
+
+Tree swap_subtrees(Problem const& p, Tree best, std::size_t* remaining_trials = nullptr) {
+    return swap_roots(p, std::move(best), remaining_trials, true);
 }
 
 Tree reparent_leaves(Problem const& p, Tree best, std::size_t* remaining_trials = nullptr) {
@@ -535,6 +550,19 @@ Tree refine_tree(Problem const& p, Tree best, std::size_t* shared_trials = nullp
     }
     charge(start, remaining_trials);
     if (shared_insertions) *shared_insertions -= insertion_start - remaining_insertions;
+    // Retain all previous phases before spending a separate capped budget on
+    // synchronous subtree exchanges and the improvements they may unlock.
+    remaining_trials = budget(8192); start = remaining_trials;
+    for (unsigned round = 0; round < 3 && remaining_trials; ++round) {
+        auto const score = validate_tree(p, best).score;
+        best = swap_subtrees(p, std::move(best), &remaining_trials);
+        best = improve_tree(p, std::move(best), &remaining_trials);
+        best = relocate_tree(p, std::move(best), &remaining_trials);
+        best = swap_leaves(p, std::move(best), &remaining_trials);
+        best = reparent_leaves(p, std::move(best), &remaining_trials);
+        if (validate_tree(p, best).score == score) break;
+    }
+    charge(start, remaining_trials);
     return best;
 }
 

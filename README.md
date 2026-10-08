@@ -111,6 +111,18 @@ with at most 1048576 contraction work steps counting edge/type examinations.
 Traversal/compaction use linear space and do not copy/validate the tree per trial.
 Triangle equality and one bottom-up sweep deliberately exclude other improvements.
 
+Small trees also try synchronous exchanges of child roots between different
+parents, with at least one buffer root. Roots that are ancestors of each other
+are rejected before copying; the parents may themselves have an ancestor relation.
+Coordinates and child counts remain fixed, but depths, arrivals and compatible
+buffer types can change. Every trial reselects types and fully validates actual
+weighted Score. The shared exchange core retains the existing leaf-only behavior.
+Subtree exchanges handle at most 128 sinks/512 components, eight passes and 2048
+scaled trials per call; even rejected ancestor trials consume the budget.
+After retaining all prior refinement phases, up to three extra rounds of subtree
+exchange, bypass, relocation, leaf exchange and leaf reparenting share 8192 trials.
+Alternative construction candidates still use their existing global/slice limits.
+
 After choosing the improved complete tree, a separate relocation pass adjusts
 buffer positions while preserving topology. It samples radius-two integer offsets,
 alignments with parent/children coordinates, and midpoint positions, with at most
@@ -170,7 +182,7 @@ After retaining previous refinement budgets, up to three extra rounds of delay,
 reparenting, bypass, relocation and exchange share 10240 extra evaluations and
 at most 16 accepted relay insertions. Delay calls have at most eight passes and
 2048 trials, further reduced by tree/library size, with at most 128 sinks and
-512 resulting components. The full local-search cap is 34816 evaluations. This
+512 resulting components. The local-search cap through this phase is 34816 evaluations. This
 bounded, strictly improving search can miss moves requiring several simultaneous
 insertions or unsampled detour positions.
 
@@ -233,6 +245,7 @@ delay relays with even/mixed parity, cost/capacity/boundary and large-integer ch
 small-forest fallback with reordered sinks,
 full-refinement alternatives with reordered sinks, different weights and costs,
 large-tree multi-output contractions with reordered sinks,
+subtree/sink exchanges with reordered sinks and buffer type changes,
 malformed input, and output preservation.
 The supplied grading archive is only a read-only reference and is never executed.
 
