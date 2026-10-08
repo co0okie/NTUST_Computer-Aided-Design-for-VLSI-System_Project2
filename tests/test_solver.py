@@ -414,6 +414,15 @@ class SolverTests(unittest.TestCase):
             pins = rng.sample([(x, y) for x in range(5, 96, 5) for y in range(5, 96, 5)], 21)
             self.run_case(pins, source=(2, 30), library=((2, 30, 2), (6, 80, 5)))
 
+    def test_small_forest_construction_fallback(self):
+        # Greedy local merge points block all original complete builders.
+        sinks = [(2, 4), (3, 4), (1, 2), (1, 3)]
+        for order in [sinks, list(reversed(sinks)), sinks[2:] + sinks[:2]]:
+            skew, text = self.run_case([(2, 1)] + order, dim=5,
+                                       source=(2, 4), library=((2, 5, 1),))
+            _, _, cost = check_output(text, [(2, 1)] + order, 5, (2, 4), ((2, 5, 1),))
+            self.assertLessEqual(100 * skew + cost, 302)
+
     def test_reject_without_overwriting(self):
         good = instance([(10, 10), (20, 20)])
         bad_cases = [good.replace('20 20', '10 10'), good.replace('20 20', '101 20'),
@@ -421,6 +430,8 @@ class SolverTests(unittest.TestCase):
                      good + 'unexpected\n', good.replace('.pin 2', '.pin 3'),
                      instance([(0, 0), (2, 2)], dim=2, source=(1, 1), library=((1, 1, 1),)),
                      instance([(5, 5), (1, 5), (9, 5)], dim=10, source=(1, 100), library=((1, 3, 1),)),
+                     instance([(2, 1), (2, 4), (3, 4), (1, 2), (1, 3)], dim=5,
+                              source=(2, 4), library=((2, 1, 1),)),
                      instance([(5, 5), (1, 5), (9, 5)], dim=10, source=(2, 1), library=((1, 3, 1),))]
         with tempfile.TemporaryDirectory() as folder:
             inp, out = pathlib.Path(folder) / 'in', pathlib.Path(folder) / 'out'

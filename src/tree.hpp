@@ -957,6 +957,105 @@ bool tree_less(Tree const& a, Tree const& b) {
         });
 }
 
+// Last-resort beam search over small forests. Each merge joins two disjoint
+// roots through a directly legal buffer; SRC may connect several final groups.
+// Existing successful builders never enter this search.
+std::optional<Tree> small_forest(Problem const& p, std::size_t& remaining_trials) {
+    if (p.sinks.size() > 8 || p.buffer_library.size() > 64 ||
+        p.dimensions.x <= 1 || p.dimensions.y <= 1 ||
+        p.dimensions.x > std::numeric_limits<Integer>::max() / 16 ||
+        p.dimensions.y > std::numeric_limits<Integer>::max() / 16) return {};
+    struct State { Tree tree; std::vector<std::size_t> roots; Integer priority; };
+    State initial{initial_tree(p, false), {}, 0};
+    for (std::size_t i = 1; i <= p.sinks.size(); ++i) initial.roots.push_back(i);
+    std::vector<State> beam{std::move(initial)};
+    auto less = [](State const& a, State const& b) {
+        return a.priority != b.priority ? a.priority < b.priority : tree_less(a.tree, b.tree);
+    };
+    while (!beam.empty() && remaining_trials) {
+        std::optional<Tree> complete;
+        Integer complete_score = std::numeric_limits<Integer>::max();
+        for (auto const& state : beam) {
+            --remaining_trials;
+            try {
+                auto candidate = state.tree;
+                candidate[0].children = state.roots;
+                auto const score = validate_tree(p, candidate).score;
+                if (!complete || score < complete_score) {
+                    complete = std::move(candidate); complete_score = score;
+                }
+            } catch (std::runtime_error const&) {}
+            if (!remaining_trials) break;
+        }
+        if (complete) return complete;
+        std::vector<State> next;
+        for (auto const& state : beam) {
+            for (std::size_t a = 0; a < state.roots.size() && remaining_trials; ++a)
+                for (std::size_t b = a + 1; b < state.roots.size() && remaining_trials; ++b) {
+                    auto const ia = state.roots[a], ib = state.roots[b];
+                    auto const pa = state.tree[ia].position, pb = state.tree[ib].position;
+                    std::set<std::pair<Integer, Integer>> points;
+                    auto offer = [&](Position base) {
+                        for (Integer dx = -1; dx <= 1; ++dx)
+                            for (Integer dy = -1; dy <= 1; ++dy) {
+                                Position s{base.x + dx, base.y + dy};
+                                if (s.x > 0 && s.y > 0 && s.x < p.dimensions.x && s.y < p.dimensions.y)
+                                    points.emplace(s.x, s.y);
+                            }
+                    };
+                    offer(pa); offer(pb); offer({pa.x, pb.y}); offer({pb.x, pa.y});
+                    offer({pa.x + (pb.x - pa.x) / 2, pa.y + (pb.y - pa.y) / 2});
+                    offer({std::clamp(p.source.x, Integer{1}, p.dimensions.x - 1),
+                           std::clamp(p.source.y, Integer{1}, p.dimensions.y - 1)});
+                    std::vector<Position> positions;
+                    for (auto point : points) positions.push_back({point.first, point.second});
+                    std::sort(positions.begin(), positions.end(), [&](Position x, Position y) {
+                        auto key = [&](Position s) {
+                            return std::make_tuple(add(distance(s, pa), distance(s, pb)),
+                                                   distance(s, p.source), s.x, s.y);
+                        };
+                        return key(x) < key(y);
+                    });
+                    for (auto s : positions) {
+                        if (!remaining_trials) break;
+                        --remaining_trials;
+                        if (std::any_of(state.tree.begin(), state.tree.end(), [&](Node const& n) {
+                            return n.position.x == s.x && n.position.y == s.y;
+                        })) continue;
+                        try {
+                            auto const wire = add(distance(s, pa), distance(s, pb));
+                            int type = -1;
+                            for (std::size_t t = 0; t < p.buffer_library.size(); ++t) {
+                                auto const& buf = p.buffer_library[t];
+                                if (buf.fanout >= 2 && buf.length >= wire &&
+                                    (type < 0 || buf.cost < p.buffer_library[static_cast<std::size_t>(type)].cost))
+                                    type = static_cast<int>(t);
+                            }
+                            if (type < 0) continue;
+                            State trial = state; // Isolate geometry and topology of every attempt.
+                            trial.roots.erase(trial.roots.begin() + static_cast<std::ptrdiff_t>(b));
+                            trial.roots.erase(trial.roots.begin() + static_cast<std::ptrdiff_t>(a));
+                            trial.roots.push_back(trial.tree.size());
+                            trial.tree.push_back({s, type, {ia, ib}});
+                            trial.priority = 0;
+                            for (auto root : trial.roots)
+                                trial.priority = add(trial.priority, distance(p.source, trial.tree[root].position));
+                            for (auto const& n : trial.tree)
+                                if (n.type >= 0) trial.priority = add(trial.priority,
+                                    p.buffer_library[static_cast<std::size_t>(n.type)].cost);
+                            auto it = std::lower_bound(next.begin(), next.end(), trial, less);
+                            if (it == next.end() || less(trial, *it)) next.insert(it, std::move(trial));
+                            if (next.size() > 64) next.pop_back();
+                        } catch (std::runtime_error const&) {}
+                    }
+                }
+            if (!remaining_trials) break;
+        }
+        beam = std::move(next);
+    }
+    return {};
+}
+
 Tree solve(Problem const& p) {
     std::optional<Tree> best;
     Integer best_score = std::numeric_limits<Integer>::max();
@@ -997,6 +1096,10 @@ Tree solve(Problem const& p) {
         catch (std::runtime_error const& e) { reason = e.what(); }
     }
     if (!best && !allocation_shortlist.empty()) best = allocation_shortlist.front().second;
+    if (!best) {
+        std::size_t remaining_trials = 65536;
+        best = small_forest(p, remaining_trials);
+    }
     if (!best) throw std::runtime_error("no legal tree constructed: " + reason);
     // Preserve the previous winner's full improvement budget. Alternatives
     // share a separate budget, so a new trial cannot regress its result.

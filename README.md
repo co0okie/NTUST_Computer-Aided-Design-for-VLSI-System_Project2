@@ -163,6 +163,15 @@ state, all buffer types are reselected, and the complete tree is validated and
 scored. The hub-only Score is used solely as a lower bound for pruning because
 all sinks share the source-to-hub path and relay insertion only adds cost.
 Every completed strategy competes on its validated Score.
+If all existing builders fail, a small-forest fallback tries alternative pairs
+and merge positions in isolated states, allowing SRC to drive multiple groups.
+It accepts only fully validated trees and runs only for at most eight sinks and
+64 library types. Each merge samples at most 54 positions near its endpoints,
+corners, midpoint and SRC, without scanning the chip. At most 64 states survive
+each merge layer, trees contain at most 16 components, and all placement and
+completion trials share a 65,536-attempt budget. It uses direct legal buffer
+edges and may miss solutions requiring relay chains or discarded beam states.
+Existing successful constructions and their optimization budgets are preserved.
 This is a heuristic: merge
 placement and relay searches are bounded, and feasibility or optimality is not
 guaranteed. A failed construction reports an error; it does not prove the input
@@ -197,6 +206,7 @@ illegal source-budget exchanges and the large-input exchange cutoff,
 merge revisits after later improvements and the 512-component refinement cutoff,
 single-leaf reparenting with remaining capacity and reordered sinks,
 delay relays with even/mixed parity, cost/capacity/boundary and large-integer checks,
+small-forest fallback with reordered sinks,
 malformed input, and output preservation.
 The supplied grading archive is only a read-only reference and is never executed.
 
