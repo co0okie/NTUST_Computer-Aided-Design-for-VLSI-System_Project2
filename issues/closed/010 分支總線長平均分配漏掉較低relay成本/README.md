@@ -30,8 +30,8 @@ cluster 首先 ba=limit/2、bb=limit-ba；只在某個child距離小於其budget
 ```sh
 cmake -S . -B tmp/tester/branch-budget-build -DCMAKE_BUILD_TYPE=Release
 cmake --build tmp/tester/branch-budget-build -j2
-./tmp/tester/branch-budget-build/cbi 'issues/opened/010 分支總線長平均分配漏掉較低relay成本/input001.cbi' tmp/tester/branch-budget-output001.cbi
-python3 'issues/opened/010 分支總線長平均分配漏掉較低relay成本/verify_witness.py'
+./tmp/tester/branch-budget-build/cbi 'issues/closed/010 分支總線長平均分配漏掉較低relay成本/input001.cbi' tmp/tester/branch-budget-output001.cbi
+python3 'issues/closed/010 分支總線長平均分配漏掉較低relay成本/verify_witness.py'
 ```
 
 驗收：附件合法且Score=8；補children順序交換、小分支距離釋放budget、理想relay被pin佔位、巨大length的工作量回退；維持既有Score基準。
