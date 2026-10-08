@@ -404,10 +404,16 @@ Tree delay_tree(Problem const& p, Tree best, std::size_t* remaining_trials = nul
     return best;
 }
 
-Tree refine_tree(Problem const& p, Tree best) {
+Tree refine_tree(Problem const& p, Tree best, std::size_t* shared_trials = nullptr,
+                 std::size_t* shared_insertions = nullptr) {
+    auto budget = [&](std::size_t cap) { return shared_trials ? std::min(cap, *shared_trials) : cap; };
+    auto charge = [&](std::size_t start, std::size_t left) {
+        if (shared_trials) *shared_trials -= start - left;
+    };
     // Keep the established one-pass result and its budgets as the fallback.
-    best = swap_leaves(p, relocate_tree(p, std::move(best)));
-    std::size_t remaining_trials = 6144;
+    best = relocate_tree(p, std::move(best), shared_trials);
+    best = swap_leaves(p, std::move(best), shared_trials);
+    std::size_t remaining_trials = budget(6144), start = remaining_trials;
     for (unsigned round = 0; round < 3 && remaining_trials; ++round) {
         auto const score = validate_tree(p, best).score;
         best = improve_tree(p, std::move(best), &remaining_trials);
@@ -415,9 +421,10 @@ Tree refine_tree(Problem const& p, Tree best) {
         best = swap_leaves(p, std::move(best), &remaining_trials);
         if (validate_tree(p, best).score == score) break;
     }
+    charge(start, remaining_trials);
     // Preserve the established refinement result before exploring the new
     // membership move, which can unlock earlier geometry/bypass improvements.
-    remaining_trials = 8192;
+    remaining_trials = budget(8192); start = remaining_trials;
     for (unsigned round = 0; round < 3 && remaining_trials; ++round) {
         auto const score = validate_tree(p, best).score;
         best = reparent_leaves(p, std::move(best), &remaining_trials);
@@ -426,8 +433,10 @@ Tree refine_tree(Problem const& p, Tree best) {
         best = swap_leaves(p, std::move(best), &remaining_trials);
         if (validate_tree(p, best).score == score) break;
     }
-    remaining_trials = 10240;
-    std::size_t remaining_insertions = 16;
+    charge(start, remaining_trials);
+    remaining_trials = budget(10240); start = remaining_trials;
+    std::size_t remaining_insertions = shared_insertions ? std::min(std::size_t{16}, *shared_insertions) : 16;
+    auto const insertion_start = remaining_insertions;
     for (unsigned round = 0; round < 3 && remaining_trials; ++round) {
         auto const score = validate_tree(p, best).score;
         best = delay_tree(p, std::move(best), &remaining_trials, &remaining_insertions);
@@ -437,6 +446,8 @@ Tree refine_tree(Problem const& p, Tree best) {
         best = swap_leaves(p, std::move(best), &remaining_trials);
         if (validate_tree(p, best).score == score) break;
     }
+    charge(start, remaining_trials);
+    if (shared_insertions) *shared_insertions -= insertion_start - remaining_insertions;
     return best;
 }
 
@@ -1061,8 +1072,20 @@ Tree solve(Problem const& p) {
     Integer best_score = std::numeric_limits<Integer>::max();
     std::string reason;
     std::vector<std::pair<Integer, Tree>> shortlist, allocation_shortlist;
-    auto consider = [&](Tree candidate, bool allocation = false) {
+    // Two representatives per route family: lowest initial Score and cost.
+    // A poor initial skew need not erase a useful star or hub topology.
+    std::vector<std::pair<Integer, Tree>> diverse(6, {std::numeric_limits<Integer>::max(), {}});
+    auto consider = [&](Tree candidate, bool allocation = false, std::size_t family = 0) {
         auto const metrics = validate_tree(p, candidate);
+        if (p.sinks.size() <= 128 && candidate.size() <= 512) {
+            auto const cost = metrics.score - p.skew_weight * (metrics.maximum_arrival - metrics.minimum_arrival);
+            for (std::size_t kind = 0; kind < 2; ++kind) {
+                auto const key = kind == 0 ? metrics.score : cost;
+                auto& entry = diverse[2 * family + kind];
+                if (entry.second.empty() || key < entry.first ||
+                    (key == entry.first && tree_less(candidate, entry.second))) entry = {key, candidate};
+            }
+        }
         if (candidate.size() <= 512) {
             auto& candidates = allocation ? allocation_shortlist : shortlist;
             auto less = [](auto const& a, auto const& b) {
@@ -1090,9 +1113,9 @@ Tree solve(Problem const& p) {
                 }
             }
         }
-        try { consider(Builder(p, false, policy).build_star()); }
+        try { consider(Builder(p, false, policy).build_star(), false, 1); }
         catch (std::runtime_error const& e) { reason = e.what(); }
-        try { consider(Builder(p, false, policy).build_hub()); }
+        try { consider(Builder(p, false, policy).build_hub(), false, 2); }
         catch (std::runtime_error const& e) { reason = e.what(); }
     }
     if (!best && !allocation_shortlist.empty()) best = allocation_shortlist.front().second;
@@ -1120,7 +1143,29 @@ Tree solve(Problem const& p) {
     improve_shortlist(shortlist);
     remaining_trials = 2048;
     improve_shortlist(allocation_shortlist);
-    return refine_tree(p, std::move(improved));
+    improved = refine_tree(p, std::move(improved));
+    best_score = validate_tree(p, improved).score;
+    // Preserve the prior winner's entire refinement. Alternatives share an
+    // extra budget, with per-candidate slices and a global insertion cap.
+    remaining_trials = 32768;
+    std::size_t remaining_insertions = 16;
+    std::vector<Tree> seen{original};
+    for (std::size_t index : {2U, 3U, 4U, 5U, 0U, 1U}) {
+        auto& tree = diverse[index].second;
+        if (tree.empty() || !remaining_trials) continue;
+        if (std::any_of(seen.begin(), seen.end(), [&](Tree const& previous) {
+            return !tree_less(tree, previous) && !tree_less(previous, tree);
+        })) continue;
+        seen.push_back(tree);
+        auto slice = std::min(std::size_t{8192}, remaining_trials);
+        auto const start = slice;
+        auto candidate = improve_tree(p, std::move(tree), &slice);
+        candidate = refine_tree(p, std::move(candidate), &slice, &remaining_insertions);
+        remaining_trials -= start - slice;
+        auto const score = validate_tree(p, candidate).score;
+        if (score < best_score) { best_score = score; improved = std::move(candidate); }
+    }
+    return improved;
 }
 
 std::string serialize_tree(Problem const& p, Tree const& tree) {

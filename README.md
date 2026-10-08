@@ -87,6 +87,16 @@ compete with that result, so exploring ties cannot worsen the previous winner.
 Exact duplicate stored layouts are skipped. The shortlist is bounded and may
 still omit a topology with greater improvement potential.
 
+After preserving the winning tree's full refinement, at most six extra
+representatives receive complete refinement: the lowest initial Score and cost
+from general/binary, star and hub families. This lets a topology with initially
+poor skew compete after geometry and membership changes. Exact stored duplicates
+are skipped. These alternatives run only for at most 128 sinks and 512 components,
+share 32768 additional trials and 16 accepted delay insertions, and receive at
+most 8192 trials each, including bypass. Phase/call limits still apply; only a
+strictly lower validated final Score replaces the established result. Finite
+representatives and shared budgets can still omit promising constructions.
+
 After choosing the improved complete tree, a separate relocation pass adjusts
 buffer positions while preserving topology. It samples radius-two integer offsets,
 alignments with parent/children coordinates, and midpoint positions, with at most
@@ -207,6 +217,7 @@ merge revisits after later improvements and the 512-component refinement cutoff,
 single-leaf reparenting with remaining capacity and reordered sinks,
 delay relays with even/mixed parity, cost/capacity/boundary and large-integer checks,
 small-forest fallback with reordered sinks,
+full-refinement alternatives with reordered sinks, different weights and costs,
 malformed input, and output preservation.
 The supplied grading archive is only a read-only reference and is never executed.
 

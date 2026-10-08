@@ -423,6 +423,19 @@ class SolverTests(unittest.TestCase):
             _, _, cost = check_output(text, [(2, 1)] + order, 5, (2, 4), ((2, 5, 1),))
             self.assertLessEqual(100 * skew + cost, 302)
 
+    def test_full_refinement_candidate_diversity(self):
+        sinks = [(9, 3), (17, 24), (24, 6)]
+        variants = [(((2, 11, 4), (2, 18, 13)), [(1, 21), (10, 27), (100, 117)]),
+                    (((2, 11, 8), (2, 18, 26)), [(1, 33), (10, 44), (100, 134)]),
+                    (((2, 11, 4), (2, 18, 5)), [(1, 10), (10, 19), (100, 109)])]
+        for order in [sinks, list(reversed(sinks)), sinks[1:] + sinks[:1]]:
+            for library, cases in variants:
+                for weight, bound in cases:
+                    pins = [(9, 9)] + order
+                    skew, text = self.run_case(pins, dim=30, source=(3, 32), library=library, weight=weight)
+                    _, _, cost = check_output(text, pins, 30, (3, 32), library)
+                    self.assertLessEqual(weight * skew + cost, bound)
+
     def test_reject_without_overwriting(self):
         good = instance([(10, 10), (20, 20)])
         bad_cases = [good.replace('20 20', '10 10'), good.replace('20 20', '101 20'),
