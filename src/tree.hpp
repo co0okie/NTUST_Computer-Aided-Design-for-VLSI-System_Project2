@@ -104,6 +104,69 @@ Metrics validate_tree(Problem const& p, Tree const& tree) {
     return {*bounds.second, *bounds.first, add(cost, skew * p.skew_weight)};
 }
 
+void select_buffer_types(Problem const& p, Tree& tree) {
+    for (std::size_t i = p.sinks.size() + 1; i < tree.size(); ++i) {
+        Integer length = 0;
+        for (auto child : tree[i].children)
+            length = add(length, distance(tree[i].position, tree[child].position));
+        int cheapest = -1;
+        for (std::size_t j = 0; j < p.buffer_library.size(); ++j) {
+            auto const& type = p.buffer_library[j];
+            if (static_cast<std::uint64_t>(type.fanout) >= tree[i].children.size() && type.length >= length &&
+                (cheapest < 0 || type.cost < p.buffer_library[static_cast<std::size_t>(cheapest)].cost))
+                cheapest = static_cast<int>(j);
+        }
+        if (cheapest < 0) throw std::runtime_error("no legal buffer type");
+        tree[i].type = cheapest;
+    }
+}
+
+Tree improve_tree(Problem const& p, Tree best) {
+    // Best-improvement passes prevent an early skew-increasing contraction
+    // from hiding a cheaper balanced merge. Bound both tree size and work.
+    if (best.size() > 512) return best;
+    auto score = validate_tree(p, best).score;
+    auto const trial_limit = std::min(std::size_t{2048},
+        std::size_t{2000000} / best.size() / (p.buffer_library.size() + 16));
+    std::size_t trials = 0;
+    for (unsigned pass = 0; pass < 16 && trials < trial_limit; ++pass) {
+        std::optional<Tree> improved;
+        auto next_score = score;
+        for (std::size_t parent = 0; parent < best.size() && trials < trial_limit; ++parent) {
+            for (std::size_t k = 0; k < best[parent].children.size() && trials < trial_limit; ++k) {
+                auto const victim = best[parent].children[k];
+                if (victim <= p.sinks.size()) continue;
+                for (bool relocate : {false, true}) {
+                    if (relocate && parent == 0) continue;
+                    if (trials >= trial_limit) break;
+                    ++trials;
+                    Tree candidate = best;
+                    auto const children = candidate[victim].children;
+                    auto& edges = candidate[parent].children;
+                    edges.erase(edges.begin() + static_cast<std::ptrdiff_t>(k));
+                    edges.insert(edges.begin() + static_cast<std::ptrdiff_t>(k), children.begin(), children.end());
+                    if (relocate) candidate[parent].position = candidate[victim].position;
+                    candidate.erase(candidate.begin() + static_cast<std::ptrdiff_t>(victim));
+                    for (auto& node : candidate)
+                        for (auto& child : node.children) if (child > victim) --child;
+                    try {
+                        select_buffer_types(p, candidate);
+                        auto const metrics = validate_tree(p, candidate);
+                        if (metrics.score < next_score) {
+                            next_score = metrics.score; improved = std::move(candidate);
+                        }
+                    } catch (std::runtime_error const&) {
+                        // Illegal merges leave the original complete tree intact.
+                    }
+                }
+            }
+        }
+        if (!improved) break;
+        best = std::move(*improved); score = next_score;
+    }
+    return best;
+}
+
 class Builder {
     Problem const& p;
     Tree tree;
@@ -471,20 +534,7 @@ public:
 
 private:
     Tree finish() {
-        // Select the cheapest legal type once every outgoing edge is known.
-        for (std::size_t i = p.sinks.size() + 1; i < tree.size(); ++i) {
-            Integer length = 0;
-            for (auto child : tree[i].children) length = add(length, distance(tree[i].position, tree[child].position));
-            int cheapest = -1;
-            for (std::size_t j = 0; j < p.buffer_library.size(); ++j) {
-                auto const& type = p.buffer_library[j];
-                if (static_cast<std::uint64_t>(type.fanout) >= tree[i].children.size() && type.length >= length &&
-                    (cheapest < 0 || type.cost < p.buffer_library[static_cast<std::size_t>(cheapest)].cost))
-                    cheapest = static_cast<int>(j);
-            }
-            if (cheapest < 0) throw std::runtime_error("no legal buffer type");
-            tree[i].type = cheapest;
-        }
+        select_buffer_types(p, tree);
         return tree;
     }
 };
@@ -558,7 +608,7 @@ Tree solve(Problem const& p) {
         catch (std::runtime_error const& e) { reason = e.what(); }
     }
     if (!best) throw std::runtime_error("no legal tree constructed: " + reason);
-    return std::move(*best);
+    return improve_tree(p, std::move(*best));
 }
 
 std::string serialize_tree(Problem const& p, Tree const& tree) {

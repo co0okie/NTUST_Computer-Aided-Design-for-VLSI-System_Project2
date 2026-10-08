@@ -30,8 +30,8 @@ Builder::branching_type 固定選 fanout>=2、length>=2 中 length 最大型別�
 ```sh
 cmake -S . -B tmp/tester/branch-cost-build -DCMAKE_BUILD_TYPE=Release
 cmake --build tmp/tester/branch-cost-build -j2
-./tmp/tester/branch-cost-build/cbi 'issues/opened/007 分支buffer固定最大線長漏掉廉價分支加relay/input001.cbi' tmp/tester/branch-output001.cbi
-python3 'issues/opened/007 分支buffer固定最大線長漏掉廉價分支加relay/verify_witness.py'
+./tmp/tester/branch-cost-build/cbi 'issues/closed/007 分支buffer固定最大線長漏掉廉價分支加relay/input001.cbi' tmp/tester/branch-output001.cbi
+python3 'issues/closed/007 分支buffer固定最大線長漏掉廉價分支加relay/verify_witness.py'
 ```
 
 驗收：附件合法且 Score<=5；檢查長分支型別更便宜時仍可選長型別、cheap type fanout 不足、總 length 各分支分配與 relay 佔位回退。保留已關閉 issues 的 Score 基準，並提供新增組合對 runtime 的觀察。

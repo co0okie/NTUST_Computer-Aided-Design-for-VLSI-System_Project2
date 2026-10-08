@@ -234,6 +234,31 @@ class SolverTests(unittest.TestCase):
         _, _, cost = check_output(text, pins, 40, (1, 100), library)
         self.assertLessEqual(skew + cost, 12)
 
+    def test_local_multiway_merge(self):
+        pins = [(10, 2), (12, 10), (10, 12), (8, 10), (9, 9)]
+        skew, text = self.run_case(pins, dim=20, source=(1, 8), library=((3, 100, 10),), weight=1)
+        _, _, cost = check_output(text, pins, 20, (1, 8), ((3, 100, 10),))
+        self.assertEqual((skew, cost), (0, 20))
+        self.assertTrue(text.startswith('.buffer 2\n'))
+
+    def test_local_merge_fanout_and_total_length(self):
+        pins = [(10, 2), (12, 10), (10, 12), (8, 10), (9, 9)]
+        _, text = self.run_case(pins, dim=20, source=(1, 8), library=((2, 100, 10),), weight=1)
+        self.assertGreaterEqual(int(text.splitlines()[0].split()[1]), 3)
+        # Edges of the two-buffer witness are individually <=3, but its
+        # outgoing total exceeds 3. All leaves span x+y ranges totaling 7,
+        # which two buffers' combined outgoing budgets of 6 cannot cover.
+        _, text = self.run_case(pins, dim=20, source=(1, 8), library=((3, 3, 10),), weight=1)
+        self.assertGreaterEqual(int(text.splitlines()[0].split()[1]), 3)
+
+    def test_merge_uses_weighted_skew(self):
+        pins = [(3, 3), (20, 10), (20, 30)]
+        library = ((2, 100, 30),)
+        for weight, expected in [(1, (20, 0)), (100, (0, 30))]:
+            skew, text = self.run_case(pins, dim=40, source=(2, 100), library=library, weight=weight)
+            _, _, cost = check_output(text, pins, 40, (2, 100), library)
+            self.assertEqual((skew, cost), expected)
+
     def test_same_boundary_relay(self):
         # Each edge's shortest path lies on a forbidden buffer boundary.
         for pins in [[(10, 0), (90, 0)], [(10, 100), (90, 100)],

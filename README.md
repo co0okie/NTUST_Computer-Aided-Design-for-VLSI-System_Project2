@@ -57,6 +57,15 @@ objective `w_skew * (T_max - T_min) + buffer_cost`. Every candidate is validated
 for unique coordinates, fixed pins, interior buffers, connectivity, tree
 structure, and driving limits. Output levels are generated from tree depth.
 
+A final local pass bypasses a child buffer, joining its outputs directly to its
+parent. It also tries moving a buffer parent to the removed child's position.
+Every trial reselects compatible buffer types and validates the complete tree;
+only a strict reduction in weighted Score is accepted. Each pass chooses the
+best trial, preserving balanced alternatives when another bypass raises skew.
+The search handles trees of at most 512 components, with at most 16 passes and
+2048 total trials; the trial budget shrinks with tree size and library size.
+This permits local multi-output merges but remains a bounded heuristic.
+
 All integer Manhattan paths between fixed endpoints have the same length parity.
 Consequently, sinks with mixed `(x+y) mod 2` cannot have exact zero skew. One
 strategy balances virtual sink arrivals with parity offsets to target skew 0
@@ -95,6 +104,7 @@ fanout/total-length counterexamples, full source relay costs and type reselectio
 hub routing fallback, short/long relay cost tradeoffs, occupied relay launch
 positions, mixed-type chains in both type orders, partial final segments, huge
 distance fallback, branch-type cost tradeoffs with fanout/total-length checks,
+local multi-output merges with fanout/total-length and weighted-skew checks,
 malformed input, and output preservation.
 The supplied grading archive is only a read-only reference and is never executed.
 
