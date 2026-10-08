@@ -123,6 +123,13 @@ After retaining all prior refinement phases, up to three extra rounds of subtree
 exchange, bypass, relocation, leaf exchange and leaf reparenting share 8192 trials.
 Alternative construction candidates still use their existing global/slice limits.
 
+Once the final refined candidate has been selected, delay insertion is revisited
+once with at most 2048 additional scaled trials and 16 accepted insertions.
+This lets subtree changes or candidate selection expose useful detours without
+consuming any prior phase budgets. The same size limits, eight-pass call limit,
+full validation and strictly lower actual Score apply. A separate final revisit
+also runs for forest fallback results; large-tree contraction follows afterward.
+
 After choosing the improved complete tree, a separate relocation pass adjusts
 buffer positions while preserving topology. It samples radius-two integer offsets,
 alignments with parent/children coordinates, and midpoint positions, with at most
@@ -273,6 +280,7 @@ dense library-arity forests requiring four/five outputs and twelve sinks,
 full-refinement alternatives with reordered sinks, different weights and costs,
 large-tree multi-output contractions with reordered sinks,
 subtree/sink exchanges with reordered sinks and buffer type changes,
+final delay revisits after candidate selection with reordered sinks,
 malformed input, and output preservation.
 The supplied grading archive is only a read-only reference and is never executed.
 

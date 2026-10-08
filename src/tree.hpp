@@ -506,6 +506,19 @@ Tree delay_tree(Problem const& p, Tree best, std::size_t* remaining_trials = nul
     return best;
 }
 
+// Revisit delay on the final selected tree, after subtree moves and alternative
+// candidate comparison. Its separate cap cannot consume established budgets.
+Tree final_delay(Problem const& p, Tree best, std::size_t* shared_trials = nullptr,
+                 std::size_t* shared_insertions = nullptr) {
+    std::size_t trials = shared_trials ? std::min(std::size_t{2048}, *shared_trials) : 2048;
+    std::size_t insertions = shared_insertions ? std::min(std::size_t{16}, *shared_insertions) : 16;
+    auto const trial_start = trials, insertion_start = insertions;
+    best = delay_tree(p, std::move(best), &trials, &insertions);
+    if (shared_trials) *shared_trials -= trial_start - trials;
+    if (shared_insertions) *shared_insertions -= insertion_start - insertions;
+    return best;
+}
+
 Tree refine_tree(Problem const& p, Tree best, std::size_t* shared_trials = nullptr,
                  std::size_t* shared_insertions = nullptr) {
     auto budget = [&](std::size_t cap) { return shared_trials ? std::min(cap, *shared_trials) : cap; };
@@ -1324,7 +1337,7 @@ Tree solve(Problem const& p) {
     // Preserve the previous winner's full improvement budget. Alternatives
     // share a separate budget, so a new trial cannot regress its result.
     if (shortlist.empty() && allocation_shortlist.empty())
-        return contract_large_tree(p, refine_tree(p, improve_tree(p, std::move(*best))));
+        return contract_large_tree(p, final_delay(p, refine_tree(p, improve_tree(p, std::move(*best)))));
     auto const original = *best;
     auto improved = improve_tree(p, std::move(*best));
     best_score = validate_tree(p, improved).score;
@@ -1363,7 +1376,7 @@ Tree solve(Problem const& p) {
         auto const score = validate_tree(p, candidate).score;
         if (score < best_score) { best_score = score; improved = std::move(candidate); }
     }
-    return contract_large_tree(p, improved);
+    return contract_large_tree(p, final_delay(p, std::move(improved)));
 }
 
 std::string serialize_tree(Problem const& p, Tree const& tree) {

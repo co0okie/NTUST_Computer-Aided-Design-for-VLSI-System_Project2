@@ -329,6 +329,16 @@ class SolverTests(unittest.TestCase):
             _, _, cost = check_output(text, pins, 30, (4, 16), library)
             self.assertLessEqual(15 * skew + cost, 106)
 
+    def test_final_delay_revisit(self):
+        sinks = [(34, 20), (24, 13), (38, 19), (20, 1), (9, 35),
+                 (37, 29), (1, 12), (15, 26), (34, 18), (26, 35)]
+        library = ((4, 84, 1),)
+        for order in [sinks, list(reversed(sinks)), sinks[3:] + sinks[:3]]:
+            pins = [(12, 28)] + order
+            skew, text = self.run_case(pins, dim=40, source=(3, 78), library=library, weight=9)
+            _, _, cost = check_output(text, pins, 40, (3, 78), library)
+            self.assertLessEqual(9 * skew + cost, 34)
+
     def test_sink_exchange_rejects_parent_length_overflow(self):
         # Swapping the direct near sink with the deeper far sink would lower
         # skew from 11 to 7, but SRC's outgoing total would become 12 > 3.
