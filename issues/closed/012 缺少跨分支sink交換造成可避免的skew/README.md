@@ -28,8 +28,8 @@ witness 只交換 S1/S4 的 parent：B1→{S1,S2}、B3→{S4,B2}；所有pin與b
 ## 重現與驗收
 
 ```sh
-./tmp/tester/review-7ab6560/build/cbi 'issues/opened/012 缺少跨分支sink交換造成可避免的skew/input001.cbi' tmp/tester/swap-output001.cbi
-python3 'issues/opened/012 缺少跨分支sink交換造成可避免的skew/verify_witness.py'
+./tmp/tester/review-7ab6560/build/cbi 'issues/closed/012 缺少跨分支sink交換造成可避免的skew/input001.cbi' tmp/tester/swap-output001.cbi
+python3 'issues/closed/012 缺少跨分支sink交換造成可避免的skew/verify_witness.py'
 ```
 
 驗收：附件合法且Score<=64；覆蓋交換後超出parent總length的拒絕案例、sink順序改變、不同depth的leaf若有採樣須重新serialize正確level、巨大dimensions/較多sinks的工作量上限；001–011既有Score基準不退步。
