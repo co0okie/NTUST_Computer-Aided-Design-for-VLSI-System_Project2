@@ -123,9 +123,11 @@ class SolverTests(unittest.TestCase):
 
     def test_source_budget_with_occupied_launch(self):
         for sinks in [[(9, 5), (6, 5)], [(6, 5), (9, 5)]]:
-            _, text = self.run_case([(5, 5)] + sinks, dim=10,
-                                    source=(2, 3), library=((1, 3, 1),))
-            self.assertTrue(text.startswith('.buffer 1\n'))
+            pins = [(5, 5)] + sinks
+            skew, text = self.run_case(pins, dim=10, source=(2, 3), library=((1, 3, 1),))
+            _, _, cost = check_output(text, pins, 10, (2, 3), ((1, 3, 1),))
+            # Delay insertion may spend a second buffer to reduce weighted skew.
+            self.assertLessEqual(100 * skew + cost, 301)
 
     def test_multi_output_hub(self):
         pins = [(5, 1), (4, 5), (5, 6), (6, 5), (5, 4)]
@@ -240,6 +242,40 @@ class SolverTests(unittest.TestCase):
         _, _, cost = check_output(text, pins, 20, (1, 8), ((3, 100, 10),))
         self.assertEqual((skew, cost), (0, 20))
         self.assertTrue(text.startswith('.buffer 2\n'))
+
+    def test_delay_relay_weighted_skew_and_parity(self):
+        library = ((1, 100, 1),)
+        for near, bound in [((7, 5), 1), ((6, 5), 101)]:
+            for order in [[near, (9, 5)], [(9, 5), near]]:
+                pins = [(5, 5)] + order
+                skew, text = self.run_case(pins, dim=10, source=(2, 100), library=library, weight=100)
+                _, _, cost = check_output(text, pins, 10, (2, 100), library)
+                self.assertEqual(100 * skew + cost, bound)
+
+    def test_delay_relay_cost_limits_and_boundary(self):
+        pins = [(5, 5), (7, 5), (9, 5)]
+        skew, text = self.run_case(pins, dim=10, source=(2, 100), library=((1, 100, 10),), weight=1)
+        self.assertEqual(skew, 2)
+        self.assertTrue(text.startswith('.buffer 0\n'))
+        # A relay of capacity one must sit next to the near sink; delaying it
+        # then requires SRC outgoing sum >=7, exceeding this limit of six.
+        skew, text = self.run_case(pins, dim=10, source=(2, 6), library=((1, 1, 1),), weight=100)
+        self.assertEqual(skew, 2)
+        self.assertTrue(text.startswith('.buffer 0\n'))
+        pins = [(5, 0), (7, 0), (9, 0)]
+        skew, text = self.run_case(pins, dim=10, source=(2, 100), library=((1, 100, 1),), weight=100)
+        _, _, cost = check_output(text, pins, 10, (2, 100), ((1, 100, 1),))
+        self.assertEqual((skew, cost), (0, 1))
+
+    def test_delay_relay_huge_dimensions_and_int64(self):
+        cases = [([(5, 5), (7, 5), (10**12 - 5, 5)], 10**12,
+                  (2, 2 * 10**12), ((1, 10**12, 1),), 100, 1),
+                 ([(0, 0), (1, 1), (2**63 - 5, 0)], 2**63 - 1,
+                  (2, 2**63 - 1), ((1, 2**63 - 1, 1),), 1, 3)]
+        for pins, dim, source, library, weight, bound in cases:
+            skew, text = self.run_case(pins, dim=dim, source=source, library=library, weight=weight)
+            _, _, cost = check_output(text, pins, dim, source, library)
+            self.assertLessEqual(weight * skew + cost, bound)
 
     def test_sink_reparent_uses_remaining_capacity(self):
         sinks = [(16, 5), (11, 14), (11, 17), (19, 2), (1, 6)]

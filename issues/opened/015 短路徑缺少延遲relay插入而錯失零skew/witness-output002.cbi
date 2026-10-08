@@ -1,0 +1,8 @@
+.buffer 1
+B1 T0 6 6
+.e
+
+.level 2
+1 SRC:{B1 S2}
+2 B1:{S1}
+.e

@@ -130,9 +130,25 @@ The move handles at most 128 sinks and 512 components, up to eight passes and 20
 evaluations per call, further limited by tree/library size and a shared counter.
 After retaining the established refinement result, up to three more rounds run
 reparenting, bypass, relocation and exchange with 8192 shared extra evaluations.
-They stop on no improvement or budget exhaustion; the full local-search cap is
+They stop on no improvement or budget exhaustion; the cap through reparenting is
 24576. Output levels are regenerated for depth-changing moves. This preserves
 prior search budgets but remains a bounded heuristic with excluded last-child moves.
+
+Delay-relay insertion can increase wire length on an early leaf or subtree edge
+without changing intrinsic buffer delay (which is zero). It samples small endpoint
+neighborhoods and bounding-box excursions derived from the actual arrival gap;
+the floor/ceiling half-gap samples respect integer Manhattan parity. At most 32
+positions per edge are considered, avoiding grid/delay-sized scans. Each trial
+replaces one edge with a unary relay, reselects legal types and validates the full
+weighted Score and all parent outgoing totals. Expensive or illegal detours keep
+the original result; overflowing candidate distances are rejected.
+After retaining previous refinement budgets, up to three extra rounds of delay,
+reparenting, bypass, relocation and exchange share 10240 extra evaluations and
+at most 16 accepted relay insertions. Delay calls have at most eight passes and
+2048 trials, further reduced by tree/library size, with at most 128 sinks and
+512 resulting components. The full local-search cap is 34816 evaluations. This
+bounded, strictly improving search can miss moves requiring several simultaneous
+insertions or unsampled detour positions.
 
 All integer Manhattan paths between fixed endpoints have the same length parity.
 Consequently, sinks with mixed `(x+y) mod 2` cannot have exact zero skew. One
@@ -180,6 +196,7 @@ targets, boundary pins and huge dimensions, cross-branch leaf exchanges,
 illegal source-budget exchanges and the large-input exchange cutoff,
 merge revisits after later improvements and the 512-component refinement cutoff,
 single-leaf reparenting with remaining capacity and reordered sinks,
+delay relays with even/mixed parity, cost/capacity/boundary and large-integer checks,
 malformed input, and output preservation.
 The supplied grading archive is only a read-only reference and is never executed.
 

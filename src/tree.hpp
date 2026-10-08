@@ -313,6 +313,97 @@ Tree reparent_leaves(Problem const& p, Tree best, std::size_t* remaining_trials 
     return best;
 }
 
+Tree delay_tree(Problem const& p, Tree best, std::size_t* remaining_trials = nullptr,
+                std::size_t* remaining_insertions = nullptr) {
+    if (best.size() >= 512 || p.sinks.size() > 128 || p.dimensions.x <= 1 || p.dimensions.y <= 1) return best;
+    auto score = validate_tree(p, best).score;
+    auto const trial_limit = local_trial_limit(p, best, remaining_trials);
+    std::size_t trials = 0;
+    for (unsigned pass = 0; pass < 8 && trials < trial_limit && best.size() < 512; ++pass) {
+        if (remaining_insertions && !*remaining_insertions) break;
+        std::vector<Integer> arrival(best.size()), high(best.size());
+        std::vector<std::size_t> queue{0};
+        std::set<std::pair<Integer, Integer>> occupied;
+        for (std::size_t k = 0; k < queue.size(); ++k) {
+            auto const parent = queue[k];
+            occupied.emplace(best[parent].position.x, best[parent].position.y);
+            for (auto child : best[parent].children) {
+                arrival[child] = add(arrival[parent], distance(best[parent].position, best[child].position));
+                queue.push_back(child);
+            }
+        }
+        for (auto it = queue.rbegin(); it != queue.rend(); ++it) {
+            auto const node = *it;
+            high[node] = arrival[node];
+            if (!best[node].children.empty()) {
+                high[node] = 0;
+                for (auto child : best[node].children) {
+                    high[node] = std::max(high[node], high[child]);
+                }
+            }
+        }
+        std::optional<Tree> improved;
+        auto next_score = score;
+        for (std::size_t parent = 0; parent < best.size() && trials < trial_limit; ++parent) {
+            for (std::size_t k = 0; k < best[parent].children.size() && trials < trial_limit; ++k) {
+                auto const child = best[parent].children[k];
+                if (high[child] >= high[0]) continue;
+                auto const a = best[parent].position, b = best[child].position;
+                std::vector<Position> positions;
+                auto offer = [&](Position point) {
+                    if (positions.size() == 32 || point.x <= 0 || point.y <= 0 ||
+                        point.x >= p.dimensions.x || point.y >= p.dimensions.y || occupied.count({point.x, point.y})) return;
+                    if (std::none_of(positions.begin(), positions.end(), [&](auto q) {
+                            return q.x == point.x && q.y == point.y;
+                        })) positions.push_back(point);
+                };
+                for (auto center : {a, b})
+                    for (Integer dx = -1; dx <= 1; ++dx)
+                        for (Integer dy = -1; dy <= 1; ++dy) {
+                            if ((dx > 0 && center.x > std::numeric_limits<Integer>::max() - dx) ||
+                                (dy > 0 && center.y > std::numeric_limits<Integer>::max() - dy)) continue;
+                            offer({center.x + dx, center.y + dy});
+                        }
+                auto const xmin = std::min(a.x, b.x), xmax = std::max(a.x, b.x);
+                auto const ymin = std::min(a.y, b.y), ymax = std::max(a.y, b.y);
+                auto const gap = high[0] - high[child];
+                for (auto excursion : {gap / 2, gap / 2 + gap % 2}) {
+                    for (auto y : {a.y, b.y, ymin + (ymax - ymin) / 2}) {
+                        y = std::clamp(y, Integer{1}, p.dimensions.y - 1);
+                        if (excursion < xmin) offer({xmin - excursion, y});
+                        if (excursion < p.dimensions.x - xmax) offer({xmax + excursion, y});
+                    }
+                    for (auto x : {a.x, b.x, xmin + (xmax - xmin) / 2}) {
+                        x = std::clamp(x, Integer{1}, p.dimensions.x - 1);
+                        if (excursion < ymin) offer({x, ymin - excursion});
+                        if (excursion < p.dimensions.y - ymax) offer({x, ymax + excursion});
+                    }
+                }
+                for (auto point : positions) {
+                    if (trials == trial_limit) break;
+                    ++trials;
+                    if (remaining_trials) --*remaining_trials;
+                    try {
+                        if (add(distance(a, point), distance(point, b)) <= distance(a, b)) continue;
+                        auto candidate = best;
+                        candidate[parent].children[k] = candidate.size();
+                        candidate.push_back({point, 0, {child}});
+                        select_buffer_types(p, candidate);
+                        auto const metrics = validate_tree(p, candidate);
+                        if (metrics.score < next_score) {
+                            next_score = metrics.score; improved = std::move(candidate);
+                        }
+                    } catch (std::runtime_error const&) {}
+                }
+            }
+        }
+        if (!improved) break;
+        if (remaining_insertions) --*remaining_insertions;
+        best = std::move(*improved); score = next_score;
+    }
+    return best;
+}
+
 Tree refine_tree(Problem const& p, Tree best) {
     // Keep the established one-pass result and its budgets as the fallback.
     best = swap_leaves(p, relocate_tree(p, std::move(best)));
@@ -329,6 +420,17 @@ Tree refine_tree(Problem const& p, Tree best) {
     remaining_trials = 8192;
     for (unsigned round = 0; round < 3 && remaining_trials; ++round) {
         auto const score = validate_tree(p, best).score;
+        best = reparent_leaves(p, std::move(best), &remaining_trials);
+        best = improve_tree(p, std::move(best), &remaining_trials);
+        best = relocate_tree(p, std::move(best), &remaining_trials);
+        best = swap_leaves(p, std::move(best), &remaining_trials);
+        if (validate_tree(p, best).score == score) break;
+    }
+    remaining_trials = 10240;
+    std::size_t remaining_insertions = 16;
+    for (unsigned round = 0; round < 3 && remaining_trials; ++round) {
+        auto const score = validate_tree(p, best).score;
+        best = delay_tree(p, std::move(best), &remaining_trials, &remaining_insertions);
         best = reparent_leaves(p, std::move(best), &remaining_trials);
         best = improve_tree(p, std::move(best), &remaining_trials);
         best = relocate_tree(p, std::move(best), &remaining_trials);
