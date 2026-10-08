@@ -44,6 +44,13 @@ queries use the original maximum-length routing policy. Placement feasibility
 and the final weighted Score are still checked on the complete tree. This bounded
 planner does not prove optimality for chains with occupied points or detours.
 
+Binary tree construction also compares up to four branching length policies,
+including the original maximum length and the cheapest compatible branching type.
+Only types with fanout at least two and length at least two are eligible. Each
+branching policy allocates its total outgoing budget across both child routes,
+allowing cheap branch buffers followed by relays. These combinations apply to
+binary/parity trees only; source star and hub searches run once per relay policy.
+
 Two merge strategies, a direct SRC-to-sinks tree, and separate relay chains from
 SRC to each sink, and a single multi-output buffer hub are compared using the actual
 objective `w_skew * (T_max - T_min) + buffer_cost`. Every candidate is validated
@@ -87,7 +94,8 @@ same-boundary connections, occupied source launch points, multi-output hubs with
 fanout/total-length counterexamples, full source relay costs and type reselection,
 hub routing fallback, short/long relay cost tradeoffs, occupied relay launch
 positions, mixed-type chains in both type orders, partial final segments, huge
-distance fallback, malformed input, and output preservation.
+distance fallback, branch-type cost tradeoffs with fanout/total-length checks,
+malformed input, and output preservation.
 The supplied grading archive is only a read-only reference and is never executed.
 
 Tester reports belong in `issues/opened/<issue>/README.md`, with reproductions

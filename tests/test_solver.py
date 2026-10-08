@@ -217,6 +217,23 @@ class SolverTests(unittest.TestCase):
         _, text = self.run_case(pins, dim=2 * 10**12, source=(1, 1), library=library, weight=1)
         self.assertEqual(check_output(text, pins, 2 * 10**12, (1, 1), library), (10**12, 10**12, 5))
 
+    def test_branch_type_and_relay_cost(self):
+        pins = [(3, 3), (20, 10), (20, 30)]
+        for library, bound in [(((2, 6, 1), (2, 100, 100)), 5),
+                                (((2, 6, 10), (2, 100, 4)), 4),
+                                (((1, 6, 1), (2, 100, 100)), 100)]:
+            skew, text = self.run_case(pins, dim=40, source=(1, 100), library=library, weight=1)
+            _, _, cost = check_output(text, pins, 40, (1, 100), library)
+            self.assertLessEqual(skew + cost, bound)
+
+    def test_branch_budget_with_occupied_relay(self):
+        # The extra fixed sink occupies an ideal relay of the two-sink tree.
+        pins = [(3, 3), (20, 10), (20, 30), (20, 17)]
+        library = ((3, 6, 1), (3, 100, 100))
+        skew, text = self.run_case(pins, dim=40, source=(1, 100), library=library, weight=1)
+        _, _, cost = check_output(text, pins, 40, (1, 100), library)
+        self.assertLessEqual(skew + cost, 12)
+
     def test_same_boundary_relay(self):
         # Each edge's shortest path lies on a forbidden buffer boundary.
         for pins in [[(10, 0), (90, 0)], [(10, 100), (90, 100)],

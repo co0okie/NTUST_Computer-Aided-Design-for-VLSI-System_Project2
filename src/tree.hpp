@@ -350,7 +350,7 @@ class Builder {
     }
 
 public:
-    Builder(Problem const& problem, bool parity, int relay_policy = -1)
+    Builder(Problem const& problem, bool parity, int relay_policy = -1, int branch_policy = -1)
         : p(problem), tree(initial_tree(p, parity)) {
         if (p.dimensions.x <= 1 || p.dimensions.y <= 1)
             throw std::runtime_error("chip has no interior buffer positions");
@@ -367,6 +367,7 @@ public:
                 (branching_type < 0 || type.length > p.buffer_library[static_cast<std::size_t>(branching_type)].length))
                 branching_type = static_cast<int>(i);
         }
+        if (branch_policy >= 0) branching_type = branch_policy;
         if (relay_policy >= 0) relay_type = relay_policy;
         mixed_relays = relay_policy <= -2;
         shorter_ties = relay_policy == -3;
@@ -490,20 +491,25 @@ private:
 
 // Keep the original maximum-length policy, then sample cost/spacing tradeoffs.
 // Full-tree comparisons, rather than these ranking heuristics, choose the output.
-std::vector<int> relay_policies(Problem const& p) {
+std::vector<int> buffer_policies(Problem const& p, bool branching = false) {
     std::vector<int> policies{-1};
+    std::vector<std::size_t> order;
     Integer longest = 0;
-    for (auto const& type : p.buffer_library) longest = std::max(longest, type.length);
+    for (std::size_t i = 0; i < p.buffer_library.size(); ++i) {
+        auto const& type = p.buffer_library[i];
+        if (branching && (type.fanout < 2 || type.length < 2)) continue;
+        order.push_back(i); longest = std::max(longest, type.length);
+    }
+    if (order.empty()) return policies;
+    auto const limit = branching ? 4U : 8U;
     std::set<Integer> lengths{longest};
     auto offer = [&](std::size_t i) {
-        if (policies.size() < 8 && lengths.insert(p.buffer_library[i].length).second)
+        if (policies.size() < limit && lengths.insert(p.buffer_library[i].length).second)
             policies.push_back(static_cast<int>(i));
     };
-    std::size_t cheapest = 0, efficient = 0;
+    auto cheapest = order.front(), efficient = order.front();
     auto ratio = [](BufferType const& t) { return static_cast<long double>(t.cost) / t.length; };
-    std::vector<std::size_t> order;
-    for (std::size_t i = 0; i < p.buffer_library.size(); ++i) {
-        order.push_back(i);
+    for (auto i : order) {
         auto const& type = p.buffer_library[i];
         auto const& cheap = p.buffer_library[cheapest];
         if (type.cost < cheap.cost || (type.cost == cheap.cost && type.length > cheap.length)) cheapest = i;
@@ -520,9 +526,9 @@ std::vector<int> relay_policies(Problem const& p) {
     for (auto i : order) {
         auto const cost = p.buffer_library[i].cost;
         if (cost < cheapest_seen) { offer(i); cheapest_seen = cost; }
-        if (policies.size() == 8) break;
+        if (policies.size() == limit) break;
     }
-    if (lengths.size() > 1) { policies.push_back(-2); policies.push_back(-3); }
+    if (!branching && lengths.size() > 1) { policies.push_back(-2); policies.push_back(-3); }
     return policies;
 }
 
@@ -538,10 +544,13 @@ Tree solve(Problem const& p) {
     for (std::size_t i = 1; i <= p.sinks.size(); ++i) direct[0].children.push_back(i);
     try { consider(std::move(direct)); } catch (std::runtime_error const& e) { reason = e.what(); }
     if (best && best_score == 0) return std::move(*best);
-    for (auto policy : relay_policies(p)) {
-        for (bool parity : {true, false}) {
-            try { consider(Builder(p, parity, policy).build()); }
-            catch (std::runtime_error const& e) { reason = e.what(); }
+    auto const branches = buffer_policies(p, true);
+    for (auto policy : buffer_policies(p)) {
+        for (auto branch : branches) {
+            for (bool parity : {true, false}) {
+                try { consider(Builder(p, parity, policy, branch).build()); }
+                catch (std::runtime_error const& e) { reason = e.what(); }
+            }
         }
         try { consider(Builder(p, false, policy).build_star()); }
         catch (std::runtime_error const& e) { reason = e.what(); }
