@@ -189,6 +189,34 @@ class SolverTests(unittest.TestCase):
         _, _, cost = check_output(text, pins, 40, (2, 2), library)
         self.assertLessEqual(skew + cost, 34)
 
+    def test_mixed_relay_types_and_order(self):
+        for library in [((1, 8, 5), (1, 6, 4)), ((1, 6, 4), (1, 8, 5))]:
+            for pins in [[(2, 2), (23, 2)], [(23, 2), (2, 2)]]:
+                _, text = self.run_case(pins, dim=40, source=(1, 1), library=library, weight=1)
+                maximum, minimum, cost = check_output(text, pins, 40, (1, 1), library)
+                self.assertEqual((maximum, minimum, cost), (21, 21, 13))
+
+    def test_mixed_relay_short_tail(self):
+        pins = [(2, 2), (22, 2)]
+        library = ((1, 8, 5), (1, 6, 4))
+        _, text = self.run_case(pins, dim=40, source=(1, 1), library=library, weight=1)
+        self.assertEqual(check_output(text, pins, 40, (1, 1), library), (20, 20, 13))
+
+    def test_mixed_relay_occupied_launch(self):
+        pins = [(2, 2), (23, 2), (11, 2)]
+        library = ((1, 8, 5), (1, 6, 4))
+        skew, text = self.run_case(pins, dim=40, source=(2, 18), library=library, weight=1)
+        _, _, cost = check_output(text, pins, 40, (2, 18), library)
+        self.assertLessEqual(skew + cost, 21)
+
+    def test_large_distance_mixed_relay_fallback(self):
+        # Cheap short chains exceed the component budget; no distance-sized DP
+        # allocation is allowed. The long-type candidate remains feasible.
+        pins = [(2, 2), (10**12 + 2, 2)]
+        library = ((1, 10**12, 5), (1, 6, 4))
+        _, text = self.run_case(pins, dim=2 * 10**12, source=(1, 1), library=library, weight=1)
+        self.assertEqual(check_output(text, pins, 2 * 10**12, (1, 1), library), (10**12, 10**12, 5))
+
     def test_same_boundary_relay(self):
         # Each edge's shortest path lies on a forbidden buffer boundary.
         for pins in [[(10, 0), (90, 0)], [(10, 100), (90, 100)],

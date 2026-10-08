@@ -13,6 +13,8 @@
 namespace cbi {
 using Integer = std::int64_t;
 constexpr std::size_t component_budget = 100000;
+constexpr Integer chain_distance_budget = 4096;
+constexpr std::size_t chain_transition_budget = 262144;
 
 Integer add(Integer a, Integer b) {
     if (a < 0 || b < 0 || a > std::numeric_limits<Integer>::max() - b)
@@ -108,6 +110,42 @@ class Builder {
     std::set<std::pair<Integer, Integer>> occupied;
     int branching_type = -1;
     int relay_type = -1;
+    bool mixed_relays = false;
+    bool shorter_ties = false;
+    std::vector<Integer> chain_cost{0};
+    std::vector<int> chain_type{-1};
+    std::size_t chain_transitions = 0;
+
+    // Minimum buffer cost to cover the remaining distance without placement
+    // obstacles: C(r) = min_t(cost_t + C(max(0, r - length_t))). Geometry is
+    // checked separately and each actual step updates the remaining distance.
+    int relay_for(Integer remaining) {
+        if (!mixed_relays || remaining > chain_distance_budget) return relay_type;
+        auto const extent = static_cast<std::size_t>(remaining);
+        auto const needed = extent + 1 > chain_cost.size() ? extent + 1 - chain_cost.size() : 0;
+        if (needed > (chain_transition_budget - chain_transitions) / p.buffer_library.size()) return relay_type;
+        while (chain_cost.size() <= extent) {
+            Integer const r = static_cast<Integer>(chain_cost.size());
+            Integer best = std::numeric_limits<Integer>::max();
+            int chosen = -1;
+            for (std::size_t i = 0; i < p.buffer_library.size(); ++i) {
+                auto const& type = p.buffer_library[i];
+                auto const tail = static_cast<std::size_t>(std::max(Integer{0}, r - type.length));
+                if ((tail != 0 && chain_type[tail] < 0) || type.cost >
+                    std::numeric_limits<Integer>::max() - chain_cost[tail]) continue;
+                auto const cost = type.cost + chain_cost[tail];
+                bool tie = false;
+                if (chosen >= 0 && cost == best) {
+                    auto const length = p.buffer_library[static_cast<std::size_t>(chosen)].length;
+                    tie = shorter_ties ? type.length < length : type.length > length;
+                }
+                if (chosen < 0 || cost < best || tie) { best = cost; chosen = static_cast<int>(i); }
+            }
+            chain_transitions += p.buffer_library.size();
+            chain_cost.push_back(best); chain_type.push_back(chosen);
+        }
+        return chain_type[extent] >= 0 ? chain_type[extent] : relay_type;
+    }
 
     bool free(Position s) const {
         return s.x > 0 && s.y > 0 && s.x < p.dimensions.x &&
@@ -264,12 +302,13 @@ class Builder {
         }
         while (distance(parent, target) > budget) {
             auto const next = relay_position(parent, target, budget, allow_detour);
-            auto const relay = insert(next, relay_type);
+            auto const type = relay_for(distance(next, target));
+            auto const relay = insert(next, type);
             if (last) tree[*last].children = {relay};
             else first = relay;
             last = relay;
             parent = next;
-            budget = p.buffer_library[static_cast<std::size_t>(relay_type)].length;
+            budget = p.buffer_library[static_cast<std::size_t>(type)].length;
         }
         if (last) tree[*last].children = {child};
         return first.value_or(child);
@@ -329,6 +368,8 @@ public:
                 branching_type = static_cast<int>(i);
         }
         if (relay_policy >= 0) relay_type = relay_policy;
+        mixed_relays = relay_policy <= -2;
+        shorter_ties = relay_policy == -3;
     }
     Tree build() {
         if (branching_type < 0 && p.sinks.size() > 1)
@@ -481,6 +522,7 @@ std::vector<int> relay_policies(Problem const& p) {
         if (cost < cheapest_seen) { offer(i); cheapest_seen = cost; }
         if (policies.size() == 8) break;
     }
+    if (lengths.size() > 1) { policies.push_back(-2); policies.push_back(-3); }
     return policies;
 }
 

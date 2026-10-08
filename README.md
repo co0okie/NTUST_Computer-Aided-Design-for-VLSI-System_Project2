@@ -35,6 +35,15 @@ bounded detour search when their shortest-path relay positions are occupied.
 A minimum required relay count rejects routes exceeding the component budget
 before inserting their buffers.
 
+Two additional candidates mix relay types along a chain using the coverage-cost
+recurrence `C(r) = min_t(cost_t + C(max(0, r - length_t)))`. Equal-cost plans
+prefer longer or shorter steps in separate candidates. Each actual placement
+updates the remaining distance, so blocked ideal positions can trigger replanning.
+The table is capped at distance 4096 and 262,144 transitions per Builder; larger
+queries use the original maximum-length routing policy. Placement feasibility
+and the final weighted Score are still checked on the complete tree. This bounded
+planner does not prove optimality for chains with occupied points or detours.
+
 Two merge strategies, a direct SRC-to-sinks tree, and separate relay chains from
 SRC to each sink, and a single multi-output buffer hub are compared using the actual
 objective `w_skew * (T_max - T_min) + buffer_cost`. Every candidate is validated
@@ -77,7 +86,8 @@ constraints. They cover uniform/mixed parity, relay insertion, boundary pins,
 same-boundary connections, occupied source launch points, multi-output hubs with
 fanout/total-length counterexamples, full source relay costs and type reselection,
 hub routing fallback, short/long relay cost tradeoffs, occupied relay launch
-positions, partial final segments, malformed input, and output preservation.
+positions, mixed-type chains in both type orders, partial final segments, huge
+distance fallback, malformed input, and output preservation.
 The supplied grading archive is only a read-only reference and is never executed.
 
 Tester reports belong in `issues/opened/<issue>/README.md`, with reproductions
