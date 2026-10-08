@@ -12,6 +12,7 @@
 
 namespace cbi {
 using Integer = std::int64_t;
+constexpr std::size_t component_budget = 100000;
 
 Integer add(Integer a, Integer b) {
     if (a < 0 || b < 0 || a > std::numeric_limits<Integer>::max() - b)
@@ -113,7 +114,7 @@ class Builder {
             s.y < p.dimensions.y && !occupied.count({s.x, s.y});
     }
     std::size_t insert(Position s, int type, std::vector<std::size_t> children = {}) {
-        if (tree.size() >= 100000)
+        if (tree.size() >= component_budget)
             throw std::runtime_error("construction component budget exceeded");
         occupied.emplace(s.x, s.y);
         tree.push_back({s, type, std::move(children)});
@@ -200,7 +201,7 @@ class Builder {
     }
 
     // Find a free relay on a shortest path, using the largest legal step first.
-    Position relay_position(Position parent, Position target, Integer budget) const {
+    Position relay_position(Position parent, Position target, Integer budget, bool allow_detour) const {
         if (budget < 1) throw std::runtime_error("insufficient outgoing length for routing");
         Integer const dx = std::max(parent.x, target.x) - std::min(parent.x, target.x);
         Integer const dy = std::max(parent.y, target.y) - std::min(parent.y, target.y);
@@ -220,9 +221,9 @@ class Builder {
                 }
             }
         }
-        // A boundary-aligned edge has no interior point on its shortest path.
-        // Enter the chip once; subsequent relay steps decrease distance normally.
-        if (parent.x == 0 || parent.y == 0 || parent.x == p.dimensions.x ||
+        // Enter the chip for boundary-aligned edges, or escape an occupied
+        // shortest path when routing a common source prefix permits detours.
+        if (allow_detour || parent.x == 0 || parent.y == 0 || parent.x == p.dimensions.x ||
             parent.y == p.dimensions.y) {
             auto clip_x = [&](Integer x) { return std::clamp(x, Integer{1}, p.dimensions.x - 1); };
             auto clip_y = [&](Integer y) { return std::clamp(y, Integer{1}, p.dimensions.y - 1); };
@@ -249,11 +250,20 @@ class Builder {
         throw std::runtime_error("no free relay position found");
     }
 
-    std::size_t route(Position parent, std::size_t child, Integer budget) {
+    std::size_t route(Position parent, std::size_t child, Integer budget, bool allow_detour = false) {
         Position const target = tree[child].position;
         std::optional<std::size_t> first, last;
+        Integer const capacity = p.buffer_library[static_cast<std::size_t>(relay_type)].length;
+        auto const length = distance(parent, target);
+        if (length > budget) {
+            Integer const excess = length - budget;
+            auto const necessary = excess / capacity + (excess % capacity != 0 ? 1 : 0);
+            if (tree.size() >= component_budget ||
+                static_cast<std::uint64_t>(necessary) > component_budget - tree.size())
+                throw std::runtime_error("routing exceeds construction component budget");
+        }
         while (distance(parent, target) > budget) {
-            auto const next = relay_position(parent, target, budget);
+            auto const next = relay_position(parent, target, budget, allow_detour);
             auto const relay = insert(next, relay_type);
             if (last) tree[*last].children = {relay};
             else first = relay;
@@ -301,7 +311,8 @@ class Builder {
     }
 
 public:
-    Builder(Problem const& problem, bool parity) : p(problem), tree(initial_tree(p, parity)) {
+    Builder(Problem const& problem, bool parity, int relay_policy = -1)
+        : p(problem), tree(initial_tree(p, parity)) {
         if (p.dimensions.x <= 1 || p.dimensions.y <= 1)
             throw std::runtime_error("chip has no interior buffer positions");
         // Transformed-coordinate calculations below need signed headroom.
@@ -317,6 +328,7 @@ public:
                 (branching_type < 0 || type.length > p.buffer_library[static_cast<std::size_t>(branching_type)].length))
                 branching_type = static_cast<int>(i);
         }
+        if (relay_policy >= 0) relay_type = relay_policy;
     }
     Tree build() {
         if (branching_type < 0 && p.sinks.size() > 1)
@@ -324,7 +336,7 @@ public:
         std::vector<std::size_t> leaves;
         for (std::size_t i = 1; i <= p.sinks.size(); ++i) leaves.push_back(i);
         auto const root = cluster(std::move(leaves));
-        auto const first = route(p.source, root, p.source_limits.length);
+        auto const first = route(p.source, root, p.source_limits.length, true);
         tree[0].children = {first};
         return finish();
     }
@@ -344,7 +356,7 @@ public:
         for (std::size_t k = 0; k < order.size(); ++k) {
             Integer const branches = count - static_cast<Integer>(k);
             Integer const budget = remaining / branches;
-            auto const first = route(p.source, order[k], budget);
+            auto const first = route(p.source, order[k], budget, true);
             remaining -= distance(p.source, tree[first].position);
             tree[0].children.push_back(first);
         }
@@ -400,7 +412,7 @@ public:
                 std::vector<std::size_t> children;
                 for (std::size_t i = 1; i <= p.sinks.size(); ++i) children.push_back(i);
                 auto const hub = trial.insert(candidate, cheapest, std::move(children));
-                auto const first = trial.route(p.source, hub, p.source_limits.length);
+                auto const first = trial.route(p.source, hub, p.source_limits.length, true);
                 trial.tree[0].children = {first};
                 auto completed = trial.finish();
                 auto const metrics = validate_tree(p, completed);
@@ -435,6 +447,43 @@ private:
     }
 };
 
+// Keep the original maximum-length policy, then sample cost/spacing tradeoffs.
+// Full-tree comparisons, rather than these ranking heuristics, choose the output.
+std::vector<int> relay_policies(Problem const& p) {
+    std::vector<int> policies{-1};
+    Integer longest = 0;
+    for (auto const& type : p.buffer_library) longest = std::max(longest, type.length);
+    std::set<Integer> lengths{longest};
+    auto offer = [&](std::size_t i) {
+        if (policies.size() < 8 && lengths.insert(p.buffer_library[i].length).second)
+            policies.push_back(static_cast<int>(i));
+    };
+    std::size_t cheapest = 0, efficient = 0;
+    auto ratio = [](BufferType const& t) { return static_cast<long double>(t.cost) / t.length; };
+    std::vector<std::size_t> order;
+    for (std::size_t i = 0; i < p.buffer_library.size(); ++i) {
+        order.push_back(i);
+        auto const& type = p.buffer_library[i];
+        auto const& cheap = p.buffer_library[cheapest];
+        if (type.cost < cheap.cost || (type.cost == cheap.cost && type.length > cheap.length)) cheapest = i;
+        if (ratio(type) < ratio(p.buffer_library[efficient]) ||
+            (ratio(type) == ratio(p.buffer_library[efficient]) && type.length > p.buffer_library[efficient].length))
+            efficient = i;
+    }
+    offer(cheapest); offer(efficient);
+    std::sort(order.begin(), order.end(), [&](auto i, auto j) {
+        auto const& a = p.buffer_library[i]; auto const& b = p.buffer_library[j];
+        return a.length != b.length ? a.length > b.length : a.cost < b.cost;
+    });
+    Integer cheapest_seen = std::numeric_limits<Integer>::max();
+    for (auto i : order) {
+        auto const cost = p.buffer_library[i].cost;
+        if (cost < cheapest_seen) { offer(i); cheapest_seen = cost; }
+        if (policies.size() == 8) break;
+    }
+    return policies;
+}
+
 Tree solve(Problem const& p) {
     std::optional<Tree> best;
     Integer best_score = std::numeric_limits<Integer>::max();
@@ -446,14 +495,17 @@ Tree solve(Problem const& p) {
     auto direct = initial_tree(p, false);
     for (std::size_t i = 1; i <= p.sinks.size(); ++i) direct[0].children.push_back(i);
     try { consider(std::move(direct)); } catch (std::runtime_error const& e) { reason = e.what(); }
-    for (bool parity : {true, false}) {
-        try { consider(Builder(p, parity).build()); }
+    if (best && best_score == 0) return std::move(*best);
+    for (auto policy : relay_policies(p)) {
+        for (bool parity : {true, false}) {
+            try { consider(Builder(p, parity, policy).build()); }
+            catch (std::runtime_error const& e) { reason = e.what(); }
+        }
+        try { consider(Builder(p, false, policy).build_star()); }
+        catch (std::runtime_error const& e) { reason = e.what(); }
+        try { consider(Builder(p, false, policy).build_hub()); }
         catch (std::runtime_error const& e) { reason = e.what(); }
     }
-    try { consider(Builder(p, false).build_star()); }
-    catch (std::runtime_error const& e) { reason = e.what(); }
-    try { consider(Builder(p, false).build_hub()); }
-    catch (std::runtime_error const& e) { reason = e.what(); }
     if (!best) throw std::runtime_error("no legal tree constructed: " + reason);
     return std::move(*best);
 }

@@ -165,6 +165,30 @@ class SolverTests(unittest.TestCase):
         self.assertEqual(skew + cost, 13)
         self.assertTrue(text.startswith('.buffer 1\n'))
 
+    def test_relay_spacing_cost_tradeoff(self):
+        pins = [(2, 2), (32, 2)]
+        for library, expected, buffers in [(((1, 5, 1), (1, 100, 100)), 6, 6),
+                                            (((1, 5, 1), (1, 100, 4)), 4, 1)]:
+            skew, text = self.run_case(pins, dim=40, source=(1, 1), library=library, weight=1)
+            maximum, minimum, cost = check_output(text, pins, 40, (1, 1), library)
+            self.assertEqual((maximum, minimum), (30, 30))
+            self.assertEqual(skew + cost, expected)
+            self.assertEqual(int(text.splitlines()[0].split()[1]), buffers)
+
+    def test_relay_short_final_segment(self):
+        pins = [(2, 2), (14, 2)]
+        library = ((1, 5, 1), (1, 100, 100))
+        _, text = self.run_case(pins, dim=40, source=(1, 1), library=library, weight=1)
+        maximum, minimum, cost = check_output(text, pins, 40, (1, 1), library)
+        self.assertEqual((maximum, minimum, cost), (12, 12, 3))
+
+    def test_relay_spacing_with_occupied_pin(self):
+        pins = [(2, 2), (32, 2), (8, 2)]
+        library = ((1, 5, 1), (1, 100, 100))
+        skew, text = self.run_case(pins, dim=40, source=(2, 2), library=library, weight=1)
+        _, _, cost = check_output(text, pins, 40, (2, 2), library)
+        self.assertLessEqual(skew + cost, 34)
+
     def test_same_boundary_relay(self):
         # Each edge's shortest path lies on a forbidden buffer boundary.
         for pins in [[(10, 0), (90, 0)], [(10, 100), (90, 100)],

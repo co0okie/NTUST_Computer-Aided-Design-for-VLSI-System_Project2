@@ -26,6 +26,14 @@ paths. Boundary-aligned connections can first enter the chip through an interior
 relay when no shortest-path buffer position is available. Each parent obeys both
 its fanout limit and the **sum** of outgoing wire
 lengths. After routing, each buffer receives the cheapest compatible library type.
+Relay spacing policies include the original largest length, the cheapest type,
+the lowest cost/length ratio, and additional undominated cost/length choices
+(up to eight distinct lengths). Each policy constructs independent complete
+candidates, which compete on actual Score. These rankings do not prove global
+optimality or cover every mixed-type chain. Source connection paths may use a
+bounded detour search when their shortest-path relay positions are occupied.
+A minimum required relay count rejects routes exceeding the component budget
+before inserting their buffers.
 
 Two merge strategies, a direct SRC-to-sinks tree, and separate relay chains from
 SRC to each sink, and a single multi-output buffer hub are compared using the actual
@@ -68,7 +76,8 @@ constraints. They cover uniform/mixed parity, relay insertion, boundary pins,
 40 deterministic random sparse inputs, unary buffer libraries with source branching,
 same-boundary connections, occupied source launch points, multi-output hubs with
 fanout/total-length counterexamples, full source relay costs and type reselection,
-hub routing fallback, malformed input, and output preservation.
+hub routing fallback, short/long relay cost tradeoffs, occupied relay launch
+positions, partial final segments, malformed input, and output preservation.
 The supplied grading archive is only a read-only reference and is never executed.
 
 Tester reports belong in `issues/opened/<issue>/README.md`, with reproductions
