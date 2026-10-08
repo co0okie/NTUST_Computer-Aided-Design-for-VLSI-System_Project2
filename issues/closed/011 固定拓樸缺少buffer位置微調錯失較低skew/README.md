@@ -28,8 +28,8 @@ Score31 達到下界：SRC fanout1、四 sinks、每buffer fanout至多2，所�
 ## 重現與驗收
 
 ```sh
-./tmp/tester/review-bf97d1d/build/cbi 'issues/opened/011 固定拓樸缺少buffer位置微調錯失較低skew/input001.cbi' tmp/tester/relocation-output001.cbi
-python3 'issues/opened/011 固定拓樸缺少buffer位置微調錯失較低skew/verify_witness.py'
+./tmp/tester/review-bf97d1d/build/cbi 'issues/closed/011 固定拓樸缺少buffer位置微調錯失較低skew/input001.cbi' tmp/tester/relocation-output001.cbi
+python3 'issues/closed/011 固定拓樸缺少buffer位置微調錯失較低skew/verify_witness.py'
 ```
 
 驗收：原測資合法輸出 Score31；交換 sinks 的順序、pin 佔用理想位置、接近 chip 邊界、巨大 dimensions 的工作量限制；既有001–010案例分數不退步。
