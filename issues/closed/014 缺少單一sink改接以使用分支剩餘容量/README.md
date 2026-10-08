@@ -25,8 +25,8 @@ witness只把S1改接到B1：B1→{S5,S2,S1}、B2→{S4,S3}。新arrival=(22,22,
 ## 重現與驗收
 
 ```sh
-./tmp/tester/review-9233163/build/cbi 'issues/opened/014 缺少單一sink改接以使用分支剩餘容量/input001.cbi' tmp/tester/reparent-result.cbi
-python3 'issues/opened/014 缺少單一sink改接以使用分支剩餘容量/verify_witness.py'
+./tmp/tester/review-9233163/build/cbi 'issues/closed/014 缺少單一sink改接以使用分支剩餘容量/input001.cbi' tmp/tester/reparent-result.cbi
+python3 'issues/closed/014 缺少單一sink改接以使用分支剩餘容量/verify_witness.py'
 ```
 
 驗收：原輸出合法Score<=23；覆盖parent剩餘fanout不足、總length超限（包括SRC）、移走唯一child的空buffer處理、跨depth改接的IDs/level、sink順序變更與大輸入工作量；001–013分數不退步。
