@@ -220,7 +220,33 @@ class Builder {
                 }
             }
         }
-        throw std::runtime_error("no free shortest-path relay position found");
+        // A boundary-aligned edge has no interior point on its shortest path.
+        // Enter the chip once; subsequent relay steps decrease distance normally.
+        if (parent.x == 0 || parent.y == 0 || parent.x == p.dimensions.x ||
+            parent.y == p.dimensions.y) {
+            auto clip_x = [&](Integer x) { return std::clamp(x, Integer{1}, p.dimensions.x - 1); };
+            auto clip_y = [&](Integer y) { return std::clamp(y, Integer{1}, p.dimensions.y - 1); };
+            std::optional<Position> best;
+            Integer best_distance = std::numeric_limits<Integer>::max();
+            for (auto x : {clip_x(parent.x), clip_x(target.x),
+                           clip_x(parent.x - budget + 1), clip_x(parent.x + budget - 1)}) {
+                for (auto y : {clip_y(parent.y), clip_y(target.y),
+                               clip_y(parent.y - budget + 1), clip_y(parent.y + budget - 1)}) {
+                    for (Integer ox = -2; ox <= 2; ++ox) {
+                        for (Integer oy = -2; oy <= 2; ++oy) {
+                            Position const candidate{x + ox, y + oy};
+                            if (!free(candidate) || distance(parent, candidate) > budget) continue;
+                            auto const remaining = distance(candidate, target);
+                            if (!best || remaining < best_distance) {
+                                best = candidate; best_distance = remaining;
+                            }
+                        }
+                    }
+                }
+            }
+            if (best) return *best;
+        }
+        throw std::runtime_error("no free relay position found");
     }
 
     std::size_t route(Position parent, std::size_t child, Integer budget) {
@@ -300,6 +326,26 @@ public:
         auto const root = cluster(std::move(leaves));
         auto const first = route(p.source, root, p.source_limits.length);
         tree[0].children = {first};
+        return finish();
+    }
+
+    Tree build_star() {
+        auto const count = static_cast<Integer>(p.sinks.size());
+        if (count > p.source_limits.fanout || count > p.source_limits.length)
+            throw std::runtime_error("SRC cannot drive one relay chain per sink");
+        Integer remaining = p.source_limits.length;
+        for (std::size_t i = 1; i <= p.sinks.size(); ++i) {
+            Integer const branches = count - static_cast<Integer>(i) + 1;
+            Integer const budget = remaining / branches;
+            auto const first = route(p.source, i, budget);
+            remaining -= distance(p.source, tree[first].position);
+            tree[0].children.push_back(first);
+        }
+        return finish();
+    }
+
+private:
+    Tree finish() {
         // Select the cheapest legal type once every outgoing edge is known.
         for (std::size_t i = p.sinks.size() + 1; i < tree.size(); ++i) {
             Integer length = 0;
@@ -333,6 +379,8 @@ Tree solve(Problem const& p) {
         try { consider(Builder(p, parity).build()); }
         catch (std::runtime_error const& e) { reason = e.what(); }
     }
+    try { consider(Builder(p, false).build_star()); }
+    catch (std::runtime_error const& e) { reason = e.what(); }
     if (!best) throw std::runtime_error("no legal tree constructed: " + reason);
     return std::move(*best);
 }

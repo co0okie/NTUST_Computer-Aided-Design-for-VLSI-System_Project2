@@ -22,10 +22,13 @@ opened, so rejected instances preserve any existing output.
 The solver partitions sinks spatially, builds a binary tree from the leaves,
 and searches integer Manhattan diamond intersections for balanced merge
 positions. Long edges are subdivided with interior relay buffers along shortest
-paths. Each parent obeys both its fanout limit and the **sum** of outgoing wire
+paths. Boundary-aligned connections can first enter the chip through an interior
+relay when no shortest-path buffer position is available. Each parent obeys both
+its fanout limit and the **sum** of outgoing wire
 lengths. After routing, each buffer receives the cheapest compatible library type.
 
-Two merge strategies and a direct SRC-to-sinks tree are compared using the actual
+Two merge strategies, a direct SRC-to-sinks tree, and separate relay chains from
+SRC to each sink are compared using the actual
 objective `w_skew * (T_max - T_min) + buffer_cost`. Every candidate is validated
 for unique coordinates, fixed pins, interior buffers, connectivity, tree
 structure, and driving limits. Output levels are generated from tree depth.
@@ -33,7 +36,9 @@ structure, and driving limits. Output levels are generated from tree depth.
 All integer Manhattan paths between fixed endpoints have the same length parity.
 Consequently, sinks with mixed `(x+y) mod 2` cannot have exact zero skew. One
 strategy balances virtual sink arrivals with parity offsets to target skew 0
-for uniform parity and skew 1 for mixed parity. This is a heuristic: merge
+for uniform parity and skew 1 for mixed parity. Separate chains support libraries
+containing only fanout 1 buffers when SRC can drive the required number of branches.
+This is a heuristic: merge
 placement and relay searches are bounded, and feasibility or optimality is not
 guaranteed. A failed construction reports an error; it does not prove the input
 has no solution. Construction is capped at 100,000 total components.
@@ -52,7 +57,8 @@ python3 tests/test_solver.py build/cbi
 
 Tests independently check serialized output, arrival times, cost, and all tree
 constraints. They cover uniform/mixed parity, relay insertion, boundary pins,
-40 deterministic random sparse inputs, malformed input, and output preservation.
+40 deterministic random sparse inputs, unary buffer libraries with source branching,
+same-boundary connections, malformed input, and output preservation.
 The supplied grading archive is only a read-only reference and is never executed.
 
 Tester reports belong in `issues/opened/<issue>/README.md`, with reproductions

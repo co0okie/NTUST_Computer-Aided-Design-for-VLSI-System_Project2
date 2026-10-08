@@ -116,6 +116,19 @@ class SolverTests(unittest.TestCase):
     def test_boundary_sink(self):
         self.run_case([(0, 0), (100, 100)], source=(1, 5), library=((1, 9, 1),))
 
+    def test_unary_library_with_source_branching(self):
+        skew, _ = self.run_case([(50, 50), (10, 10), (90, 90)],
+                                source=(2, 10), library=((1, 15, 1),))
+        self.assertEqual(skew, 0)
+
+    def test_same_boundary_relay(self):
+        # Each edge's shortest path lies on a forbidden buffer boundary.
+        for pins in [[(10, 0), (90, 0)], [(10, 100), (90, 100)],
+                     [(0, 10), (0, 90)], [(100, 10), (100, 90)],
+                     [(0, 0), (100, 0)]]:
+            skew, _ = self.run_case(pins, source=(1, 5), library=((1, 10, 1),))
+            self.assertEqual(skew, 0)
+
     def test_random_sparse(self):
         rng = random.Random(20261009)
         for _ in range(40):
