@@ -228,6 +228,42 @@ Tree relocate_tree(Problem const& p, Tree best) {
     return best;
 }
 
+Tree swap_leaves(Problem const& p, Tree best) {
+    if (best.size() > 512 || p.sinks.size() > 128) return best;
+    auto score = validate_tree(p, best).score;
+    auto const trial_limit = std::min(std::size_t{2048},
+        std::size_t{2000000} / best.size() / (p.buffer_library.size() + 16));
+    std::size_t trials = 0;
+    for (unsigned pass = 0; pass < 8 && trials < trial_limit; ++pass) {
+        std::optional<Tree> improved;
+        auto next_score = score;
+        std::vector<std::size_t> parents(best.size()), slots(best.size());
+        for (std::size_t i = 0; i < best.size(); ++i) {
+            for (std::size_t k = 0; k < best[i].children.size(); ++k) {
+                auto const child = best[i].children[k]; parents[child] = i; slots[child] = k;
+            }
+        }
+        for (std::size_t a = 1; a <= p.sinks.size() && trials < trial_limit; ++a) {
+            for (std::size_t b = a + 1; b <= p.sinks.size() && trials < trial_limit; ++b) {
+                if (parents[a] == parents[b]) continue;
+                ++trials;
+                auto candidate = best;
+                std::swap(candidate[parents[a]].children[slots[a]], candidate[parents[b]].children[slots[b]]);
+                try {
+                    select_buffer_types(p, candidate);
+                    auto const metrics = validate_tree(p, candidate);
+                    if (metrics.score < next_score) {
+                        next_score = metrics.score; improved = std::move(candidate);
+                    }
+                } catch (std::runtime_error const&) {}
+            }
+        }
+        if (!improved) break;
+        best = std::move(*improved); score = next_score;
+    }
+    return best;
+}
+
 class Builder {
     Problem const& p;
     Tree tree;
@@ -788,7 +824,7 @@ Tree solve(Problem const& p) {
     if (!best) throw std::runtime_error("no legal tree constructed: " + reason);
     // Preserve the previous winner's full improvement budget. Alternatives
     // share a separate budget, so a new trial cannot regress its result.
-    if (shortlist.empty() && allocation_shortlist.empty()) return relocate_tree(p, improve_tree(p, std::move(*best)));
+    if (shortlist.empty() && allocation_shortlist.empty()) return swap_leaves(p, relocate_tree(p, improve_tree(p, std::move(*best))));
     auto const original = *best;
     auto improved = improve_tree(p, std::move(*best));
     best_score = validate_tree(p, improved).score;
@@ -805,7 +841,7 @@ Tree solve(Problem const& p) {
     improve_shortlist(shortlist);
     remaining_trials = 2048;
     improve_shortlist(allocation_shortlist);
-    return relocate_tree(p, std::move(improved));
+    return swap_leaves(p, relocate_tree(p, std::move(improved)));
 }
 
 std::string serialize_tree(Problem const& p, Tree const& tree) {

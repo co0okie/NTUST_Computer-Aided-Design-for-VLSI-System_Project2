@@ -241,6 +241,30 @@ class SolverTests(unittest.TestCase):
         self.assertEqual((skew, cost), (0, 20))
         self.assertTrue(text.startswith('.buffer 2\n'))
 
+    def test_cross_branch_sink_exchange(self):
+        sinks = [(11, 10), (28, 8), (23, 15), (16, 5), (10, 28)]
+        library = ((2, 31, 1),)
+        for order in [sinks, list(reversed(sinks))]:
+            pins = [(25, 28)] + order
+            skew, text = self.run_case(pins, dim=30, source=(3, 34), library=library, weight=12)
+            _, _, cost = check_output(text, pins, 30, (3, 34), library)
+            self.assertLessEqual(12 * skew + cost, 64)
+
+    def test_sink_exchange_rejects_parent_length_overflow(self):
+        # Swapping the direct near sink with the deeper far sink would lower
+        # skew from 11 to 7, but SRC's outgoing total would become 12 > 3.
+        pins = [(0, 0), (1, 0), (10, 0)]
+        library = ((1, 20, 1),)
+        skew, text = self.run_case(pins, dim=20, source=(2, 3), library=library, weight=1)
+        _, _, cost = check_output(text, pins, 20, (2, 3), library)
+        self.assertEqual((skew, cost), (11, 1))
+
+    def test_sink_exchange_large_input_bound(self):
+        pins = [(0, 0)] + [(10 * x, 10 * y) for x in range(1, 14) for y in range(1, 11)][:129]
+        _, text = self.run_case(pins, dim=10**12, source=(1, 10**12),
+                                library=((2, 10**12, 1),), weight=1)
+        self.assertGreaterEqual(int(text.splitlines()[0].split()[1]), 128)
+
     def test_buffer_position_improvement(self):
         sinks = [(12, 25), (29, 2), (15, 23), (26, 14)]
         library = ((2, 22, 10),)

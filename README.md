@@ -99,6 +99,16 @@ remain intact; the total cap including relocation is 8192 local evaluations.
 Large dimensions do not increase the sampled neighborhood. This bounded pass
 may stop before finding further valid moves or require moves it does not sample.
 
+A final leaf-exchange pass tries swapping two sinks' parent edges. It keeps all
+pin/buffer coordinates and component IDs fixed, reselects compatible types, and
+validates complete arrival times, driving limits and weighted Score. Leaf-only
+swaps preserve a connected acyclic tree, including when the parents have different
+depths; output levels are regenerated. Same-parent pairs are skipped. The pass
+handles at most 128 sinks and 512 components, with up to eight rounds and 2048
+total evaluations, further reduced by tree/library size. Earlier search budgets
+remain intact, for a total cap of 10240 local evaluations. Only strict improvements
+replace the result; bounded enumeration can miss beneficial exchanges.
+
 All integer Manhattan paths between fixed endpoints have the same length parity.
 Consequently, sinks with mixed `(x+y) mod 2` cannot have exact zero skew. One
 strategy balances virtual sink arrivals with parity offsets to target skew 0
@@ -141,7 +151,8 @@ local multi-output merges with fanout/total-length and weighted-skew checks,
 equal-score construction alternatives that improve differently,
 branch-budget allocation with swapped children, occupied launches, short edges
 and huge capacities, fixed-topology relocation with reordered sinks, occupied
-targets, boundary pins and huge dimensions,
+targets, boundary pins and huge dimensions, cross-branch leaf exchanges,
+illegal source-budget exchanges and the large-input exchange cutoff,
 malformed input, and output preservation.
 The supplied grading archive is only a read-only reference and is never executed.
 
