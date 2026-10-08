@@ -27,8 +27,8 @@ input002奇偶對照：S1=(6,5)、S2=(9,5)，其餘同上。原arrival1/4、Scor
 ## 重現與驗收
 
 ```sh
-./tmp/tester/review-36f8658/build/cbi 'issues/opened/015 短路徑缺少延遲relay插入而錯失零skew/input001.cbi' tmp/tester/delay-output001.cbi
-python3 'issues/opened/015 短路徑缺少延遲relay插入而錯失零skew/verify_witness.py'
+./tmp/tester/review-36f8658/build/cbi 'issues/closed/015 短路徑缺少延遲relay插入而錯失零skew/input001.cbi' tmp/tester/delay-output001.cbi
+python3 'issues/closed/015 短路徑缺少延遲relay插入而錯失零skew/verify_witness.py'
 ```
 
 驗收：input001合法Score1、input002合法Score101；交換sink順序、低權重高relay成本時保留原結果、parent總length與relay capacity不容許的候選拒絕、理想位置佔用/靠近boundary、巨大dimensions與大arrival差工作量受限；001–014分數不退步。
