@@ -241,6 +241,26 @@ class SolverTests(unittest.TestCase):
         self.assertEqual((skew, cost), (0, 20))
         self.assertTrue(text.startswith('.buffer 2\n'))
 
+    def test_buffer_position_improvement(self):
+        sinks = [(12, 25), (29, 2), (15, 23), (26, 14)]
+        library = ((2, 22, 10),)
+        for order in [sinks, list(reversed(sinks))]:
+            pins = [(26, 8)] + order
+            skew, text = self.run_case(pins, dim=30, source=(1, 19), library=library, weight=1)
+            _, _, cost = check_output(text, pins, 30, (1, 19), library)
+            self.assertEqual((skew, cost), (1, 30))
+
+    def test_buffer_position_bounds_and_occupied_target(self):
+        base = [(26, 8), (12, 25), (29, 2), (15, 23), (26, 14)]
+        library = ((2, 22, 10),)
+        cases = [(base + [(12, 15)], 30, 41),
+                 ([(x - 11, y - 2) for x, y in base], 30, 31),
+                 (base, 10**12, 31)]
+        for pins, dim, bound in cases:
+            skew, text = self.run_case(pins, dim=dim, source=(1, 19), library=library, weight=1)
+            _, _, cost = check_output(text, pins, dim, (1, 19), library)
+            self.assertLessEqual(skew + cost, bound)
+
     def test_branch_budget_allocation(self):
         library = ((2, 6, 5), (1, 6, 1))
         for sinks in [[(20, 10), (20, 30)], [(20, 30), (20, 10)]]:

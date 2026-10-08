@@ -87,6 +87,18 @@ compete with that result, so exploring ties cannot worsen the previous winner.
 Exact duplicate stored layouts are skipped. The shortlist is bounded and may
 still omit a topology with greater improvement potential.
 
+After choosing the improved complete tree, a separate relocation pass adjusts
+buffer positions while preserving topology. It samples radius-two integer offsets,
+alignments with parent/children coordinates, and midpoint positions, with at most
+32 positions per buffer. Pins and SRC stay fixed. Each trial reselects compatible
+types and validates the entire tree, including the changed incoming edge and all
+sink arrivals; only strict weighted Score improvements are accepted. The pass
+handles at most 512 components, up to eight rounds and 2048 total evaluations,
+with the same tree/library-scaled budget as bypass search. Earlier search budgets
+remain intact; the total cap including relocation is 8192 local evaluations.
+Large dimensions do not increase the sampled neighborhood. This bounded pass
+may stop before finding further valid moves or require moves it does not sample.
+
 All integer Manhattan paths between fixed endpoints have the same length parity.
 Consequently, sinks with mixed `(x+y) mod 2` cannot have exact zero skew. One
 strategy balances virtual sink arrivals with parity offsets to target skew 0
@@ -128,7 +140,8 @@ distance fallback, branch-type cost tradeoffs with fanout/total-length checks,
 local multi-output merges with fanout/total-length and weighted-skew checks,
 equal-score construction alternatives that improve differently,
 branch-budget allocation with swapped children, occupied launches, short edges
-and huge capacities,
+and huge capacities, fixed-topology relocation with reordered sinks, occupied
+targets, boundary pins and huge dimensions,
 malformed input, and output preservation.
 The supplied grading archive is only a read-only reference and is never executed.
 

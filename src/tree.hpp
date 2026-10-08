@@ -169,6 +169,65 @@ Tree improve_tree(Problem const& p, Tree best, std::size_t* remaining_trials = n
     return best;
 }
 
+Tree relocate_tree(Problem const& p, Tree best) {
+    if (best.size() > 512) return best;
+    auto score = validate_tree(p, best).score;
+    auto const trial_limit = std::min(std::size_t{2048},
+        std::size_t{2000000} / best.size() / (p.buffer_library.size() + 16));
+    std::size_t trials = 0;
+    for (unsigned pass = 0; pass < 8 && trials < trial_limit; ++pass) {
+        std::optional<Tree> improved;
+        auto next_score = score;
+        std::set<std::pair<Integer, Integer>> occupied;
+        std::vector<std::size_t> parents(best.size());
+        for (std::size_t i = 0; i < best.size(); ++i) {
+            occupied.emplace(best[i].position.x, best[i].position.y);
+            for (auto child : best[i].children) parents[child] = i;
+        }
+        for (std::size_t i = p.sinks.size() + 1; i < best.size() && trials < trial_limit; ++i) {
+            auto const origin = best[i].position;
+            std::vector<Position> positions;
+            auto offer = [&](Position point) {
+                if (positions.size() >= 32 || point.x <= 0 || point.y <= 0 ||
+                    point.x >= p.dimensions.x || point.y >= p.dimensions.y ||
+                    occupied.count({point.x, point.y})) return;
+                if (std::none_of(positions.begin(), positions.end(), [&](auto q) {
+                        return q.x == point.x && q.y == point.y;
+                    })) positions.push_back(point);
+            };
+            for (Integer dx = -2; dx <= 2; ++dx)
+                for (Integer dy = -2; dy <= 2; ++dy) {
+                    if ((dx > 0 && origin.x > std::numeric_limits<Integer>::max() - dx) ||
+                        (dy > 0 && origin.y > std::numeric_limits<Integer>::max() - dy)) continue;
+                    offer({origin.x + dx, origin.y + dy});
+                }
+            auto align = [&](Position anchor) {
+                offer({anchor.x, origin.y}); offer({origin.x, anchor.y});
+                offer({origin.x + (anchor.x - origin.x) / 2,
+                       origin.y + (anchor.y - origin.y) / 2});
+            };
+            align(best[parents[i]].position);
+            for (auto child : best[i].children) align(best[child].position);
+            for (auto point : positions) {
+                if (trials == trial_limit) break;
+                ++trials;
+                auto candidate = best;
+                candidate[i].position = point;
+                try {
+                    select_buffer_types(p, candidate);
+                    auto const metrics = validate_tree(p, candidate);
+                    if (metrics.score < next_score) {
+                        next_score = metrics.score; improved = std::move(candidate);
+                    }
+                } catch (std::runtime_error const&) {}
+            }
+        }
+        if (!improved) break;
+        best = std::move(*improved); score = next_score;
+    }
+    return best;
+}
+
 class Builder {
     Problem const& p;
     Tree tree;
@@ -729,7 +788,7 @@ Tree solve(Problem const& p) {
     if (!best) throw std::runtime_error("no legal tree constructed: " + reason);
     // Preserve the previous winner's full improvement budget. Alternatives
     // share a separate budget, so a new trial cannot regress its result.
-    if (shortlist.empty() && allocation_shortlist.empty()) return improve_tree(p, std::move(*best));
+    if (shortlist.empty() && allocation_shortlist.empty()) return relocate_tree(p, improve_tree(p, std::move(*best)));
     auto const original = *best;
     auto improved = improve_tree(p, std::move(*best));
     best_score = validate_tree(p, improved).score;
@@ -746,7 +805,7 @@ Tree solve(Problem const& p) {
     improve_shortlist(shortlist);
     remaining_trials = 2048;
     improve_shortlist(allocation_shortlist);
-    return improved;
+    return relocate_tree(p, std::move(improved));
 }
 
 std::string serialize_tree(Problem const& p, Tree const& tree) {
