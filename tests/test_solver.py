@@ -453,6 +453,20 @@ class SolverTests(unittest.TestCase):
                 _, _, cost = check_output(text, pins, dim, limits, library)
                 self.assertLessEqual(100 * skew + cost, bound)
 
+    def test_library_arity_dense_forest_fallback(self):
+        cases = [([(1, 1), (1, 3), (2, 1), (0, 2), (3, 1), (3, 3), (2, 3), (4, 2)],
+                  4, (2, 2), ((4, 5, 1),), 102),
+                 ([(1, 1), (1, 3), (2, 1), (0, 1), (0, 3), (3, 1), (3, 3), (2, 3), (4, 1), (4, 3)],
+                  4, (2, 2), ((5, 8, 1),), 102),
+                 ([(1, 1), (1, 3), (1, 4), (2, 1), (3, 1), (4, 1), (4, 2), (4, 3),
+                   (2, 4), (3, 3), (3, 4), (4, 4)], 5, (3, 3), ((4, 7, 1),), 203)]
+        for sinks, dim, limits, library, bound in cases:
+            for order in [sinks, list(reversed(sinks)), sinks[2:] + sinks[:2]]:
+                pins = [(2, 2)] + order
+                skew, text = self.run_case(pins, dim=dim, source=limits, library=library)
+                _, _, cost = check_output(text, pins, dim, limits, library)
+                self.assertLessEqual(100 * skew + cost, bound)
+
     def test_full_refinement_candidate_diversity(self):
         sinks = [(9, 3), (17, 24), (24, 6)]
         variants = [(((2, 11, 4), (2, 18, 13)), [(1, 21), (10, 27), (100, 117)]),

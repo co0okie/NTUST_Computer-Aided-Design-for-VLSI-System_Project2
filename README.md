@@ -217,6 +217,22 @@ per layer are capped at 4096 so later layers can still run. It shares a separate
 together spend at most 131072 attempts. Earlier successful results are preserved.
 The extended search still samples local positions and direct edges and can miss
 valid forests requiring larger merge arities, relay chains or discarded states.
+If both bounded stages fail, a third stage permits merge arities from the
+library's maximum fanout down to two, bounded by the remaining roots (at most
+12). It skips libraries with maximum fanout at most three. Per state it samples
+radius-one neighborhoods of at most 24 existing nodes, rejects occupied and
+non-interior points, and keeps at most 64 free positions nearest SRC. Every
+subset attempt visits this nonempty finite pool, so subset enumeration is also
+bounded by charged placement trials. The existing 12-sink/64-type/24-component,
+64-state beam, 4096-placement layer and 65536-attempt stage limits apply.
+All three fallback stages together have at most 196608 attempts; earlier
+successful results are preserved. This stage still cannot prove infeasibility.
+It rejects partial forests whose necessary future branching-buffer count,
+`ceil(max(0, roots - SRC fanout) / (maximum library fanout - 1))`, exceeds the
+remaining interior capacity after a proposed merge. Capacity uses exact integer
+area for dense chips and a safely saturated bound for larger chips, without a
+grid scan or overflowing dimension products. This prevents cheap low-arity
+states from occupying the beam when too few free coordinates remain to finish.
 This is a heuristic: merge
 placement and relay searches are bounded, and feasibility or optimality is not
 guaranteed. A failed construction reports an error; it does not prove the input
@@ -253,6 +269,7 @@ single-leaf reparenting with remaining capacity and reordered sinks,
 delay relays with even/mixed parity, cost/capacity/boundary and large-integer checks,
 small-forest fallback with reordered sinks,
 dense ternary forests with reordered sinks and nine-sink fallback,
+dense library-arity forests requiring four/five outputs and twelve sinks,
 full-refinement alternatives with reordered sinks, different weights and costs,
 large-tree multi-output contractions with reordered sinks,
 subtree/sink exchanges with reordered sinks and buffer type changes,

@@ -1086,11 +1086,16 @@ bool tree_less(Tree const& a, Tree const& b) {
 // Last-resort beam search over small forests. Each merge joins disjoint
 // roots through a directly legal buffer; SRC may connect several final groups.
 // Existing successful builders never enter this search.
-std::optional<Tree> small_forest(Problem const& p, std::size_t& remaining_trials, bool multiway = false) {
+std::optional<Tree> small_forest(Problem const& p, std::size_t& remaining_trials, bool multiway = false,
+                                 bool library_arity = false) {
+    multiway = multiway || library_arity;
     if (p.sinks.size() > (multiway ? 12U : 8U) || p.buffer_library.size() > 64 ||
         p.dimensions.x <= 1 || p.dimensions.y <= 1 ||
         p.dimensions.x > std::numeric_limits<Integer>::max() / 16 ||
         p.dimensions.y > std::numeric_limits<Integer>::max() / 16) return {};
+    Integer max_fanout = 2;
+    for (auto const& buf : p.buffer_library) max_fanout = std::max(max_fanout, buf.fanout);
+    if (library_arity && max_fanout <= 3) return {};
     struct State { Tree tree; std::vector<std::size_t> roots; Integer priority; };
     State initial{initial_tree(p, false), {}, 0};
     for (std::size_t i = 1; i <= p.sinks.size(); ++i) initial.roots.push_back(i);
@@ -1119,32 +1124,67 @@ std::optional<Tree> small_forest(Problem const& p, std::size_t& remaining_trials
         // search while enumerating one layer of three-root combinations.
         auto layer_trials = multiway ? std::min(std::size_t{4096}, remaining_trials) : remaining_trials;
         for (auto const& state : beam) {
-            auto merge = [&](std::size_t a, std::size_t b, std::optional<std::size_t> c) {
-                std::vector<std::size_t> slots{a, b}, children{state.roots[a], state.roots[b]};
-                if (c) { slots.push_back(*c); children.push_back(state.roots[*c]); }
-                auto const ia = state.roots[a], ib = state.roots[b];
-                auto const pa = state.tree[ia].position, pb = state.tree[ib].position;
+            std::vector<Position> free_positions;
+            std::size_t available_positions = 12;
+            if (library_arity) {
+                Integer occupied_inside = 0;
+                for (auto const& n : state.tree)
+                    if (n.position.x > 0 && n.position.y > 0 && n.position.x < p.dimensions.x &&
+                        n.position.y < p.dimensions.y) ++occupied_inside;
+                auto const width = p.dimensions.x - 1, height = p.dimensions.y - 1;
+                // Exact capacity for dense chips, safely saturated otherwise.
+                if (width <= (occupied_inside + 12) / height)
+                    available_positions = static_cast<std::size_t>(width * height - occupied_inside);
+                if (!available_positions) continue;
+                // Build a bounded, subset-independent pool. Dense cases have
+                // few free points, so occupied points do not hide later groups.
                 std::set<std::pair<Integer, Integer>> points;
-                auto offer = [&](Position base) {
+                for (auto const& n : state.tree)
                     for (Integer dx = -1; dx <= 1; ++dx)
                         for (Integer dy = -1; dy <= 1; ++dy) {
-                            Position s{base.x + dx, base.y + dy};
-                            if (s.x > 0 && s.y > 0 && s.x < p.dimensions.x && s.y < p.dimensions.y)
-                                points.emplace(s.x, s.y);
+                            Position s{n.position.x + dx, n.position.y + dy};
+                            if (s.x > 0 && s.y > 0 && s.x < p.dimensions.x && s.y < p.dimensions.y &&
+                                std::none_of(state.tree.begin(), state.tree.end(), [&](Node const& other) {
+                                    return other.position.x == s.x && other.position.y == s.y;
+                                })) points.emplace(s.x, s.y);
                         }
-                };
-                offer(pa); offer(pb); offer({pa.x, pb.y}); offer({pb.x, pa.y});
-                offer({pa.x + (pb.x - pa.x) / 2, pa.y + (pb.y - pa.y) / 2});
-                offer({std::clamp(p.source.x, Integer{1}, p.dimensions.x - 1),
-                       std::clamp(p.source.y, Integer{1}, p.dimensions.y - 1)});
-                if (c) offer(state.tree[state.roots[*c]].position);
+                for (auto point : points) free_positions.push_back({point.first, point.second});
+                std::sort(free_positions.begin(), free_positions.end(), [&](Position a, Position b) {
+                    return std::make_tuple(distance(p.source, a), a.x, a.y) <
+                           std::make_tuple(distance(p.source, b), b.x, b.y);
+                });
+                if (free_positions.size() > 64) free_positions.resize(64);
+                if (free_positions.empty()) continue;
+            }
+            auto merge = [&](std::vector<std::size_t> const& slots) {
+                std::vector<std::size_t> children;
+                for (auto slot : slots) children.push_back(state.roots[slot]);
+                auto const a = slots[0], b = slots[1];
+                auto const ia = state.roots[a], ib = state.roots[b];
+                auto const pa = state.tree[ia].position, pb = state.tree[ib].position;
+                std::vector<Position> positions = free_positions;
+                if (!library_arity) {
+                    std::set<std::pair<Integer, Integer>> points;
+                    auto offer = [&](Position base) {
+                        for (Integer dx = -1; dx <= 1; ++dx)
+                            for (Integer dy = -1; dy <= 1; ++dy) {
+                                Position s{base.x + dx, base.y + dy};
+                                if (s.x > 0 && s.y > 0 && s.x < p.dimensions.x && s.y < p.dimensions.y)
+                                    points.emplace(s.x, s.y);
+                            }
+                    };
+                    offer(pa); offer(pb); offer({pa.x, pb.y}); offer({pb.x, pa.y});
+                    offer({pa.x + (pb.x - pa.x) / 2, pa.y + (pb.y - pa.y) / 2});
+                    offer({std::clamp(p.source.x, Integer{1}, p.dimensions.x - 1),
+                           std::clamp(p.source.y, Integer{1}, p.dimensions.y - 1)});
+                    if (slots.size() == 3) offer(state.tree[state.roots[slots[2]]].position);
+                    for (auto point : points) positions.push_back({point.first, point.second});
+                }
                 auto wire_length = [&](Position s) {
                     Integer length = 0;
                     for (auto child : children) length = add(length, distance(s, state.tree[child].position));
                     return length;
                 };
-                std::vector<Position> positions;
-                for (auto point : points) positions.push_back({point.first, point.second});
                 std::sort(positions.begin(), positions.end(), [&](Position x, Position y) {
                     auto key = [&](Position s) {
                         return std::make_tuple(wire_length(s),
@@ -1168,6 +1208,12 @@ std::optional<Tree> small_forest(Problem const& p, std::size_t& remaining_trials
                                 type = static_cast<int>(t);
                         }
                         if (type < 0) continue;
+                        if (library_arity) {
+                            auto const roots = static_cast<Integer>(state.roots.size() - children.size() + 1);
+                            auto const excess = std::max(Integer{0}, roots - p.source_limits.fanout);
+                            auto const needed = excess / (max_fanout - 1) + (excess % (max_fanout - 1) != 0);
+                            if (static_cast<std::uint64_t>(needed) > available_positions - 1) continue;
+                        }
                         State trial = state; // Isolate geometry and topology of every attempt.
                         for (auto it = slots.rbegin(); it != slots.rend(); ++it)
                             trial.roots.erase(trial.roots.begin() + static_cast<std::ptrdiff_t>(*it));
@@ -1185,12 +1231,24 @@ std::optional<Tree> small_forest(Problem const& p, std::size_t& remaining_trials
                     } catch (std::runtime_error const&) {}
                 }
             };
-            for (std::size_t a = 0; a < state.roots.size() && layer_trials; ++a)
-                for (std::size_t b = a + 1; b < state.roots.size() && layer_trials; ++b) {
-                    merge(a, b, {});
-                    if (multiway)
-                        for (std::size_t c = b + 1; c < state.roots.size() && layer_trials; ++c) merge(a, b, c);
-                }
+            if (library_arity) {
+                auto const arity = std::min(static_cast<std::size_t>(max_fanout), state.roots.size());
+                std::vector<std::size_t> slots;
+                auto subsets = [&](auto&& self, std::size_t begin, std::size_t needed) -> void {
+                    if (!needed) { merge(slots); return; }
+                    for (std::size_t i = begin; i + needed <= state.roots.size() && layer_trials; ++i) {
+                        slots.push_back(i); self(self, i + 1, needed - 1); slots.pop_back();
+                    }
+                };
+                for (std::size_t count = arity; count >= 2 && layer_trials; --count) subsets(subsets, 0, count);
+            } else {
+                for (std::size_t a = 0; a < state.roots.size() && layer_trials; ++a)
+                    for (std::size_t b = a + 1; b < state.roots.size() && layer_trials; ++b) {
+                        merge({a, b});
+                        if (multiway)
+                            for (std::size_t c = b + 1; c < state.roots.size() && layer_trials; ++c) merge({a, b, c});
+                    }
+            }
             if (!layer_trials) break;
         }
         beam = std::move(next);
@@ -1256,6 +1314,10 @@ Tree solve(Problem const& p) {
         if (!best) {
             remaining_trials = 65536;
             best = small_forest(p, remaining_trials, true);
+        }
+        if (!best) {
+            remaining_trials = 65536;
+            best = small_forest(p, remaining_trials, true, true);
         }
     }
     if (!best) throw std::runtime_error("no legal tree constructed: " + reason);
