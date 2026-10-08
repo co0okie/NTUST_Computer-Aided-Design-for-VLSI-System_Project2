@@ -41,7 +41,11 @@ containing only fanout 1 buffers when SRC can drive the required number of branc
 Near sinks are connected first so short direct branches release budget for longer
 chains. The hub strategy samples sink medians, their bounding-box center, and
 near-source positions; it checks the full fanout and total length before selecting
-a type. Every completed strategy competes on its validated Score.
+a type. Each eligible hub is then connected to SRC in independent construction
+state, all buffer types are reselected, and the complete tree is validated and
+scored. The hub-only Score is used solely as a lower bound for pruning because
+all sinks share the source-to-hub path and relay insertion only adds cost.
+Every completed strategy competes on its validated Score.
 This is a heuristic: merge
 placement and relay searches are bounded, and feasibility or optimality is not
 guaranteed. A failed construction reports an error; it does not prove the input
@@ -63,7 +67,8 @@ Tests independently check serialized output, arrival times, cost, and all tree
 constraints. They cover uniform/mixed parity, relay insertion, boundary pins,
 40 deterministic random sparse inputs, unary buffer libraries with source branching,
 same-boundary connections, occupied source launch points, multi-output hubs with
-fanout/total-length counterexamples, malformed input, and output preservation.
+fanout/total-length counterexamples, full source relay costs and type reselection,
+hub routing fallback, malformed input, and output preservation.
 The supplied grading archive is only a read-only reference and is never executed.
 
 Tester reports belong in `issues/opened/<issue>/README.md`, with reproductions

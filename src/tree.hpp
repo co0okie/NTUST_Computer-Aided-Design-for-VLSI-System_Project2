@@ -369,35 +369,50 @@ public:
                 for (Integer dy = -2; dy <= 2; ++dy)
                     candidates.push_back({base.x + dx, base.y + dy});
         }
-        std::optional<Position> best;
-        int best_type = -1;
-        std::tuple<Integer, Integer> best_key;
+        std::optional<Tree> best;
+        Integer best_score = std::numeric_limits<Integer>::max();
+        std::set<std::pair<Integer, Integer>> evaluated;
         for (auto candidate : candidates) {
-            if (!free(candidate)) continue;
-            Integer total = 0, low = std::numeric_limits<Integer>::max(), high = 0;
-            for (auto sink : p.sinks) {
-                auto const d = distance(candidate, sink);
-                total = add(total, d); low = std::min(low, d); high = std::max(high, d);
-            }
-            for (std::size_t i = 0; i < p.buffer_library.size(); ++i) {
-                auto const& type = p.buffer_library[i];
-                if (static_cast<std::uint64_t>(type.fanout) < count || type.length < total) continue;
+            if (!free(candidate) || !evaluated.emplace(candidate.x, candidate.y).second) continue;
+            try {
+                Integer total = 0, low = std::numeric_limits<Integer>::max(), high = 0;
+                for (auto sink : p.sinks) {
+                    auto const d = distance(candidate, sink);
+                    total = add(total, d); low = std::min(low, d); high = std::max(high, d);
+                }
+                int cheapest = -1;
+                for (std::size_t i = 0; i < p.buffer_library.size(); ++i) {
+                    auto const& type = p.buffer_library[i];
+                    if (static_cast<std::uint64_t>(type.fanout) >= count && type.length >= total &&
+                        (cheapest < 0 || type.cost < p.buffer_library[static_cast<std::size_t>(cheapest)].cost))
+                        cheapest = static_cast<int>(i);
+                }
+                if (cheapest < 0) continue;
                 auto const skew = high - low;
                 if (skew > std::numeric_limits<Integer>::max() / p.skew_weight) continue;
-                auto const score = add(type.cost, skew * p.skew_weight);
-                auto const key = std::make_tuple(score, distance(p.source, candidate));
-                if (!best || key < best_key) {
-                    best = candidate; best_type = static_cast<int>(i); best_key = key;
+                // All sinks share the source-to-hub path. Routing adds buffer
+                // cost but cannot reduce this skew, so this is a lower bound.
+                auto const lower_bound = add(p.buffer_library[static_cast<std::size_t>(cheapest)].cost,
+                                             skew * p.skew_weight);
+                if (best && lower_bound >= best_score) continue;
+                // A failed route must not leave occupied positions in later trials.
+                Builder trial = *this;
+                std::vector<std::size_t> children;
+                for (std::size_t i = 1; i <= p.sinks.size(); ++i) children.push_back(i);
+                auto const hub = trial.insert(candidate, cheapest, std::move(children));
+                auto const first = trial.route(p.source, hub, p.source_limits.length);
+                trial.tree[0].children = {first};
+                auto completed = trial.finish();
+                auto const metrics = validate_tree(p, completed);
+                if (!best || metrics.score < best_score) {
+                    best_score = metrics.score; best = std::move(completed);
                 }
+            } catch (std::runtime_error const&) {
+                // Other placements remain eligible when routing or arithmetic fails.
             }
         }
-        if (!best) throw std::runtime_error("no legal multi-output hub position found");
-        std::vector<std::size_t> children;
-        for (std::size_t i = 1; i <= p.sinks.size(); ++i) children.push_back(i);
-        auto const hub = insert(*best, best_type, std::move(children));
-        auto const first = route(p.source, hub, p.source_limits.length);
-        tree[0].children = {first};
-        return finish();
+        if (!best) throw std::runtime_error("no legal multi-output hub tree found");
+        return std::move(*best);
     }
 
 private:

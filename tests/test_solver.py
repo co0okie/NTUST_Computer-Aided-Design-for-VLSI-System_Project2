@@ -12,11 +12,11 @@ BINARY = pathlib.Path(sys.argv.pop(1)).resolve()
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 
 
-def instance(pins, dim=100, source=(2, 100), library=((3, 100, 10),)):
+def instance(pins, dim=100, source=(2, 100), library=((3, 100, 10),), weight=100):
     lines = [f'.limit\nfanout {source[0]}\nlength {source[1]}',
              f'.dimx {dim}\n.dimy {dim}\n.e\n.buflib {len(library)}']
     lines += [f'T{i} {f} {length} {cost}' for i, (f, length, cost) in enumerate(library)]
-    lines += ['.e\n.objective\nw_skew 100\n.e', f'.pin {len(pins)}']
+    lines += [f'.e\n.objective\nw_skew {weight}\n.e', f'.pin {len(pins)}']
     lines += [f'{x} {y}' for x, y in pins]
     return '\n'.join(lines + ['.e\n'])
 
@@ -83,15 +83,15 @@ def check_output(text, pins, dim, source, library):
 
 
 class SolverTests(unittest.TestCase):
-    def run_case(self, pins, dim=100, source=(2, 100), library=((3, 100, 10),)):
+    def run_case(self, pins, dim=100, source=(2, 100), library=((3, 100, 10),), weight=100):
         with tempfile.TemporaryDirectory() as folder:
             inp, out = pathlib.Path(folder) / 'input001.cbi', pathlib.Path(folder) / 'output001.cbi'
-            inp.write_text(instance(pins, dim, source, library))
+            inp.write_text(instance(pins, dim, source, library, weight))
             result = subprocess.run([str(BINARY), str(inp), str(out)], capture_output=True, text=True, timeout=10)
             self.assertEqual(result.returncode, 0, result.stderr)
             maximum, minimum, cost = check_output(out.read_text(), pins, dim, source, library)
             self.assertEqual(result.stdout.strip(),
-                             f'T_max: {maximum}, T_min: {minimum}, Score: {100 * (maximum - minimum) + cost}')
+                             f'T_max: {maximum}, T_min: {minimum}, Score: {weight * (maximum - minimum) + cost}')
             return maximum - minimum, out.read_text()
 
     def test_direct(self):
@@ -136,6 +136,34 @@ class SolverTests(unittest.TestCase):
         for library in [((2, 20, 10),), ((4, 3, 10),)]:
             _, text = self.run_case(pins, dim=10, source=(1, 4), library=library)
             self.assertGreater(int(text.splitlines()[0].split()[1]), 1)
+
+    def test_hub_includes_source_relay_cost(self):
+        pins = [(6, 1), (3, 1), (7, 9), (7, 1)]
+        skew, text = self.run_case(pins, dim=10, source=(1, 1), library=((3, 30, 10),), weight=1)
+        _, _, cost = check_output(text, pins, 10, (1, 1), ((3, 30, 10),))
+        self.assertLessEqual(skew + cost, 16)
+
+    def test_hub_multiple_relays_and_type_reselection(self):
+        pins = [(2, 2), (70, 50), (72, 50), (71, 51)]
+        library = ((3, 14, 10), (1, 14, 1))
+        skew, text = self.run_case(pins, source=(1, 1), library=library, weight=1)
+        _, _, cost = check_output(text, pins, 100, (1, 1), library)
+        count = int(text.splitlines()[0].split()[1])
+        types = [line.split()[1] for line in text.splitlines()[1:count + 1]]
+        self.assertGreater(count, 3)
+        self.assertEqual(types.count('T0'), 1)
+        self.assertEqual(types.count('T1'), count - 1)
+        self.assertEqual(cost, 10 + count - 1)
+        self.assertEqual(skew + cost, 19)
+
+    def test_hub_fallback_after_unreachable_candidate(self):
+        # Low-skew hubs below SRC cannot pass its three occupied neighbors.
+        # An independent trial above SRC can connect directly and remain legal.
+        pins = [(5, 5), (4, 5), (6, 5), (5, 4), (5, 1)]
+        skew, text = self.run_case(pins, dim=10, source=(1, 1), library=((4, 30, 10),), weight=1)
+        _, _, cost = check_output(text, pins, 10, (1, 1), ((4, 30, 10),))
+        self.assertEqual(skew + cost, 13)
+        self.assertTrue(text.startswith('.buffer 1\n'))
 
     def test_same_boundary_relay(self):
         # Each edge's shortest path lies on a forbidden buffer boundary.
