@@ -509,6 +509,25 @@ class SolverTests(unittest.TestCase):
                 _, _, cost = check_output(text, pins, 15, (3, 23), ((3, 16, 6),))
                 self.assertEqual(3 * skew + cost, 9)
 
+    def test_layered_ring_clusters(self):
+        for radius in (8, 16):
+            sinks = []
+            for cx, cy in ((60, 80), (100, 80), (80, 60), (80, 100)):
+                for dx in range(-radius, radius + 1):
+                    dy = radius - abs(dx)
+                    sinks.append((cx + dx, cy + dy))
+                    if dy:
+                        sinks.append((cx + dx, cy - dy))
+            for ordered in (sinks, list(reversed(sinks))):
+                for transpose in (False, True):
+                    pins = [(80, 79)] + ordered
+                    if transpose:
+                        pins = [(y, x) for x, y in pins]
+                    skew, text = self.run_case(pins, dim=160, source=(1, 1),
+                                              library=((4 * radius, 4 * radius * radius, 1),))
+                    self.assertEqual(skew, 0)
+                    self.assertEqual(int(text.splitlines()[0].split()[1]), 5)
+
     def test_random_sparse(self):
         rng = random.Random(20261009)
         for _ in range(40):

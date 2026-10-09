@@ -30,6 +30,22 @@ counts and two parity strategies produce at most 16 attempts. All attempts share
 inserted components. Three distinct complete candidates survive for refinement.
 These finite samples can miss useful placements or source partitions.
 
+A separate layered candidate handles 8–1024 sinks and at most 64 types. Up to
+four type policies try four/eight proximity groups, with farthest-first seeds
+and at most 16 Manhattan nearest-center/coordinate-median updates. Coordinate
+tie breaks keep seeds independent of pin order. Empty clusters are rejected.
+Each group's subtree uses the selected type's available fanout, rather than the
+ordinary builder's fixed 32 cap; a separate buffer joins group roots. All attempts
+share 262144 work steps, including clustering distances, sampled positions,
+geometry child-edge examinations and inserted components. This allows high
+fanout without uncharged high-degree geometry scans. Routing, type selection and
+complete validation still enforce actual driving limits. A candidate attaining
+the Score bound returns immediately; otherwise the complete earlier solver result
+is preserved before the layered candidate receives 8192 independent refinement
+trials and 16 delay insertions. Only a lower validated final Score replaces it.
+The extra small-input trial cap including joint hubs is 49152. Proximity iteration,
+finite type/group choices and one retained layered candidate remain heuristics.
+
 A proven Score lower bound permits early termination. Unique integer coordinates
 make every edge at least one unit long, so effective fanout is `min(fanout, length)`.
 For `N` sinks, effective source fanout `S`, largest effective buffer fanout `F`,
@@ -72,7 +88,8 @@ result. The mixed-parity/cost lower bound can stop further enumeration. This
 permits topology and geometry to change together without accepting a worse
 intermediate tree. It does not enumerate the chip or construct multiple-buffer
 joint moves, and larger inputs retain the previous result and budget unchanged.
-The extra small-input work cap is 40960 including the earlier 32768 trials.
+The joint-hub work cap is 8192 in addition to the earlier 32768 trials
+and the separate 8192 layered-candidate trials.
 
 The reference strategy partitions sinks spatially, builds a binary tree from the leaves,
 and searches integer Manhattan diamond intersections for balanced merge
@@ -367,6 +384,8 @@ dense forests with 16/21 sinks, reversed input order and almost/full coordinate
 occupancy, source-axis hub candidates under reversed library/sink order and axis
 transposition, joint membership/position plateaus, malformed input, and output
 preservation.
+Layered ring tests attain five buffers and zero skew under reversed pin order
+and axis transposition, including direct fanout 32/64/128/256.
 
 For the fanout/scheduler update, Release and Debug tests pass. A development
 comparison against commit `81aedd0` checked 300 valid inputs generated with seed

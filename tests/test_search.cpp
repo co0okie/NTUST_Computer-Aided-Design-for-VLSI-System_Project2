@@ -230,9 +230,52 @@ void joint_hub_budgets() {
     require(!cbi::tree_less(unchanged, tree) && !cbi::tree_less(tree, unchanged) && trials == 8192,
             "joint hub cutoff preserves tree and budget");
 }
+
+cbi::Problem rings(cbi::Integer radius) {
+    auto const dimension = radius < 32 ? 160 : radius * 10;
+    auto const center = dimension / 2;
+    auto const span = radius < 32 ? 20 : radius * 5 / 2;
+    cbi::Problem p{{1, 1}, {dimension, dimension},
+                   {{"T0", 4 * radius, std::max(4 * radius * radius, 4 * span), 1}},
+                   100, {center, center - 1}, {}};
+    for (cbi::Position hub : {cbi::Position{center - span, center}, {center + span, center},
+                             {center, center - span}, {center, center + span}}) {
+        for (cbi::Integer dx = -radius; dx <= radius; ++dx) {
+            auto const dy = radius - (dx < 0 ? -dx : dx);
+            p.sinks.push_back({hub.x + dx, hub.y + dy});
+            if (dy) p.sinks.push_back({hub.x + dx, hub.y - dy});
+        }
+    }
+    return p;
+}
+
+void layered_rings() {
+    for (cbi::Integer radius : {2, 8, 16, 32, 64}) {
+        auto p = rings(radius);
+        for (bool reverse : {false, true}) {
+            if (reverse) std::reverse(p.sinks.begin(), p.sinks.end());
+            std::size_t work = 262144;
+            auto const tree = cbi::Builder(p, true, -1, 0).build_layered(4, work);
+            auto const metrics = cbi::validate_tree(p, tree);
+            require(metrics.score == 5 && metrics.minimum_arrival == metrics.maximum_arrival, "layered rings attain optimal five buffers");
+            require(tree.size() == p.sinks.size() + 6, "layered ring buffer count");
+            require(work < 262144 && work > 0, "layered construction charges distance and edge work");
+        }
+    }
+    auto const p = rings(8);
+    for (std::size_t work : {std::size_t{0}, std::size_t{1}, std::size_t{100}}) {
+        bool failed = false;
+        try { (void)cbi::Builder(p, true, -1, 0).build_layered(4, work); }
+        catch (std::runtime_error const&) { failed = true; }
+        require(failed && work == 0, "layered budget exhaustion has no underflow");
+    }
+}
 } // namespace
 
 int main() {
-    try { multiway(); lower_bounds(); scheduler(); retry_unlocked_move(); incremental_relocations(); dense_forest_budgets(); joint_hub_budgets(); }
+    try {
+        multiway(); lower_bounds(); scheduler(); retry_unlocked_move();
+        incremental_relocations(); dense_forest_budgets(); joint_hub_budgets(); layered_rings();
+    }
     catch (std::exception const& error) { std::cerr << error.what() << '\n'; return 1; }
 }

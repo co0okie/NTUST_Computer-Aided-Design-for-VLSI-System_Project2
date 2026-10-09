@@ -727,6 +727,7 @@ class Builder {
     std::size_t allocation_trials = 0;
     std::size_t construction_limit = component_budget;
     std::size_t* construction_work = nullptr;
+    bool charge_geometry_edges = false;
 
     // Minimum buffer cost to cover the remaining distance without placement
     // obstacles: C(r) = min_t(cost_t + C(max(0, r - length_t))). Geometry is
@@ -1045,6 +1046,52 @@ class Builder {
         return groups;
     }
 
+    std::vector<std::vector<std::size_t>> proximity_groups(std::vector<std::size_t> nodes, std::size_t count) {
+        auto charge = [&] {
+            if (!construction_work || !*construction_work) throw std::runtime_error("construction work budget exceeded");
+            --*construction_work;
+        };
+        auto separation = [&](Position a, Position b) { charge(); return distance(a, b); };
+        std::vector<Position> centers;
+        // Farthest-first seeds, with coordinate tie breaks independent of pin IDs.
+        while (centers.size() < count) {
+            std::optional<Position> chosen;
+            std::tuple<Integer, Integer, Integer> best_key;
+            for (auto node : nodes) {
+                auto const point = tree[node].position;
+                Integer nearest = centers.empty() ? separation(point, p.source) : std::numeric_limits<Integer>::max();
+                for (auto center : centers) nearest = std::min(nearest, separation(point, center));
+                auto const key = std::make_tuple(nearest, point.x, point.y);
+                if (!chosen || key > best_key) { chosen = point; best_key = key; }
+            }
+            centers.push_back(*chosen);
+        }
+        std::vector<std::vector<std::size_t>> groups;
+        for (unsigned iteration = 0; iteration < 16; ++iteration) {
+            groups.assign(count, {});
+            for (auto node : nodes) {
+                std::size_t closest = 0; auto nearest = std::numeric_limits<Integer>::max();
+                for (std::size_t i = 0; i < centers.size(); ++i) {
+                    auto const d = separation(tree[node].position, centers[i]);
+                    if (d < nearest) { nearest = d; closest = i; }
+                }
+                groups[closest].push_back(node);
+            }
+            bool changed = false;
+            for (std::size_t i = 0; i < groups.size(); ++i) {
+                if (groups[i].empty()) throw std::runtime_error("empty proximity cluster");
+                std::vector<Integer> xs, ys;
+                for (auto node : groups[i]) { xs.push_back(tree[node].position.x); ys.push_back(tree[node].position.y); }
+                std::sort(xs.begin(), xs.end()); std::sort(ys.begin(), ys.end());
+                Position const center{xs[xs.size() / 2], ys[ys.size() / 2]};
+                changed = changed || center.x != centers[i].x || center.y != centers[i].y;
+                centers[i] = center;
+            }
+            if (!changed) break;
+        }
+        return groups;
+    }
+
     Position multiway_position(std::vector<std::size_t> const& children, Integer limit) {
         std::vector<Integer> xs, ys;
         for (auto child : children) { xs.push_back(tree[child].position.x); ys.push_back(tree[child].position.y); }
@@ -1075,6 +1122,10 @@ class Builder {
             try {
                 Integer wire = 0, high = 0, low = std::numeric_limits<Integer>::max();
                 for (auto child : children) {
+                    if (charge_geometry_edges) {
+                        if (!*construction_work) throw std::runtime_error("construction work budget exceeded");
+                        --*construction_work;
+                    }
                     auto const d = distance(s, tree[child].position);
                     wire = add(wire, d);
                     high = std::max(high, add(d, tree[child].high));
@@ -1088,14 +1139,8 @@ class Builder {
         return *best;
     }
 
-    std::size_t cluster_multiway(std::vector<std::size_t> nodes) {
-        if (nodes.size() == 1) return nodes.front();
+    std::size_t merge_multiway(std::vector<std::size_t> children) {
         auto const& type = p.buffer_library[static_cast<std::size_t>(branching_type)];
-        auto const arity = std::min({std::size_t{32}, nodes.size(),
-                                    static_cast<std::size_t>(std::min(type.fanout, type.length))});
-        if (arity < 2) throw std::runtime_error("multi-output type cannot branch");
-        std::vector<std::size_t> children;
-        for (auto group : spatial_groups(std::move(nodes), arity)) children.push_back(cluster_multiway(std::move(group)));
         auto const s = multiway_position(children, type.length);
         Integer low = std::numeric_limits<Integer>::max(), high = 0;
         for (auto child : children) {
@@ -1114,6 +1159,17 @@ class Builder {
         }
         tree[root].low = low; tree[root].high = high;
         return root;
+    }
+
+    std::size_t cluster_multiway(std::vector<std::size_t> nodes, std::size_t arity_limit = 32) {
+        if (nodes.size() == 1) return nodes.front();
+        auto const& type = p.buffer_library[static_cast<std::size_t>(branching_type)];
+        auto const arity = std::min({arity_limit, nodes.size(),
+                                    static_cast<std::size_t>(std::min(type.fanout, type.length))});
+        if (arity < 2) throw std::runtime_error("multi-output type cannot branch");
+        std::vector<std::size_t> children;
+        for (auto group : spatial_groups(std::move(nodes), arity)) children.push_back(cluster_multiway(std::move(group), arity_limit));
+        return merge_multiway(std::move(children));
     }
 
     std::size_t cluster(std::vector<std::size_t> nodes) {
@@ -1198,6 +1254,24 @@ public:
             auto const first = route(p.source, roots[k], remaining / static_cast<Integer>(roots.size() - k), true);
             remaining -= distance(p.source, tree[first].position); tree[0].children.push_back(first);
         }
+        return finish();
+    }
+
+    Tree build_layered(std::size_t groups, std::size_t& work) {
+        if (branching_type < 0 || groups < 2 || groups > p.sinks.size() || groups > 8)
+            throw std::runtime_error("invalid layered group count");
+        auto const& type = p.buffer_library[static_cast<std::size_t>(branching_type)];
+        if (groups > static_cast<std::uint64_t>(std::min(type.fanout, type.length)))
+            throw std::runtime_error("layered root cannot drive group count");
+        construction_work = &work;
+        charge_geometry_edges = true;
+        std::vector<std::size_t> leaves;
+        for (std::size_t i = 1; i <= p.sinks.size(); ++i) leaves.push_back(i);
+        spatial_sort(leaves);
+        std::vector<std::size_t> roots;
+        for (auto group : proximity_groups(std::move(leaves), groups)) roots.push_back(cluster_multiway(std::move(group), p.sinks.size()));
+        auto const root = merge_multiway(std::move(roots));
+        tree[0].children = {route(p.source, root, p.source_limits.length, true)};
         return finish();
     }
 
@@ -1880,6 +1954,24 @@ std::vector<int> multiway_policies(Problem const& p) {
     return policies;
 }
 
+std::optional<Tree> layered_candidate(Problem const& p) {
+    if (p.sinks.size() < 8 || p.sinks.size() > 1024 || p.buffer_library.size() > 64) return {};
+    std::size_t work = 262144;
+    std::optional<Tree> best;
+    auto score = std::numeric_limits<Integer>::max();
+    auto const lower_bound = score_lower_bound(p);
+    for (auto policy : multiway_policies(p)) for (auto groups : {std::size_t{4}, std::size_t{8}}) {
+        if (!work) break;
+        try {
+            auto tree = Builder(p, true, -1, policy).build_layered(groups, work);
+            auto const metrics = validate_tree(p, tree);
+            if (!best || metrics.score < score) { score = metrics.score; best = std::move(tree); }
+            if (lower_bound && score == *lower_bound) return best;
+        } catch (std::runtime_error const&) {}
+    }
+    return best;
+}
+
 Tree solve(Problem const& p) {
     auto const lower_bound = score_lower_bound(p);
     auto optimum = [&](Tree const& tree) {
@@ -1888,6 +1980,8 @@ Tree solve(Problem const& p) {
     auto direct = initial_tree(p, false);
     for (std::size_t i = 1; i <= p.sinks.size(); ++i) direct[0].children.push_back(i);
     try { if (optimum(direct)) return direct; } catch (std::runtime_error const&) {}
+    auto layered = layered_candidate(p);
+    if (layered && optimum(*layered)) return std::move(*layered);
 
     // First-class fanout-aware construction precedes the binary fallback.
     // Non-optimal candidates get an independent shortlist and cannot displace
@@ -1936,11 +2030,20 @@ Tree solve(Problem const& p) {
         if (!best || score < best_score) { best_score = score; best = std::move(tree); }
     }
     if (!best) best = dense_forest(p);
+    if (!best && layered) { best = std::move(layered); layered.reset(); }
     if (!best) throw std::runtime_error(reason.empty() ? "no legal tree constructed" : reason);
     std::size_t final_trials = 8192;
     auto tree = adaptive_refine(p, std::move(*best), &final_trials, &insertions);
     tree = final_delay(p, std::move(tree), &final_trials, &insertions);
-    return partial_hub_tree(p, contract_large_tree(p, tree));
+    tree = partial_hub_tree(p, contract_large_tree(p, tree));
+    if (layered) {
+        std::size_t trials = 8192, extra_insertions = 16;
+        auto candidate = adaptive_refine(p, std::move(*layered), &trials, &extra_insertions);
+        candidate = final_delay(p, std::move(candidate), &trials, &extra_insertions);
+        candidate = contract_large_tree(p, candidate);
+        if (validate_tree(p, candidate).score < validate_tree(p, tree).score) return candidate;
+    }
+    return tree;
 }
 
 std::string serialize_tree(Problem const& p, Tree const& tree) {
