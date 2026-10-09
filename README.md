@@ -59,6 +59,21 @@ not a convergence guarantee. General small instances can take longer because
 both strategies run; regular multi-output grids often attain the lower bound
 immediately and skip the reference search.
 
+After preserving the final result, an independent joint membership/position
+search handles two to eight sinks and at most 64 types. It tries a full hub first,
+then sink subsets of size at least two, with the remaining sinks directly driven
+by SRC. It cross-combines source, lower/upper median and floor/ceiling center
+coordinates, sampling radius-two neighborhoods of at most 25 anchors per subset.
+All position trials, including occupied/illegal points, share an 8192 counter.
+Source fanout and total direct/hub wire budgets, compatible buffer types, actual
+arrival extrema and weighted Score are checked. Only promising candidates are
+materialized and fully validated; a strict improvement replaces the preserved
+result. The mixed-parity/cost lower bound can stop further enumeration. This
+permits topology and geometry to change together without accepting a worse
+intermediate tree. It does not enumerate the chip or construct multiple-buffer
+joint moves, and larger inputs retain the previous result and budget unchanged.
+The extra small-input work cap is 40960 including the earlier 32768 trials.
+
 The reference strategy partitions sinks spatially, builds a binary tree from the leaves,
 and searches integer Manhattan diamond intersections for balanced merge
 positions. Long edges are subdivided with interior relay buffers along shortest
@@ -349,7 +364,9 @@ large-tree multi-output contractions with reordered sinks,
 subtree/sink exchanges with reordered sinks and buffer type changes,
 final delay revisits after candidate selection with reordered sinks,
 dense forests with 16/21 sinks, reversed input order and almost/full coordinate
-occupancy, malformed input, and output preservation.
+occupancy, source-axis hub candidates under reversed library/sink order and axis
+transposition, joint membership/position plateaus, malformed input, and output
+preservation.
 
 For the fanout/scheduler update, Release and Debug tests pass. A development
 comparison against commit `81aedd0` checked 300 valid inputs generated with seed

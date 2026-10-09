@@ -485,6 +485,30 @@ class SolverTests(unittest.TestCase):
                                             library=((9, 16, 1),), weight=1)
                     self.assertEqual(int(text.splitlines()[0].split()[1]), 3)
 
+    def test_hub_source_axis_crossings(self):
+        for library in (((2, 17, 8), (2, 41, 12)), ((2, 41, 12), (2, 17, 8))):
+            for sinks in ([(6, 13), (3, 13)], [(3, 13), (6, 13)]):
+                for transpose in (False, True):
+                    pins = [(0, 2)] + sinks
+                    if transpose:
+                        pins = [(y, x) for x, y in pins]
+                    skew, text = self.run_case(pins, dim=14, source=(1, 5),
+                                              library=library, weight=26)
+                    _, _, cost = check_output(text, pins, 14, (1, 5), library)
+                    self.assertEqual(26 * skew + cost, 38)
+                    self.assertEqual(int(text.splitlines()[0].split()[1]), 1)
+
+    def test_joint_membership_and_position(self):
+        for sinks in ([(2, 2), (13, 11), (6, 7)], [(6, 7), (13, 11), (2, 2)]):
+            for transpose in (False, True):
+                pins = [(2, 12)] + sinks
+                if transpose:
+                    pins = [(y, x) for x, y in pins]
+                skew, text = self.run_case(pins, dim=15, source=(3, 23),
+                                          library=((3, 16, 6),), weight=3)
+                _, _, cost = check_output(text, pins, 15, (3, 23), ((3, 16, 6),))
+                self.assertEqual(3 * skew + cost, 9)
+
     def test_random_sparse(self):
         rng = random.Random(20261009)
         for _ in range(40):

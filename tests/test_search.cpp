@@ -209,9 +209,30 @@ void dense_forest_budgets() {
     auto large = sparse; large.dimensions = {std::numeric_limits<cbi::Integer>::max(), 100};
     require(!cbi::dense_forest(large, &work) && work == 1000, "large area does not overflow or scan");
 }
+
+void joint_hub_budgets() {
+    cbi::Problem const p{{3, 23}, {15, 15}, {{"T0", 3, 16, 6}}, 3, {2, 12}, {{2, 2}, {13, 11}, {6, 7}}};
+    auto initial = cbi::initial_tree(p, false);
+    initial.push_back({{7, 11}, 0, {3, 2}}); initial[0].children = {1, 4};
+    require(cbi::validate_tree(p, initial).score == 12, "joint move plateau fixture");
+    for (std::size_t cap : {std::size_t{0}, std::size_t{1}, std::size_t{100}, std::size_t{100000}}) {
+        auto trials = cap;
+        auto const result = cbi::partial_hub_tree(p, initial, &trials);
+        require(trials <= cap && cap - trials <= 8192, "joint hub shared trial accounting");
+        require(cbi::validate_tree(p, result).score <= 12, "joint hub cannot regress score");
+        if (!cap) require(!cbi::tree_less(result, initial) && !cbi::tree_less(initial, result), "joint hub zero budget");
+        if (cap == 100000) require(cbi::validate_tree(p, result).score == 9, "joint hub crosses plateau to lower bound");
+    }
+    auto const large = grid(16); std::size_t work = 1048576;
+    auto const tree = cbi::Builder(large, true, -1, 0).build_multiway(1, work);
+    std::size_t trials = 8192;
+    auto const unchanged = cbi::partial_hub_tree(large, tree, &trials);
+    require(!cbi::tree_less(unchanged, tree) && !cbi::tree_less(tree, unchanged) && trials == 8192,
+            "joint hub cutoff preserves tree and budget");
+}
 } // namespace
 
 int main() {
-    try { multiway(); lower_bounds(); scheduler(); retry_unlocked_move(); incremental_relocations(); dense_forest_budgets(); }
+    try { multiway(); lower_bounds(); scheduler(); retry_unlocked_move(); incremental_relocations(); dense_forest_budgets(); joint_hub_budgets(); }
     catch (std::exception const& error) { std::cerr << error.what() << '\n'; return 1; }
 }

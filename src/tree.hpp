@@ -1772,6 +1772,91 @@ std::optional<Integer> score_lower_bound(Problem const& p) {
     catch (std::runtime_error const&) { return {}; }
 }
 
+// Membership and geometry can be jointly necessary: a strict single move
+// cannot cross a plateau whose other coordinate/topology change is illegal.
+Tree partial_hub_tree(Problem const& p, Tree best, std::size_t* shared_trials = nullptr) {
+    if (p.sinks.size() < 2 || p.sinks.size() > 8 || p.buffer_library.size() > 64 ||
+        p.dimensions.x <= 1 || p.dimensions.y <= 1 ||
+        p.dimensions.x > std::numeric_limits<Integer>::max() / 16 ||
+        p.dimensions.y > std::numeric_limits<Integer>::max() / 16) return best;
+    auto score = validate_tree(p, best).score;
+    auto const lower_bound = score_lower_bound(p);
+    auto trials = shared_trials ? std::min(std::size_t{8192}, *shared_trials) : std::size_t{8192};
+    auto const start = trials;
+    Integer max_capacity = 0;
+    for (auto const& type : p.buffer_library) max_capacity = std::max(max_capacity, std::min(type.fanout, type.length));
+    if (max_capacity < 2) return best;
+    std::set<std::pair<Integer, Integer>> occupied{{p.source.x, p.source.y}};
+    for (auto sink : p.sinks) occupied.emplace(sink.x, sink.y);
+    auto const full = (std::size_t{1} << p.sinks.size()) - 1;
+    // The full hub always receives a slice before partial memberships.
+    std::vector<std::size_t> masks{full};
+    for (std::size_t mask = 1; mask < full; ++mask) masks.push_back(mask);
+    for (auto mask : masks) {
+        if (!trials || (lower_bound && score == *lower_bound)) break;
+        std::vector<std::size_t> children, direct;
+        std::vector<Integer> xs{p.source.x}, ys{p.source.y};
+        Integer direct_wire = 0;
+        try {
+            for (std::size_t i = 0; i < p.sinks.size(); ++i) {
+                if (mask & (std::size_t{1} << i)) {
+                    children.push_back(i + 1);
+                } else {
+                    direct.push_back(i + 1); direct_wire = add(direct_wire, distance(p.source, p.sinks[i]));
+                }
+            }
+            if (children.size() < 2 || children.size() > static_cast<std::uint64_t>(max_capacity) ||
+                direct.size() + 1 > static_cast<std::uint64_t>(p.source_limits.fanout) ||
+                direct_wire >= p.source_limits.length) continue;
+            std::vector<Integer> group_x, group_y;
+            for (auto child : children) { group_x.push_back(p.sinks[child - 1].x); group_y.push_back(p.sinks[child - 1].y); }
+            std::sort(group_x.begin(), group_x.end()); std::sort(group_y.begin(), group_y.end());
+            auto coordinates = [](std::vector<Integer> const& values, std::vector<Integer>& anchors) {
+                auto const center = values.front() + (values.back() - values.front()) / 2;
+                anchors.push_back(values[(values.size() - 1) / 2]); anchors.push_back(values[values.size() / 2]);
+                anchors.push_back(center); anchors.push_back(center + (values.back() - values.front()) % 2);
+            };
+            coordinates(group_x, xs); coordinates(group_y, ys);
+            std::set<std::pair<Integer, Integer>> points;
+            for (auto x : xs) for (auto y : ys)
+                for (Integer dx = -2; dx <= 2; ++dx) for (Integer dy = -2; dy <= 2; ++dy)
+                    points.emplace(x + dx, y + dy);
+            for (auto point : points) {
+                if (!trials) break;
+                --trials;
+                Position const position{point.first, point.second};
+                if (position.x <= 0 || position.y <= 0 || position.x >= p.dimensions.x ||
+                    position.y >= p.dimensions.y || occupied.count(point)) continue;
+                try {
+                    auto const incoming = distance(p.source, position);
+                    if (add(direct_wire, incoming) > p.source_limits.length) continue;
+                    Integer wire = 0, low = std::numeric_limits<Integer>::max(), high = 0;
+                    for (auto leaf : children) {
+                        auto const length = distance(position, p.sinks[leaf - 1]); wire = add(wire, length);
+                        auto const arrival = add(incoming, length); low = std::min(low, arrival); high = std::max(high, arrival);
+                    }
+                    for (auto leaf : direct) {
+                        auto const arrival = distance(p.source, p.sinks[leaf - 1]);
+                        low = std::min(low, arrival); high = std::max(high, arrival);
+                    }
+                    auto const type = cheapest_buffer_type(p, children.size(), wire);
+                    auto const skew = high - low;
+                    if (p.skew_weight && skew > std::numeric_limits<Integer>::max() / p.skew_weight) continue;
+                    auto const next_score = add(p.buffer_library[static_cast<std::size_t>(type)].cost, skew * p.skew_weight);
+                    if (next_score >= score) continue;
+                    auto candidate = initial_tree(p, false);
+                    candidate[0].children = direct; candidate[0].children.push_back(candidate.size());
+                    candidate.push_back({position, type, children});
+                    auto const metrics = validate_tree(p, candidate);
+                    if (metrics.score < score) { score = metrics.score; best = std::move(candidate); }
+                } catch (std::runtime_error const&) {}
+            }
+        } catch (std::runtime_error const&) {}
+    }
+    if (shared_trials) *shared_trials -= start - trials;
+    return best;
+}
+
 std::vector<int> multiway_policies(Problem const& p) {
     std::vector<std::size_t> eligible;
     for (std::size_t i = 0; i < p.buffer_library.size(); ++i)
@@ -1855,7 +1940,7 @@ Tree solve(Problem const& p) {
     std::size_t final_trials = 8192;
     auto tree = adaptive_refine(p, std::move(*best), &final_trials, &insertions);
     tree = final_delay(p, std::move(tree), &final_trials, &insertions);
-    return contract_large_tree(p, tree);
+    return partial_hub_tree(p, contract_large_tree(p, tree));
 }
 
 std::string serialize_tree(Problem const& p, Tree const& tree) {
