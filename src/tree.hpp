@@ -519,64 +519,98 @@ Tree final_delay(Problem const& p, Tree best, std::size_t* shared_trials = nullp
     return best;
 }
 
-Tree refine_tree(Problem const& p, Tree best, std::size_t* shared_trials = nullptr,
-                 std::size_t* shared_insertions = nullptr) {
-    auto budget = [&](std::size_t cap) { return shared_trials ? std::min(cap, *shared_trials) : cap; };
-    auto charge = [&](std::size_t start, std::size_t left) {
-        if (shared_trials) *shared_trials -= start - left;
-    };
-    // Keep the established one-pass result and its budgets as the fallback.
-    best = relocate_tree(p, std::move(best), shared_trials);
-    best = swap_leaves(p, std::move(best), shared_trials);
-    std::size_t remaining_trials = budget(6144), start = remaining_trials;
-    for (unsigned round = 0; round < 3 && remaining_trials; ++round) {
-        auto const score = validate_tree(p, best).score;
-        best = improve_tree(p, std::move(best), &remaining_trials);
-        best = relocate_tree(p, std::move(best), &remaining_trials);
-        best = swap_leaves(p, std::move(best), &remaining_trials);
-        if (validate_tree(p, best).score == score) break;
+enum class Move { bypass, relocate, leaves, reparent, delay, subtrees };
+
+struct SearchBudget { std::size_t trials; std::size_t insertions; };
+
+class RefinementScheduler {
+    Problem const& p;
+    SearchBudget& budget;
+
+    Tree apply(Move move, Tree best, std::size_t& quota, std::size_t slice = 2048) {
+        auto allowance = std::min({quota, budget.trials, slice});
+        if (!allowance) return best;
+        auto const start = allowance;
+        switch (move) {
+        case Move::bypass: best = improve_tree(p, std::move(best), &allowance); break;
+        case Move::relocate: best = relocate_tree(p, std::move(best), &allowance); break;
+        case Move::leaves: best = swap_leaves(p, std::move(best), &allowance); break;
+        case Move::reparent: best = reparent_leaves(p, std::move(best), &allowance); break;
+        case Move::delay: best = delay_tree(p, std::move(best), &allowance, &budget.insertions); break;
+        case Move::subtrees: best = swap_subtrees(p, std::move(best), &allowance); break;
+        }
+        auto const used = start - allowance;
+        budget.trials -= used; quota -= used;
+        return best;
     }
-    charge(start, remaining_trials);
-    // Preserve the established refinement result before exploring the new
-    // membership move, which can unlock earlier geometry/bypass improvements.
-    remaining_trials = budget(8192); start = remaining_trials;
-    for (unsigned round = 0; round < 3 && remaining_trials; ++round) {
-        auto const score = validate_tree(p, best).score;
-        best = reparent_leaves(p, std::move(best), &remaining_trials);
-        best = improve_tree(p, std::move(best), &remaining_trials);
-        best = relocate_tree(p, std::move(best), &remaining_trials);
-        best = swap_leaves(p, std::move(best), &remaining_trials);
-        if (validate_tree(p, best).score == score) break;
+
+public:
+    RefinementScheduler(Problem const& problem, SearchBudget& limits) : p(problem), budget(limits) {}
+
+    Tree reference(Tree best) {
+        // Declarative compatibility schedule preserves every established phase
+        // and its result while using the same accounting as adaptive dispatch.
+        struct Phase { std::size_t trials; unsigned rounds; std::vector<Move> moves; };
+        std::vector<Phase> const phases{
+            {4096, 1, {Move::relocate, Move::leaves}},
+            {6144, 3, {Move::bypass, Move::relocate, Move::leaves}},
+            {8192, 3, {Move::reparent, Move::bypass, Move::relocate, Move::leaves}},
+            {10240, 3, {Move::delay, Move::reparent, Move::bypass, Move::relocate, Move::leaves}},
+            {8192, 3, {Move::subtrees, Move::bypass, Move::relocate, Move::leaves, Move::reparent}}
+        };
+        for (auto const& phase : phases) {
+            auto quota = std::min(phase.trials, budget.trials);
+            for (unsigned round = 0; round < phase.rounds && quota; ++round) {
+                auto const score = validate_tree(p, best).score;
+                for (auto move : phase.moves) best = apply(move, std::move(best), quota);
+                if (validate_tree(p, best).score == score) break;
+            }
+        }
+        return best;
     }
-    charge(start, remaining_trials);
-    remaining_trials = budget(10240); start = remaining_trials;
-    std::size_t remaining_insertions = shared_insertions ? std::min(std::size_t{16}, *shared_insertions) : 16;
-    auto const insertion_start = remaining_insertions;
-    for (unsigned round = 0; round < 3 && remaining_trials; ++round) {
-        auto const score = validate_tree(p, best).score;
-        best = delay_tree(p, std::move(best), &remaining_trials, &remaining_insertions);
-        best = reparent_leaves(p, std::move(best), &remaining_trials);
-        best = improve_tree(p, std::move(best), &remaining_trials);
-        best = relocate_tree(p, std::move(best), &remaining_trials);
-        best = swap_leaves(p, std::move(best), &remaining_trials);
-        if (validate_tree(p, best).score == score) break;
+
+    Tree adaptive(Tree best) {
+        if (best.size() > 512 || p.sinks.size() > 128) return best;
+        std::vector<Move> const moves{Move::bypass, Move::relocate, Move::leaves,
+                                      Move::reparent, Move::subtrees, Move::delay};
+        auto pending = moves;
+        auto quota = budget.trials;
+        auto score = validate_tree(p, best).score;
+        for (unsigned dispatch = 0; dispatch < 64 && quota && !pending.empty(); ++dispatch) {
+            auto const move = pending.front(); pending.erase(pending.begin());
+            best = apply(move, std::move(best), quota, 512);
+            auto const next_score = validate_tree(p, best).score;
+            if (next_score < score) {
+                score = next_score;
+                // Any changed arrival/topology can unlock another operator.
+                // Keep at most one pending entry per operator, including itself.
+                for (auto retry : moves)
+                    if (std::find(pending.begin(), pending.end(), retry) == pending.end()) pending.push_back(retry);
+            }
+        }
+        return best;
     }
-    charge(start, remaining_trials);
-    if (shared_insertions) *shared_insertions -= insertion_start - remaining_insertions;
-    // Retain all previous phases before spending a separate capped budget on
-    // synchronous subtree exchanges and the improvements they may unlock.
-    remaining_trials = budget(8192); start = remaining_trials;
-    for (unsigned round = 0; round < 3 && remaining_trials; ++round) {
-        auto const score = validate_tree(p, best).score;
-        best = swap_subtrees(p, std::move(best), &remaining_trials);
-        best = improve_tree(p, std::move(best), &remaining_trials);
-        best = relocate_tree(p, std::move(best), &remaining_trials);
-        best = swap_leaves(p, std::move(best), &remaining_trials);
-        best = reparent_leaves(p, std::move(best), &remaining_trials);
-        if (validate_tree(p, best).score == score) break;
-    }
-    charge(start, remaining_trials);
+};
+
+Tree scheduled_refinement(Problem const& p, Tree best, bool adaptive,
+                          std::size_t* shared_trials, std::size_t* shared_insertions) {
+    auto const cap = adaptive ? std::size_t{8192} : std::size_t{36864};
+    SearchBudget budget{shared_trials ? std::min(cap, *shared_trials) : cap,
+                        shared_insertions ? std::min(std::size_t{16}, *shared_insertions) : 16};
+    auto const initial = budget;
+    RefinementScheduler scheduler(p, budget);
+    best = adaptive ? scheduler.adaptive(std::move(best)) : scheduler.reference(std::move(best));
+    if (shared_trials) *shared_trials -= initial.trials - budget.trials;
+    if (shared_insertions) *shared_insertions -= initial.insertions - budget.insertions;
     return best;
+}
+
+Tree refine_tree(Problem const& p, Tree best, std::size_t* trials = nullptr, std::size_t* insertions = nullptr) {
+    return scheduled_refinement(p, std::move(best), false, trials, insertions);
+}
+
+Tree adaptive_refine(Problem const& p, Tree best, std::size_t* trials = nullptr, std::size_t* insertions = nullptr) {
+    return scheduled_refinement(p, std::move(best), true, trials, insertions);
 }
 
 class Builder {
@@ -593,6 +627,7 @@ class Builder {
     bool optimize_branch_budget = false;
     std::size_t allocation_trials = 0;
     std::size_t construction_limit = component_budget;
+    std::size_t* construction_work = nullptr;
 
     // Minimum buffer cost to cover the remaining distance without placement
     // obstacles: C(r) = min_t(cost_t + C(max(0, r - length_t))). Geometry is
@@ -632,6 +667,10 @@ class Builder {
     std::size_t insert(Position s, int type, std::vector<std::size_t> children = {}) {
         if (tree.size() >= construction_limit)
             throw std::runtime_error("construction component budget exceeded");
+        if (construction_work) {
+            if (!*construction_work) throw std::runtime_error("construction work budget exceeded");
+            --*construction_work;
+        }
         occupied.emplace(s.x, s.y);
         tree.push_back({s, type, std::move(children)});
         return tree.size() - 1;
@@ -878,20 +917,109 @@ class Builder {
         }
     }
 
-    std::size_t cluster(std::vector<std::size_t> nodes) {
-        if (nodes.size() == 1) return nodes.front();
+    void spatial_sort(std::vector<std::size_t>& nodes) const {
         Integer xmin = p.dimensions.x, xmax = 0, ymin = p.dimensions.y, ymax = 0;
-        for (auto n : nodes) {
-            auto s = tree[n].position;
+        for (auto node : nodes) {
+            auto const s = tree[node].position;
             xmin = std::min(xmin, s.x); xmax = std::max(xmax, s.x);
             ymin = std::min(ymin, s.y); ymax = std::max(ymax, s.y);
         }
         bool const xaxis = xmax - xmin >= ymax - ymin;
         std::sort(nodes.begin(), nodes.end(), [&](auto a, auto b) {
-            auto pa = tree[a].position, pb = tree[b].position;
+            auto const pa = tree[a].position, pb = tree[b].position;
             return xaxis ? std::tie(pa.x, pa.y) < std::tie(pb.x, pb.y) :
                            std::tie(pa.y, pa.x) < std::tie(pb.y, pb.x);
         });
+    }
+
+    std::vector<std::vector<std::size_t>> spatial_groups(std::vector<std::size_t> nodes, std::size_t count) const {
+        std::vector<std::vector<std::size_t>> groups{std::move(nodes)};
+        while (groups.size() < count) {
+            auto it = std::max_element(groups.begin(), groups.end(), [](auto const& a, auto const& b) {
+                return a.size() < b.size();
+            });
+            spatial_sort(*it);
+            auto const middle = it->begin() + static_cast<std::ptrdiff_t>(it->size() / 2);
+            std::vector<std::size_t> right(middle, it->end());
+            it->erase(middle, it->end()); groups.push_back(std::move(right));
+        }
+        return groups;
+    }
+
+    Position multiway_position(std::vector<std::size_t> const& children, Integer limit) {
+        std::vector<Integer> xs, ys;
+        for (auto child : children) { xs.push_back(tree[child].position.x); ys.push_back(tree[child].position.y); }
+        std::sort(xs.begin(), xs.end()); std::sort(ys.begin(), ys.end());
+        std::set<std::pair<Integer, Integer>> points;
+        auto offer = [&](Integer x, Integer y) {
+            for (Integer dx = -1; dx <= 1; ++dx)
+                for (Integer dy = -1; dy <= 1; ++dy) points.emplace(x + dx, y + dy);
+        };
+        auto const xmid = xs.front() + (xs.back() - xs.front()) / 2;
+        auto const ymid = ys.front() + (ys.back() - ys.front()) / 2;
+        for (Integer x : {xmid, xmid + (xs.back() - xs.front()) % 2})
+            for (Integer y : {ymid, ymid + (ys.back() - ys.front()) % 2}) offer(x, y);
+        offer(xs[(xs.size() - 1) / 2], ys[(ys.size() - 1) / 2]);
+        offer(xs[xs.size() / 2], ys[ys.size() / 2]);
+        offer(std::clamp(p.source.x, Integer{1}, p.dimensions.x - 1),
+              std::clamp(p.source.y, Integer{1}, p.dimensions.y - 1));
+        for (std::size_t i = 0; i < std::min(std::size_t{4}, children.size()); ++i) {
+            auto const s = tree[children[i]].position; offer(s.x, s.y);
+        }
+        std::optional<Position> best;
+        std::tuple<bool, Integer, Integer, Integer, Integer> best_key;
+        for (auto point : points) {
+            if (!construction_work || !*construction_work) throw std::runtime_error("construction work budget exceeded");
+            --*construction_work;
+            Position const s{point.first, point.second};
+            if (!free(s)) continue;
+            try {
+                Integer wire = 0, high = 0, low = std::numeric_limits<Integer>::max();
+                for (auto child : children) {
+                    auto const d = distance(s, tree[child].position);
+                    wire = add(wire, d);
+                    high = std::max(high, add(d, tree[child].high));
+                    low = std::min(low, add(d, tree[child].low));
+                }
+                auto const key = std::make_tuple(wire > limit, high - low, high, wire, distance(s, p.source));
+                if (!best || key < best_key) { best = s; best_key = key; }
+            } catch (std::runtime_error const&) {}
+        }
+        if (!best) throw std::runtime_error("no free multi-output merge position");
+        return *best;
+    }
+
+    std::size_t cluster_multiway(std::vector<std::size_t> nodes) {
+        if (nodes.size() == 1) return nodes.front();
+        auto const& type = p.buffer_library[static_cast<std::size_t>(branching_type)];
+        auto const arity = std::min({std::size_t{32}, nodes.size(),
+                                    static_cast<std::size_t>(std::min(type.fanout, type.length))});
+        if (arity < 2) throw std::runtime_error("multi-output type cannot branch");
+        std::vector<std::size_t> children;
+        for (auto group : spatial_groups(std::move(nodes), arity)) children.push_back(cluster_multiway(std::move(group)));
+        auto const s = multiway_position(children, type.length);
+        Integer low = std::numeric_limits<Integer>::max(), high = 0;
+        for (auto child : children) {
+            auto const d = distance(s, tree[child].position);
+            low = std::min(low, add(d, tree[child].low)); high = std::max(high, add(d, tree[child].high));
+        }
+        auto const root = insert(s, branching_type);
+        std::sort(children.begin(), children.end(), [&](auto a, auto b) {
+            return distance(s, tree[a].position) < distance(s, tree[b].position);
+        });
+        Integer remaining = type.length;
+        for (std::size_t k = 0; k < children.size(); ++k) {
+            auto const budget = remaining / static_cast<Integer>(children.size() - k);
+            auto const first = route(s, children[k], budget);
+            remaining -= distance(s, tree[first].position); tree[root].children.push_back(first);
+        }
+        tree[root].low = low; tree[root].high = high;
+        return root;
+    }
+
+    std::size_t cluster(std::vector<std::size_t> nodes) {
+        if (nodes.size() == 1) return nodes.front();
+        spatial_sort(nodes);
         auto const middle = nodes.begin() + static_cast<std::ptrdiff_t>(nodes.size() / 2);
         auto const a = cluster({nodes.begin(), middle});
         auto const b = cluster({middle, nodes.end()});
@@ -949,6 +1077,28 @@ public:
         auto const root = cluster(std::move(leaves));
         auto const first = route(p.source, root, p.source_limits.length, true);
         tree[0].children = {first};
+        return finish();
+    }
+
+    Tree build_multiway(std::size_t source_groups, std::size_t& work) {
+        if (branching_type < 0) throw std::runtime_error("no multi-output branch type");
+        if (!source_groups || source_groups > p.sinks.size() ||
+            source_groups > static_cast<std::uint64_t>(p.source_limits.fanout) ||
+            source_groups > static_cast<std::uint64_t>(p.source_limits.length))
+            throw std::runtime_error("invalid source group count");
+        construction_work = &work;
+        std::vector<std::size_t> leaves;
+        for (std::size_t i = 1; i <= p.sinks.size(); ++i) leaves.push_back(i);
+        std::vector<std::size_t> roots;
+        for (auto group : spatial_groups(std::move(leaves), source_groups)) roots.push_back(cluster_multiway(std::move(group)));
+        std::sort(roots.begin(), roots.end(), [&](auto a, auto b) {
+            return distance(p.source, tree[a].position) < distance(p.source, tree[b].position);
+        });
+        Integer remaining = p.source_limits.length;
+        for (std::size_t k = 0; k < roots.size(); ++k) {
+            auto const first = route(p.source, roots[k], remaining / static_cast<Integer>(roots.size() - k), true);
+            remaining -= distance(p.source, tree[first].position); tree[0].children.push_back(first);
+        }
         return finish();
     }
 
@@ -1269,7 +1419,7 @@ std::optional<Tree> small_forest(Problem const& p, std::size_t& remaining_trials
     return {};
 }
 
-Tree solve(Problem const& p) {
+Tree solve_reference(Problem const& p) {
     std::optional<Tree> best;
     Integer best_score = std::numeric_limits<Integer>::max();
     std::string reason;
@@ -1377,6 +1527,113 @@ Tree solve(Problem const& p) {
         if (score < best_score) { best_score = score; improved = std::move(candidate); }
     }
     return contract_large_tree(p, final_delay(p, std::move(improved)));
+}
+
+std::optional<Integer> score_lower_bound(Problem const& p) {
+    if (p.sinks.empty()) return Integer{0};
+    // Every edge has integer length >= 1 because coordinates are distinct.
+    // N <= effective SRC fanout + sum(buffer fanout - 1), while mixed
+    // endpoint parity forces skew >= 1 regardless of intermediate buffers.
+    Integer max_fanout = 1, min_cost = std::numeric_limits<Integer>::max();
+    for (auto const& type : p.buffer_library) {
+        max_fanout = std::max(max_fanout, std::min(type.fanout, type.length));
+        min_cost = std::min(min_cost, type.cost);
+    }
+    auto const excess = std::max(Integer{0}, static_cast<Integer>(p.sinks.size()) -
+                                              std::min(p.source_limits.fanout, p.source_limits.length));
+    if (excess && max_fanout <= 1) return {};
+    auto const buffers = excess ? excess / (max_fanout - 1) + (excess % (max_fanout - 1) != 0) : 0;
+    bool mixed_parity = false;
+    auto const parity = (p.sinks.front().x % 2 + p.sinks.front().y % 2) % 2;
+    for (auto sink : p.sinks) mixed_parity = mixed_parity || (sink.x % 2 + sink.y % 2) % 2 != parity;
+    if (buffers && min_cost > std::numeric_limits<Integer>::max() / buffers) return {};
+    try { return add(buffers ? buffers * min_cost : 0, mixed_parity ? p.skew_weight : 0); }
+    catch (std::runtime_error const&) { return {}; }
+}
+
+std::vector<int> multiway_policies(Problem const& p) {
+    std::vector<std::size_t> eligible;
+    for (std::size_t i = 0; i < p.buffer_library.size(); ++i)
+        if (p.buffer_library[i].fanout >= 3 && p.buffer_library[i].length >= 3) eligible.push_back(i);
+    std::vector<int> policies;
+    if (eligible.empty()) return policies;
+    auto offer = [&](auto less) {
+        auto const chosen = static_cast<int>(*std::min_element(eligible.begin(), eligible.end(), less));
+        if (std::find(policies.begin(), policies.end(), chosen) == policies.end()) policies.push_back(chosen);
+    };
+    auto arity = [&](std::size_t i) {
+        auto const& type = p.buffer_library[i]; return std::min({Integer{32}, type.fanout, type.length});
+    };
+    offer([&](auto a, auto b) { return arity(a) > arity(b); });
+    offer([&](auto a, auto b) {
+        return static_cast<long double>(p.buffer_library[a].cost) / (arity(a) - 1) <
+               static_cast<long double>(p.buffer_library[b].cost) / (arity(b) - 1);
+    });
+    offer([&](auto a, auto b) { return p.buffer_library[a].cost < p.buffer_library[b].cost; });
+    offer([&](auto a, auto b) { return p.buffer_library[a].length > p.buffer_library[b].length; });
+    return policies;
+}
+
+Tree solve(Problem const& p) {
+    auto const lower_bound = score_lower_bound(p);
+    auto optimum = [&](Tree const& tree) {
+        return lower_bound && validate_tree(p, tree).score == *lower_bound;
+    };
+    auto direct = initial_tree(p, false);
+    for (std::size_t i = 1; i <= p.sinks.size(); ++i) direct[0].children.push_back(i);
+    try { if (optimum(direct)) return direct; } catch (std::runtime_error const&) {}
+
+    // First-class fanout-aware construction precedes the binary fallback.
+    // Non-optimal candidates get an independent shortlist and cannot displace
+    // the complete reference result before their actual refinement is compared.
+    std::vector<std::pair<Integer, Tree>> candidates;
+    std::size_t work = 1048576, builds = 0;
+    if (p.sinks.size() < component_budget && p.buffer_library.size() <= 64) {
+        auto const count = std::min({std::size_t{4}, p.sinks.size(),
+                                    static_cast<std::size_t>(std::min(p.source_limits.fanout, p.source_limits.length))});
+        std::vector<std::size_t> source_groups{count};
+        if (count != 1) source_groups.push_back(1);
+        for (auto policy : multiway_policies(p))
+            for (auto groups : source_groups)
+                for (bool parity : {true, false}) {
+                    if (!work || builds == 16) continue;
+                    ++builds;
+                    try {
+                        auto tree = Builder(p, parity, -1, policy).build_multiway(groups, work);
+                        auto const score = validate_tree(p, tree).score;
+                        if (lower_bound && score == *lower_bound) return tree;
+                        std::pair<Integer, Tree> entry{score, std::move(tree)};
+                        auto less = [](auto const& a, auto const& b) {
+                            return a.first != b.first ? a.first < b.first : tree_less(a.second, b.second);
+                        };
+                        auto it = std::lower_bound(candidates.begin(), candidates.end(), entry, less);
+                        if (it == candidates.end() || less(entry, *it)) candidates.insert(it, std::move(entry));
+                        if (candidates.size() > 3) candidates.pop_back();
+                    } catch (std::runtime_error const&) {}
+                }
+    }
+    std::optional<Tree> best;
+    std::string reason;
+    try { best = solve_reference(p); }
+    catch (std::runtime_error const& e) { reason = e.what(); }
+    if (best && optimum(*best)) return std::move(*best);
+    auto best_score = best ? validate_tree(p, *best).score : std::numeric_limits<Integer>::max();
+    std::size_t candidate_trials = 24576, insertions = 16;
+    for (auto& entry : candidates) {
+        auto slice = std::min(std::size_t{8192}, candidate_trials);
+        auto const start = slice;
+        auto tree = adaptive_refine(p, std::move(entry.second), &slice, &insertions);
+        tree = final_delay(p, std::move(tree), &slice, &insertions);
+        tree = contract_large_tree(p, tree);
+        candidate_trials -= start - slice;
+        auto const score = validate_tree(p, tree).score;
+        if (!best || score < best_score) { best_score = score; best = std::move(tree); }
+    }
+    if (!best) throw std::runtime_error(reason.empty() ? "no legal tree constructed" : reason);
+    std::size_t final_trials = 8192;
+    auto tree = adaptive_refine(p, std::move(*best), &final_trials, &insertions);
+    tree = final_delay(p, std::move(tree), &final_trials, &insertions);
+    return contract_large_tree(p, tree);
 }
 
 std::string serialize_tree(Problem const& p, Tree const& tree) {

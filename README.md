@@ -19,7 +19,47 @@ opened, so rejected instances preserve any existing output.
 
 ## Construction and optimization
 
-The solver partitions sinks spatially, builds a binary tree from the leaves,
+The solver first tries a fanout-aware spatial construction. Repeated median
+splits along the widest axis form groups, and each branch directly supports up
+to `min(32, fanout, outgoing-length limit)` children. It samples at most 99 merge
+positions near centers, medians, SRC and child roots. Shortest relay routes share
+the parent's total outgoing budget; complete trees receive the cheapest compatible
+types and full validation. Up to four branch-type policies, two source grouping
+counts and two parity strategies produce at most 16 attempts. All attempts share
+1,048,576 work steps, charging sampled positions (including rejected ones) and
+inserted components. Three distinct complete candidates survive for refinement.
+These finite samples can miss useful placements or source partitions.
+
+A proven Score lower bound permits early termination. Unique integer coordinates
+make every edge at least one unit long, so effective fanout is `min(fanout, length)`.
+For `N` sinks, effective source fanout `S`, largest effective buffer fanout `F`,
+and cheapest buffer cost `C`, any legal tree needs at least
+`ceil(max(0, N - S) / (F - 1))` buffers when `F > 1`. Multiply that count by `C`
+and add `w_skew` if sink coordinates have mixed Manhattan parity. A validated
+candidate attaining this bound is globally optimal for the stated objective.
+Overflow disables early termination; a missing bound does not prove infeasibility.
+
+Otherwise the complete established construction/refinement pipeline runs as a
+protected reference strategy. New candidates compete only after refinement, so
+their extra search cannot consume reference budgets or worsen its final Score.
+The common scheduler expresses the reference phases declaratively and accounts
+for every operator's trials and delay insertions. Adaptive search queues bypass,
+relocation, leaf exchange, reparenting, subtree exchange and delay insertion.
+After a strict Score improvement, it queues each affected operator for another
+attempt, retaining at most one pending entry per operator. Each dispatch receives
+at most 512 trials; a call allows 8192 trials, 16 insertions and 64 dispatches,
+with the existing 128-sink/512-component cutoffs. Each operator still validates
+the complete tree and accepts only strict improvements.
+
+The three new candidates share 24,576 local trials; the final winner has 8192
+reserved trials. Final delay revisits use those same counters, and these searches
+share 16 accepted insertions. The total extra local budget is therefore 32,768;
+all reference budgets below remain intact. Search is deterministic and bounded,
+not a convergence guarantee. General small instances can take longer because
+both strategies run; regular multi-output grids often attain the lower bound
+immediately and skip the reference search.
+
+The reference strategy partitions sinks spatially, builds a binary tree from the leaves,
 and searches integer Manhattan diamond intersections for balanced merge
 positions. Long edges are subdivided with interior relay buffers along shortest
 paths. Boundary-aligned connections can first enter the chip through an interior
@@ -257,8 +297,14 @@ ctest --test-dir build --output-on-failure
 python3 tests/test_solver.py build/cbi
 ```
 
-Tests independently check serialized output, arrival times, cost, and all tree
-constraints. They cover uniform/mixed parity, relay insertion, boundary pins,
+The C++ search tests check direct multi-output construction, attained lower
+bounds, overflow handling, shared budget accounting, zero-budget preservation,
+the large-tree search cutoff, and a retry case improving Score 16 to 12.
+Checks remain active in Release builds.
+The Python tests independently check serialized output, arrival times, cost, and all tree
+constraints. They also cover optimal four-output grids under reversed sink order
+and fixed-seed discoveries with previously missed feasibility or lower Score.
+They cover uniform/mixed parity, relay insertion, boundary pins,
 40 deterministic random sparse inputs, unary buffer libraries with source branching,
 same-boundary connections, occupied source launch points, multi-output hubs with
 fanout/total-length counterexamples, full source relay costs and type reselection,
@@ -282,6 +328,18 @@ large-tree multi-output contractions with reordered sinks,
 subtree/sink exchanges with reordered sinks and buffer type changes,
 final delay revisits after candidate selection with reordered sinks,
 malformed input, and output preservation.
+
+For the fanout/scheduler update, Release and Debug tests pass. A development
+comparison against commit `81aedd0` checked 300 valid inputs generated with seed
+`20261010`: 37 previously successful cases improved, five additional cases became
+constructible, and no previously successful case regressed. The refactored
+reference strategy produced byte-identical output on those cases and all 27
+issue inputs; the final solver preserved all 27 issue scores. The 16,384-sink
+uniform grid retained zero skew and Score 5461. One local Release measurement
+changed from 0.47 s / 18,436 KiB peak RSS to 0.07 s / 12,092 KiB; timing is machine
+and workload dependent. Across the small random comparison, total measured
+runtime increased from about 3.04 s to 4.79 s because of the extra search.
+
 The supplied grading archive is only a read-only reference and is never executed.
 
 Tester reports belong in `issues/opened/<NNN issue>/README.md`, with reproductions

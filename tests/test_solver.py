@@ -436,6 +436,39 @@ class SolverTests(unittest.TestCase):
             skew, _ = self.run_case(pins, source=(1, 5), library=((1, 10, 1),))
             self.assertEqual(skew, 0)
 
+    def test_direct_multiway_grid(self):
+        # Distinct integer edges force at least ceil((N - SRC fanout) / 3)
+        # buffers. These four-output grids attain that bound without skew.
+        for side in (8, 16, 32):
+            sinks = [(x, y) for x in range(1, side, 2) for y in range(1, side, 2)]
+            for ordered in (sinks, list(reversed(sinks))):
+                pins = [(side // 2, 0)] + ordered
+                skew, text = self.run_case(pins, dim=side, source=(1, 1000),
+                                          library=((4, 1000, 1),))
+                self.assertEqual(skew, 0)
+                self.assertEqual(int(text.splitlines()[0].split()[1]), (len(sinks) - 1) // 3)
+
+    def test_multiway_and_adaptive_regressions(self):
+        # Fixed-seed discoveries: a formerly missed legal tree, and two
+        # lower-cost results from the extra construction/refinement search.
+        cases = [
+            ([(6, 8), (7, 6), (3, 8), (2, 2), (0, 3), (7, 4), (1, 1),
+              (5, 7), (2, 1), (8, 7), (6, 0), (8, 8), (3, 7), (3, 0),
+              (2, 5), (8, 1), (4, 2), (4, 8)],
+             8, (2, 2), ((5, 100, 5), (1, 3, 9)), 1, 33),
+            ([(11, 4), (5, 7), (1, 6), (6, 4), (5, 11), (3, 0), (6, 2),
+              (7, 2), (3, 1), (11, 8), (11, 9)],
+             12, (2, 5), ((1, 40, 7), (3, 20, 9), (7, 10, 11)), 20, 101),
+            ([(6, 7), (4, 3), (2, 6), (3, 5), (8, 5), (7, 0), (7, 7),
+              (6, 0), (6, 3), (8, 8), (3, 6), (4, 4), (3, 7)],
+             8, (4, 20), ((2, 40, 4), (4, 100, 5), (4, 5, 2)), 20, 59),
+        ]
+        for pins, dim, source, library, weight, ceiling in cases:
+            with self.subTest(pins=pins):
+                skew, text = self.run_case(pins, dim, source, library, weight)
+                _, _, cost = check_output(text, pins, dim, source, library)
+                self.assertLessEqual(weight * skew + cost, ceiling)
+
     def test_random_sparse(self):
         rng = random.Random(20261009)
         for _ in range(40):
