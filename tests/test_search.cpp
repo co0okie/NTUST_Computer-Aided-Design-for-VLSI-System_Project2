@@ -124,9 +124,73 @@ void retry_unlocked_move() {
     auto const retried = cbi::adaptive_refine(p, initial, &trials, &insertions);
     require(cbi::validate_tree(p, retried).score <= 12, "adaptive queue retries unlocked move");
 }
+
+void compare_relocations(cbi::Problem const& p, cbi::Tree const& tree,
+                         std::vector<cbi::Position> const& points) {
+    cbi::RelocationEvaluation const evaluation(p, tree);
+    for (std::size_t moved = p.sinks.size() + 1; moved < tree.size(); ++moved) {
+        for (auto point : points) {
+            std::optional<cbi::Metrics> expected, actual;
+            try {
+                auto candidate = tree; candidate[moved].position = point;
+                cbi::select_buffer_types(p, candidate);
+                expected = cbi::validate_tree(p, candidate);
+            } catch (std::runtime_error const&) {}
+            try { actual = evaluation.evaluate(moved, point); }
+            catch (std::runtime_error const&) {}
+            require(expected.has_value() == actual.has_value(), "relocation legality matches full validation");
+            if (expected) {
+                require(expected->score == actual->score &&
+                        expected->maximum_arrival == actual->maximum_arrival &&
+                        expected->minimum_arrival == actual->minimum_arrival,
+                        "cached relocation metrics match full validation");
+            }
+        }
+    }
+}
+
+void incremental_relocations() {
+    auto p = grid(8);
+    std::size_t work = 1048576;
+    auto tree = cbi::Builder(p, true, -1, 0).build_multiway(1, work);
+    std::vector<cbi::Position> points;
+    for (cbi::Integer x = 0; x <= 8; ++x)
+        for (cbi::Integer y = 0; y <= 8; ++y) points.push_back({x, y});
+    compare_relocations(p, tree, points);
+    // All unchanged buffers must also receive their cheapest compatible type.
+    p.buffer_library.push_back({"T1", 4, 1000, 7});
+    for (std::size_t i = p.sinks.size() + 1; i < tree.size(); ++i) {
+        tree[i].type = 1;
+        // Construction's virtual offsets must never replace actual arrivals.
+        tree[i].low = 12345; tree[i].high = 67890;
+    }
+    compare_relocations(p, tree, points);
+    p.source_limits.length = cbi::distance(p.source, tree[tree[0].children[0]].position);
+    p.buffer_library[0].length = 16; p.buffer_library[1].length = 16;
+    compare_relocations(p, tree, points);
+
+    // Several source groups leave unchanged sink arrivals outside the moved
+    // subtree; these participate in both extrema, even at different depths.
+    p = grid(16); p.source_limits.fanout = 4; work = 1048576;
+    tree = cbi::Builder(p, true, -1, 0).build_multiway(4, work);
+    compare_relocations(p, tree, points);
+
+    auto const maximum = std::numeric_limits<cbi::Integer>::max();
+    p = {{1, maximum}, {maximum, maximum}, {{"T0", 2, maximum, 1}},
+         1, {0, 0}, {{10, 10}, {10, 12}}};
+    tree = cbi::initial_tree(p, false);
+    tree.push_back({{9, 11}, 0, {1, 2}}); tree[0].children = {3};
+    compare_relocations(p, tree, {{9, 11}, {maximum - 1, 1}, {1, maximum - 1}, {maximum - 1, maximum - 1}});
+    // Overflow in weighted skew and buffer-cost reselection must be rejected.
+    p.skew_weight = maximum;
+    compare_relocations(p, tree, {{9, 11}, {9, 10}, {11, 12}});
+    p.skew_weight = 1;
+    p.buffer_library = {{"T0", 2, 4, 1}, {"T1", 2, maximum, maximum}};
+    compare_relocations(p, tree, {{9, 11}, {9, 10}, {8, 8}});
+}
 } // namespace
 
 int main() {
-    try { multiway(); lower_bounds(); scheduler(); retry_unlocked_move(); }
+    try { multiway(); lower_bounds(); scheduler(); retry_unlocked_move(); incremental_relocations(); }
     catch (std::exception const& error) { std::cerr << error.what() << '\n'; return 1; }
 }

@@ -104,22 +104,123 @@ Metrics validate_tree(Problem const& p, Tree const& tree) {
     return {*bounds.second, *bounds.first, add(cost, skew * p.skew_weight)};
 }
 
+int cheapest_buffer_type(Problem const& p, std::size_t fanout, Integer length) {
+    int cheapest = -1;
+    for (std::size_t j = 0; j < p.buffer_library.size(); ++j) {
+        auto const& type = p.buffer_library[j];
+        if (static_cast<std::uint64_t>(type.fanout) >= fanout && type.length >= length &&
+            (cheapest < 0 || type.cost < p.buffer_library[static_cast<std::size_t>(cheapest)].cost))
+            cheapest = static_cast<int>(j);
+    }
+    if (cheapest < 0) throw std::runtime_error("no legal buffer type");
+    return cheapest;
+}
+
 void select_buffer_types(Problem const& p, Tree& tree) {
     for (std::size_t i = p.sinks.size() + 1; i < tree.size(); ++i) {
         Integer length = 0;
         for (auto child : tree[i].children)
             length = add(length, distance(tree[i].position, tree[child].position));
-        int cheapest = -1;
-        for (std::size_t j = 0; j < p.buffer_library.size(); ++j) {
-            auto const& type = p.buffer_library[j];
-            if (static_cast<std::uint64_t>(type.fanout) >= tree[i].children.size() && type.length >= length &&
-                (cheapest < 0 || type.cost < p.buffer_library[static_cast<std::size_t>(cheapest)].cost))
-                cheapest = static_cast<int>(j);
-        }
-        if (cheapest < 0) throw std::runtime_error("no legal buffer type");
-        tree[i].type = cheapest;
+        tree[i].type = cheapest_buffer_type(p, tree[i].children.size(), length);
     }
 }
+
+// Fixed-topology relocation changes only two drivers' wire totals and the
+// arrivals below the moved buffer. The snapshot lasts for one search pass.
+class RelocationEvaluation {
+    struct Bounds {
+        Integer low = std::numeric_limits<Integer>::max(), high = 0;
+        bool empty = true;
+        void include(Integer minimum, Integer maximum) {
+            low = std::min(low, minimum); high = std::max(high, maximum); empty = false;
+        }
+        void include(Bounds const& other) { if (!other.empty) include(other.low, other.high); }
+    };
+    Problem const& p;
+    Tree const& tree;
+    std::vector<std::size_t> parents;
+    std::vector<Integer> arrivals, wire;
+    std::vector<int> types;
+    std::vector<Bounds> below, outside;
+    std::set<std::pair<Integer, Integer>> occupied;
+    Integer cost = 0;
+
+    int driver_type(std::size_t node, Integer length) const {
+        if (node != 0) return cheapest_buffer_type(p, tree[node].children.size(), length);
+        if (tree[0].children.size() > static_cast<std::uint64_t>(p.source_limits.fanout) ||
+            length > p.source_limits.length) throw std::runtime_error("SRC driving limit exceeded");
+        return -1;
+    }
+    Integer price(int type) const { return type < 0 ? 0 : p.buffer_library[static_cast<std::size_t>(type)].cost; }
+
+public:
+    RelocationEvaluation(Problem const& problem, Tree const& snapshot)
+        : p(problem), tree(snapshot), parents(tree.size()), arrivals(tree.size()), wire(tree.size()),
+          types(tree.size(), -1), below(tree.size()), outside(tree.size()) {
+        (void)validate_tree(p, tree);
+        std::vector<std::size_t> queue{0};
+        for (std::size_t k = 0; k < queue.size(); ++k) {
+            auto const u = queue[k];
+            occupied.emplace(tree[u].position.x, tree[u].position.y);
+            for (auto v : tree[u].children) {
+                auto const length = distance(tree[u].position, tree[v].position);
+                wire[u] = add(wire[u], length); arrivals[v] = add(arrivals[u], length);
+                parents[v] = u; queue.push_back(v);
+            }
+            if (u > p.sinks.size()) {
+                types[u] = driver_type(u, wire[u]); cost = add(cost, price(types[u]));
+            }
+        }
+        for (auto it = queue.rbegin(); it != queue.rend(); ++it) {
+            auto const u = *it;
+            if (u && u <= p.sinks.size()) below[u].include(arrivals[u], arrivals[u]);
+            for (auto v : tree[u].children) below[u].include(below[v]);
+        }
+        for (auto u : queue) {
+            auto const& children = tree[u].children;
+            std::vector<Bounds> prefix(children.size() + 1);
+            for (std::size_t k = 0; k < children.size(); ++k) {
+                prefix[k + 1] = prefix[k]; prefix[k + 1].include(below[children[k]]);
+            }
+            Bounds suffix;
+            for (std::size_t k = children.size(); k > 0; --k) {
+                auto const v = children[k - 1];
+                outside[v] = outside[u]; outside[v].include(prefix[k - 1]); outside[v].include(suffix);
+                suffix.include(below[v]);
+            }
+        }
+    }
+
+    std::size_t parent(std::size_t node) const { return parents[node]; }
+    bool occupied_at(Position point) const { return occupied.count({point.x, point.y}) != 0; }
+
+    Metrics evaluate(std::size_t moved, Position point) const {
+        if (moved <= p.sinks.size() || moved >= tree.size() || point.x <= 0 || point.y <= 0 ||
+            point.x >= p.dimensions.x || point.y >= p.dimensions.y ||
+            (occupied_at(point) && (point.x != tree[moved].position.x || point.y != tree[moved].position.y)))
+            throw std::runtime_error("invalid relocation");
+        auto const from = parents[moved];
+        auto const incoming = distance(tree[from].position, point);
+        auto const parent_wire = add(wire[from] - distance(tree[from].position, tree[moved].position), incoming);
+        auto const parent_type = driver_type(from, parent_wire);
+        auto const moved_arrival = add(arrivals[from], incoming);
+        Integer moved_wire = 0;
+        Bounds bounds = outside[moved];
+        for (auto child : tree[moved].children) {
+            auto const length = distance(point, tree[child].position);
+            moved_wire = add(moved_wire, length);
+            auto const child_arrival = add(moved_arrival, length);
+            bounds.include(add(child_arrival, below[child].low - arrivals[child]),
+                           add(child_arrival, below[child].high - arrivals[child]));
+        }
+        auto const moved_type = driver_type(moved, moved_wire);
+        auto const next_cost = add(add(cost - price(types[from]) - price(types[moved]), price(parent_type)), price(moved_type));
+        auto const skew = bounds.high - bounds.low;
+        if (p.skew_weight && skew > std::numeric_limits<Integer>::max() / p.skew_weight)
+            throw std::runtime_error("score exceeds integer range");
+        return {bounds.high, bounds.low, add(next_cost, skew * p.skew_weight)};
+    }
+};
 
 std::size_t local_trial_limit(Problem const& p, Tree const& tree, std::size_t* remaining_trials) {
     auto const limit = std::min(std::size_t{2048},
@@ -268,19 +369,14 @@ Tree relocate_tree(Problem const& p, Tree best, std::size_t* remaining_trials = 
     for (unsigned pass = 0; pass < 8 && trials < trial_limit; ++pass) {
         std::optional<Tree> improved;
         auto next_score = score;
-        std::set<std::pair<Integer, Integer>> occupied;
-        std::vector<std::size_t> parents(best.size());
-        for (std::size_t i = 0; i < best.size(); ++i) {
-            occupied.emplace(best[i].position.x, best[i].position.y);
-            for (auto child : best[i].children) parents[child] = i;
-        }
+        RelocationEvaluation const evaluation(p, best);
         for (std::size_t i = p.sinks.size() + 1; i < best.size() && trials < trial_limit; ++i) {
             auto const origin = best[i].position;
             std::vector<Position> positions;
             auto offer = [&](Position point) {
                 if (positions.size() >= 32 || point.x <= 0 || point.y <= 0 ||
                     point.x >= p.dimensions.x || point.y >= p.dimensions.y ||
-                    occupied.count({point.x, point.y})) return;
+                    evaluation.occupied_at(point)) return;
                 if (std::none_of(positions.begin(), positions.end(), [&](auto q) {
                         return q.x == point.x && q.y == point.y;
                     })) positions.push_back(point);
@@ -296,19 +392,21 @@ Tree relocate_tree(Problem const& p, Tree best, std::size_t* remaining_trials = 
                 offer({origin.x + (anchor.x - origin.x) / 2,
                        origin.y + (anchor.y - origin.y) / 2});
             };
-            align(best[parents[i]].position);
+            align(best[evaluation.parent(i)].position);
             for (auto child : best[i].children) align(best[child].position);
             for (auto point : positions) {
                 if (trials == trial_limit) break;
                 ++trials;
                 if (remaining_trials) --*remaining_trials;
-                auto candidate = best;
-                candidate[i].position = point;
                 try {
-                    select_buffer_types(p, candidate);
-                    auto const metrics = validate_tree(p, candidate);
-                    if (metrics.score < next_score) {
-                        next_score = metrics.score; improved = std::move(candidate);
+                    if (evaluation.evaluate(i, point).score < next_score) {
+                        auto candidate = best;
+                        candidate[i].position = point;
+                        select_buffer_types(p, candidate);
+                        auto const metrics = validate_tree(p, candidate);
+                        if (metrics.score < next_score) {
+                            next_score = metrics.score; improved = std::move(candidate);
+                        }
                     }
                 } catch (std::runtime_error const&) {}
             }

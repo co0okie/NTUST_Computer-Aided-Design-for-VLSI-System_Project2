@@ -173,9 +173,12 @@ also runs for forest fallback results; large-tree contraction follows afterward.
 After choosing the improved complete tree, a separate relocation pass adjusts
 buffer positions while preserving topology. It samples radius-two integer offsets,
 alignments with parent/children coordinates, and midpoint positions, with at most
-32 positions per buffer. Pins and SRC stay fixed. Each trial reselects compatible
-types and validates the entire tree, including the changed incoming edge and all
-sink arrivals; only strict weighted Score improvements are accepted. The pass
+32 positions per buffer. Pins and SRC stay fixed. A snapshot caches parent links, wire totals, cheapest types, actual arrivals, and
+sink extrema inside/outside each subtree. Relocation evaluates only the changed
+incoming edge, two drivers, and child-subtree arrival offsets; it does not copy
+the tree for rejected trials. Type costs include cheapest reselection of every
+unchanged buffer. Promising candidates are copied, retyped and fully validated
+before acceptance; only strict weighted Score improvements are accepted. The pass
 handles at most 512 components, up to eight rounds and 2048 total evaluations,
 with the same tree/library-scaled budget as bypass search. Earlier search budgets
 remain intact; the first-pass cap including relocation is 8192 local evaluations.
@@ -339,6 +342,15 @@ uniform grid retained zero skew and Score 5461. One local Release measurement
 changed from 0.47 s / 18,436 KiB peak RSS to 0.07 s / 12,092 KiB; timing is machine
 and workload dependent. Across the small random comparison, total measured
 runtime increased from about 3.04 s to 4.79 s because of the extra search.
+
+The relocation cache was compared against full retyping/validation for all
+sampled positions in regular grids, multiple source groups, nonminimal initial
+types, tight wire limits, occupied/boundary positions, huge coordinates, skew
+multiplication and cost overflow. An additional comparison against `8d47e51`
+checked 300 valid fixed-seed random inputs and 29 issue inputs: success/failure,
+metrics and serialized output were identical for all 329. One local total-runtime
+measurement decreased from 4.95 s to 4.06 s; this depends on the mix of operators.
+Search order, trial accounting and cutoffs are unchanged.
 
 The supplied grading archive is only a read-only reference and is never executed.
 
