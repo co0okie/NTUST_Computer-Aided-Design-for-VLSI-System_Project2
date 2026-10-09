@@ -2052,7 +2052,7 @@ std::optional<Tree> layered_candidate(Problem const& p) {
     return best;
 }
 
-Tree solve(Problem const& p) {
+Tree solve_core(Problem const& p) {
     auto const lower_bound = score_lower_bound(p);
     auto optimum = [&](Tree const& tree) {
         return lower_bound && validate_tree(p, tree).score == *lower_bound;
@@ -2132,6 +2132,53 @@ Tree solve(Problem const& p) {
         tree = final_delay(p, std::move(tree), &joint_work, &joint_insertions);
     }
     return tree;
+}
+
+// Large unused dimensions need not force large arithmetic in a compact pin
+// cluster. Translation preserves every Manhattan edge; clipping supplies only
+// an additional candidate, never removes the original solver's result.
+std::optional<std::pair<Problem, Position>> local_domain(Problem const& p) {
+    auto const limit = std::numeric_limits<Integer>::max() / 16;
+    if (p.dimensions.x <= limit && p.dimensions.y <= limit) return {};
+    Position low = p.source, high = p.source;
+    for (auto sink : p.sinks) {
+        low.x = std::min(low.x, sink.x); low.y = std::min(low.y, sink.y);
+        high.x = std::max(high.x, sink.x); high.y = std::max(high.y, sink.y);
+    }
+    Position const origin{low.x > 64 ? low.x - 64 : 0, low.y > 64 ? low.y - 64 : 0};
+    auto const xmax = high.x - origin.x, ymax = high.y - origin.y;
+    if (xmax > limit - 64 || ymax > limit - 64) return {};
+    auto local = p;
+    local.dimensions = {std::min(p.dimensions.x - origin.x, xmax + 64),
+                        std::min(p.dimensions.y - origin.y, ymax + 64)};
+    local.source = {p.source.x - origin.x, p.source.y - origin.y};
+    for (auto& sink : local.sinks) { sink.x -= origin.x; sink.y -= origin.y; }
+    return std::make_pair(std::move(local), origin);
+}
+
+Tree solve(Problem const& p) {
+    auto domain = local_domain(p);
+    if (!domain) return solve_core(p);
+    std::optional<Tree> local;
+    Integer local_score = 0;
+    try {
+        local = solve_core(domain->first);
+        for (auto& node : *local) {
+            node.position.x = add(node.position.x, domain->second.x);
+            node.position.y = add(node.position.y, domain->second.y);
+        }
+        local_score = validate_tree(p, *local).score;
+        auto const lower_bound = score_lower_bound(p);
+        if (lower_bound && local_score == *lower_bound) return std::move(*local);
+    } catch (std::runtime_error const&) { local.reset(); }
+    try {
+        auto original = solve_core(p);
+        if (local && local_score < validate_tree(p, original).score) return std::move(*local);
+        return original;
+    } catch (std::runtime_error const&) {
+        if (local) return std::move(*local);
+        throw;
+    }
 }
 
 std::string serialize_tree(Problem const& p, Tree const& tree) {

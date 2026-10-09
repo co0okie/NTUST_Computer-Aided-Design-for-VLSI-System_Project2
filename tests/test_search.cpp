@@ -290,12 +290,37 @@ void joint_bypass_budgets() {
     auto const blocked = cbi::joint_bypass_tree(p, initial);
     require(cbi::validate_tree(p, blocked).score == 9, "joint bypass obeys source fanout");
 }
+
+void local_domains() {
+    auto const maximum = std::numeric_limits<cbi::Integer>::max();
+    cbi::Problem p{{1, 1}, {maximum, maximum}, {{"T0", 13, 52, 1}}, 100, {10, 9},
+                  {{6,10},{7,11},{7,9},{8,12},{8,8},{9,13},{9,7},
+                   {10,14},{10,6},{11,13},{11,7},{12,12},{12,8}}};
+    for (auto offset : {cbi::Integer{0}, maximum - 20}) {
+        auto shifted = p;
+        shifted.source.x += offset; shifted.source.y += offset;
+        for (auto& sink : shifted.sinks) { sink.x += offset; sink.y += offset; }
+        auto domain = cbi::local_domain(shifted);
+        require(domain && domain->first.dimensions.x < 200 && domain->first.dimensions.y < 200,
+                "compact pins have compact translated domain");
+        auto const result = cbi::solve(shifted);
+        require(cbi::validate_tree(shifted, result).score == 1, "translated huge-domain hub remains legal and optimal");
+    }
+    p = {{1, 1}, {maximum, maximum}, {{"T0", 2, 10, 1}}, 100, {maximum, 5}, {{maximum, 1}, {maximum, 9}}};
+    auto const boundary = cbi::solve(p);
+    require(cbi::validate_tree(p, boundary).score == 1, "translation preserves extreme original boundary");
+    p = {{1, maximum}, {maximum, maximum}, {{"T0", 1, maximum, 1}}, 1, {0, 0}, {{maximum, maximum}}};
+    require(!cbi::local_domain(p), "unrepresentable span is not clipped to lose pins");
+    bool failed = false;
+    try { (void)cbi::solve(p); } catch (std::runtime_error const&) { failed = true; }
+    require(failed, "actual Manhattan arrival overflow remains rejected");
+}
 } // namespace
 
 int main() {
     try {
         multiway(); lower_bounds(); scheduler(); retry_unlocked_move();
-        incremental_relocations(); dense_forest_budgets(); joint_hub_budgets(); layered_rings(); joint_bypass_budgets();
+        incremental_relocations(); dense_forest_budgets(); joint_hub_budgets(); layered_rings(); joint_bypass_budgets(); local_domains();
     }
     catch (std::exception const& error) { std::cerr << error.what() << '\n'; return 1; }
 }

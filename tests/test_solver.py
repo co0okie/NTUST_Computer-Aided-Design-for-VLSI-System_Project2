@@ -539,6 +539,22 @@ class SolverTests(unittest.TestCase):
                 self.assertEqual(skew, 0)
                 self.assertEqual(int(text.splitlines()[0].split()[1]), 2)
 
+    def test_compact_hub_in_huge_translated_domains(self):
+        sinks = [(6, 10), (7, 11), (7, 9), (8, 12), (8, 8), (9, 13), (9, 7),
+                 (10, 14), (10, 6), (11, 13), (11, 7), (12, 12), (12, 8)]
+        maximum = 2**63 - 1
+        for dim in (20, 2**61, maximum):
+            for offset in ((0,) if dim == 20 else (0, dim - 20)):
+                pins = [(x + offset, y + offset) for x, y in [(10, 9)] + sinks]
+                skew, text = self.run_case(pins, dim=dim, source=(1, 1),
+                                          library=((13, 52, 1),))
+                self.assertEqual(skew, 0)
+                self.assertEqual(int(text.splitlines()[0].split()[1]), 1)
+        skew, text = self.run_case([(maximum, 5), (maximum, 1), (maximum, 9)],
+                                  dim=maximum, source=(1, 1), library=((2, 10, 1),))
+        self.assertEqual(skew, 0)
+        self.assertEqual(int(text.splitlines()[0].split()[1]), 1)
+
     def test_random_sparse(self):
         rng = random.Random(20261009)
         for _ in range(40):
@@ -598,6 +614,8 @@ class SolverTests(unittest.TestCase):
         bad_cases = [good.replace('20 20', '10 10'), good.replace('20 20', '101 20'),
                      good.replace('fanout 2', 'fanout -2'), good.replace('w_skew 100', 'w_skew nope'),
                      good + 'unexpected\n', good.replace('.pin 2', '.pin 3'),
+                     instance([(0, 0), (2**63 - 1, 2**63 - 1)], dim=2**63 - 1,
+                              source=(1, 2**63 - 1), library=((1, 2**63 - 1, 1),)),
                      instance([(0, 0), (2, 2)], dim=2, source=(1, 1), library=((1, 1, 1),)),
                      instance([(5, 5), (1, 5), (9, 5)], dim=10, source=(1, 100), library=((1, 3, 1),)),
                      instance([(2, 1), (2, 4), (3, 4), (1, 2), (1, 3)], dim=5,

@@ -19,6 +19,21 @@ opened, so rejected instances preserve any existing output.
 
 ## Construction and optimization
 
+When unused chip dimensions exceed the geometry arithmetic range, a compact pin
+cluster can supply an additional safe local-domain candidate. Each axis is
+translated near its minimum pin coordinate and padded by 64 units, clipped to
+the original boundary. Spans exceeding the safe construction range are left to
+the original solver. Positions are translated back with checked addition, and
+the complete tree is validated against the original pins, dimensions and limits.
+Manhattan lengths and arrivals are invariant under translation. A candidate
+attaining the original Score lower bound returns immediately; otherwise the
+original complete result is still computed and retained unless the local result
+has a lower actual Score. Padding is a finite heuristic, not a feasibility proof.
+Compact hubs near the origin, near `INT64_MAX`, and on the original boundary
+remain supported when the whole chip grows; actual distance/Score overflow is
+still rejected before opening the output file.
+
+
 The solver first tries a fanout-aware spatial construction. Repeated median
 splits along the widest axis form groups, and each branch directly supports up
 to `min(32, fanout, outgoing-length limit)` children. It samples at most 99 merge
@@ -401,6 +416,8 @@ transposition, joint membership/position plateaus, malformed input, and output
 preservation.
 Layered ring tests attain five buffers and zero skew under reversed pin order
 and axis transposition, including direct fanout 32/64/128/256.
+Local-domain tests cover dimensions 20, 2^61 and INT64_MAX, near-origin/translated
+hubs, preserved original boundary positions, and actual arrival overflow rejection.
 Joint bypass tests preserve zero skew while deleting an ancestor branch, under
 reversed pins/transposed axes, exhausted work counters and tight source fanout.
 
