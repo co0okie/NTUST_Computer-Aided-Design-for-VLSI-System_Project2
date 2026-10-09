@@ -315,12 +315,42 @@ void local_domains() {
     try { (void)cbi::solve(p); } catch (std::runtime_error const&) { failed = true; }
     require(failed, "actual Manhattan arrival overflow remains rejected");
 }
+
+void compressed_chains() {
+    // Exhaustive coverage/cost comparison includes odd remaining distances:
+    // ceil(r / gcd) must preserve partial final segments, not round downward.
+    for (cbi::Integer remaining = 1; remaining <= 80; ++remaining) {
+        cbi::Integer optimum = std::numeric_limits<cbi::Integer>::max();
+        for (cbi::Integer a = 0; a <= 14; ++a) for (cbi::Integer b = 0; b <= 14; ++b)
+            if (8 * a + 6 * b >= remaining) optimum = std::min(optimum, 5 * a + 4 * b);
+        cbi::Problem const p{{1, 1}, {remaining + 20, remaining + 20},
+                             {{"T0", 1, 8, 5}, {"T1", 1, 6, 4}}, 1, {2, 2}, {{remaining + 3, 2}}};
+        for (int policy : {-2, -4, -5}) {
+            auto const tree = cbi::Builder(p, false, policy).build();
+            require(cbi::validate_tree(p, tree).score == optimum, "compressed coverage DP matches exhaustive optimum");
+        }
+    }
+    for (cbi::Integer scale : {1, 1000, 1000000}) {
+        for (cbi::Integer delta : {-1, 0, 1}) {
+            if (scale + delta <= 0) continue;
+            cbi::Problem const p{{1, scale + delta}, {40 * scale, 40 * scale},
+                                 {{"T0", 1, 8 * scale, 5}, {"T1", 1, 6 * scale, 4}},
+                                 1, {2 * scale, 2 * scale}, {{31 * scale, 2 * scale}}};
+            auto const result = cbi::compressed_chain_candidate(p);
+            require(result.has_value(), "scaled chain builds within component/state limits");
+            require(cbi::validate_tree(p, *result).score == (delta < 0 ? 19 : 18), "scaled partial segments use ceiling units");
+        }
+    }
+    cbi::Problem const too_long{{1, 1}, {10000, 10000}, {{"T0", 1, 8, 5}, {"T1", 1, 6, 4}}, 1, {2, 2}, {{9002, 2}}};
+    require(!cbi::compressed_chain_candidate(too_long), "compressed candidate component cutoff");
+}
 } // namespace
 
 int main() {
     try {
         multiway(); lower_bounds(); scheduler(); retry_unlocked_move();
-        incremental_relocations(); dense_forest_budgets(); joint_hub_budgets(); layered_rings(); joint_bypass_budgets(); local_domains();
+        incremental_relocations(); dense_forest_budgets(); joint_hub_budgets(); layered_rings();
+        joint_bypass_budgets(); local_domains(); compressed_chains();
     }
     catch (std::exception const& error) { std::cerr << error.what() << '\n'; return 1; }
 }

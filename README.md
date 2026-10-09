@@ -146,6 +146,24 @@ queries use the original maximum-length routing policy. Placement feasibility
 and the final weighted Score are still checked on the complete tree. This bounded
 planner does not prove optimality for chains with occupied points or detours.
 
+A separate compressed mixed-chain candidate uses `g = gcd(library lengths)`.
+Because every total buffer coverage is a multiple of `g`, covering distance `r`
+is equivalent to covering `ceil(r/g)` units with capacities `length/g`.
+The same cost recurrence and longer/shorter tie policies run on those units,
+retaining the 4096-effective-unit and 262144-transition bounds. Physical placement still
+uses original lengths and recomputes the ceiling after every actual step, so
+partial final segments and blocked ideal positions remain checked. This candidate
+runs only with at least two distinct lengths, `g > 1`, up to 128 sinks/64 types,
+and at most 512 components per build. Two tie policies try binary/parity, star
+and hub constructions (at most eight builds), retaining one complete candidate.
+Its independent 8192 refinement trials and 16 insertions cannot consume any
+previous candidate's budget. The original uncompressed policies remain intact;
+`g = 1`, large effective distance or exhausted transition budget retain the old
+fallback. This adds at most 8192 trials to the earlier 57344, for a 65536 extra
+work/trial cap across new refinements. The coverage planner remains optimistic
+about geometry and does not prove feasibility or global chain optimality with
+occupied points or detours.
+
 Binary tree construction also compares up to four branching length policies,
 including the original maximum length and the cheapest compatible branching type.
 Only types with fanout at least two and length at least two are eligible. Each
@@ -418,6 +436,9 @@ Layered ring tests attain five buffers and zero skew under reversed pin order
 and axis transposition, including direct fanout 32/64/128/256.
 Local-domain tests cover dimensions 20, 2^61 and INT64_MAX, near-origin/translated
 hubs, preserved original boundary positions, and actual arrival overflow rejection.
+Compressed-chain tests compare short coverages to exhaustive cost minima, then
+scale coordinates/capacities by 1000 and 1000000 under both library orders.
+Source budgets around a GCD boundary test ceiling rounding and partial segments.
 Joint bypass tests preserve zero skew while deleting an ancestor branch, under
 reversed pins/transposed axes, exhausted work counters and tight source fanout.
 

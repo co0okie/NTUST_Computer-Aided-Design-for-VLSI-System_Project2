@@ -555,6 +555,20 @@ class SolverTests(unittest.TestCase):
         self.assertEqual(skew, 0)
         self.assertEqual(int(text.splitlines()[0].split()[1]), 1)
 
+    def test_scaled_mixed_relay_coverage(self):
+        for scale in (1, 1000, 1000000):
+            for delta in (-1, 0, 1):
+                if scale + delta <= 0:
+                    continue
+                for library in (((1, 8 * scale, 5), (1, 6 * scale, 4)),
+                                ((1, 6 * scale, 4), (1, 8 * scale, 5))):
+                    pins = [(2 * scale, 2 * scale), (31 * scale, 2 * scale)]
+                    skew, text = self.run_case(pins, dim=40 * scale, source=(1, scale + delta),
+                                              library=library, weight=1)
+                    _, _, cost = check_output(text, pins, 40 * scale, (1, scale + delta), library)
+                    self.assertEqual(skew, 0)
+                    self.assertEqual(cost, 19 if delta < 0 else 18)
+
     def test_random_sparse(self):
         rng = random.Random(20261009)
         for _ in range(40):

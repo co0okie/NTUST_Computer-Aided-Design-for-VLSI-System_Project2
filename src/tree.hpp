@@ -5,6 +5,7 @@
 #include <algorithm>
 #include <functional>
 #include <limits>
+#include <numeric>
 #include <optional>
 #include <set>
 #include <sstream>
@@ -720,6 +721,7 @@ class Builder {
     int relay_type = -1;
     bool mixed_relays = false;
     bool shorter_ties = false;
+    Integer chain_unit = 1;
     std::vector<Integer> chain_cost{0};
     std::vector<int> chain_type{-1};
     std::size_t chain_transitions = 0;
@@ -733,8 +735,10 @@ class Builder {
     // obstacles: C(r) = min_t(cost_t + C(max(0, r - length_t))). Geometry is
     // checked separately and each actual step updates the remaining distance.
     int relay_for(Integer remaining) {
-        if (!mixed_relays || remaining > chain_distance_budget) return relay_type;
-        auto const extent = static_cast<std::size_t>(remaining);
+        if (!mixed_relays) return relay_type;
+        auto const units = chain_unit == 1 ? remaining : remaining / chain_unit + (remaining % chain_unit != 0);
+        if (units > chain_distance_budget) return relay_type;
+        auto const extent = static_cast<std::size_t>(units);
         auto const needed = extent + 1 > chain_cost.size() ? extent + 1 - chain_cost.size() : 0;
         if (needed > (chain_transition_budget - chain_transitions) / p.buffer_library.size()) return relay_type;
         while (chain_cost.size() <= extent) {
@@ -743,7 +747,7 @@ class Builder {
             int chosen = -1;
             for (std::size_t i = 0; i < p.buffer_library.size(); ++i) {
                 auto const& type = p.buffer_library[i];
-                auto const tail = static_cast<std::size_t>(std::max(Integer{0}, r - type.length));
+                auto const tail = static_cast<std::size_t>(std::max(Integer{0}, r - type.length / chain_unit));
                 if ((tail != 0 && chain_type[tail] < 0) || type.cost >
                     std::numeric_limits<Integer>::max() - chain_cost[tail]) continue;
                 auto const cost = type.cost + chain_cost[tail];
@@ -1221,7 +1225,12 @@ public:
         if (branch_policy >= 0) branching_type = branch_policy;
         if (relay_policy >= 0) relay_type = relay_policy;
         mixed_relays = relay_policy <= -2;
-        shorter_ties = relay_policy == -3;
+        shorter_ties = relay_policy == -3 || relay_policy == -5;
+        if (relay_policy <= -4) {
+            chain_unit = 0;
+            for (auto const& type : p.buffer_library) chain_unit = std::gcd(chain_unit, type.length);
+            construction_limit = 512;
+        }
         optimize_branch_budget = optimize_allocation;
     }
     Tree build() {
@@ -2052,6 +2061,28 @@ std::optional<Tree> layered_candidate(Problem const& p) {
     return best;
 }
 
+std::optional<Tree> compressed_chain_candidate(Problem const& p) {
+    if (p.sinks.empty() || p.sinks.size() > 128 || p.buffer_library.size() < 2 || p.buffer_library.size() > 64) return {};
+    Integer unit = 0;
+    std::set<Integer> lengths;
+    for (auto const& type : p.buffer_library) { unit = std::gcd(unit, type.length); lengths.insert(type.length); }
+    if (unit <= 1 || lengths.size() < 2) return {};
+    std::optional<Tree> best;
+    Integer score = std::numeric_limits<Integer>::max();
+    auto consider = [&](Tree tree) {
+        auto const metrics = validate_tree(p, tree);
+        if (!best || metrics.score < score) { score = metrics.score; best = std::move(tree); }
+    };
+    for (int policy : {-4, -5}) {
+        for (bool parity : {true, false}) {
+            try { consider(Builder(p, parity, policy).build()); } catch (std::runtime_error const&) {}
+        }
+        try { consider(Builder(p, false, policy).build_star()); } catch (std::runtime_error const&) {}
+        try { consider(Builder(p, false, policy).build_hub()); } catch (std::runtime_error const&) {}
+    }
+    return best;
+}
+
 Tree solve_core(Problem const& p) {
     auto const lower_bound = score_lower_bound(p);
     auto optimum = [&](Tree const& tree) {
@@ -2062,6 +2093,8 @@ Tree solve_core(Problem const& p) {
     try { if (optimum(direct)) return direct; } catch (std::runtime_error const&) {}
     auto layered = layered_candidate(p);
     if (layered && optimum(*layered)) return std::move(*layered);
+    auto compressed = compressed_chain_candidate(p);
+    if (compressed && optimum(*compressed)) return std::move(*compressed);
 
     // First-class fanout-aware construction precedes the binary fallback.
     // Non-optimal candidates get an independent shortlist and cannot displace
@@ -2111,14 +2144,16 @@ Tree solve_core(Problem const& p) {
     }
     if (!best) best = dense_forest(p);
     if (!best && layered) { best = std::move(layered); layered.reset(); }
+    if (!best && compressed) { best = std::move(compressed); compressed.reset(); }
     if (!best) throw std::runtime_error(reason.empty() ? "no legal tree constructed" : reason);
     std::size_t final_trials = 8192;
     auto tree = adaptive_refine(p, std::move(*best), &final_trials, &insertions);
     tree = final_delay(p, std::move(tree), &final_trials, &insertions);
     tree = partial_hub_tree(p, contract_large_tree(p, tree));
-    if (layered) {
+    for (auto extra : {&layered, &compressed}) {
+        if (!*extra) continue;
         std::size_t trials = 8192, extra_insertions = 16;
-        auto candidate = adaptive_refine(p, std::move(*layered), &trials, &extra_insertions);
+        auto candidate = adaptive_refine(p, std::move(**extra), &trials, &extra_insertions);
         candidate = final_delay(p, std::move(candidate), &trials, &extra_insertions);
         candidate = contract_large_tree(p, candidate);
         if (validate_tree(p, candidate).score < validate_tree(p, tree).score) tree = std::move(candidate);
