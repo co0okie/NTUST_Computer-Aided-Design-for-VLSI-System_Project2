@@ -188,9 +188,30 @@ void incremental_relocations() {
     p.buffer_library = {{"T0", 2, 4, 1}, {"T1", 2, maximum, maximum}};
     compare_relocations(p, tree, {{9, 11}, {9, 10}, {8, 8}});
 }
+
+void dense_forest_budgets() {
+    cbi::Problem p{{3, 10}, {4, 4}, {{"T0", 9, 16, 1}}, 1, {4, 3},
+                  {{2,4},{3,4},{0,0},{4,0},{4,1},{0,3},{2,2},{3,3},
+                   {2,0},{1,0},{4,4},{1,4},{1,2},{3,0},{4,2},{2,3}}};
+    for (std::size_t cap : {std::size_t{0}, std::size_t{1}, std::size_t{100}, std::size_t{1000000}}) {
+        auto work = cap;
+        auto result = cbi::dense_forest(p, &work);
+        require(work <= cap && cap - work <= 262144, "dense forest shared work accounting");
+        if (result) (void)cbi::validate_tree(p, *result);
+        if (cap <= 1) require(!result && work == 0, "dense forest exhausted budget");
+        if (cap == 1000000) require(result.has_value(), "dense forest constructs sixteen sinks");
+    }
+    p.source_limits.fanout = 1;
+    std::size_t work = 100;
+    require(!cbi::dense_forest(p, &work), "impossible source capacity remains bounded");
+    auto const sparse = grid(8); work = 1000;
+    require(!cbi::dense_forest(sparse, &work) && work == 1000, "many free positions skip dense search");
+    auto large = sparse; large.dimensions = {std::numeric_limits<cbi::Integer>::max(), 100};
+    require(!cbi::dense_forest(large, &work) && work == 1000, "large area does not overflow or scan");
+}
 } // namespace
 
 int main() {
-    try { multiway(); lower_bounds(); scheduler(); retry_unlocked_move(); incremental_relocations(); }
+    try { multiway(); lower_bounds(); scheduler(); retry_unlocked_move(); incremental_relocations(); dense_forest_budgets(); }
     catch (std::exception const& error) { std::cerr << error.what() << '\n'; return 1; }
 }

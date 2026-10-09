@@ -283,6 +283,23 @@ remaining interior capacity after a proposed merge. Capacity uses exact integer
 area for dense chips and a safely saturated bound for larger chips, without a
 grid scan or overflowing dimension products. This prevents cheap low-arity
 states from occupying the beam when too few free coordinates remain to finish.
+If the established builders and fallback stages all fail, a dense-chip search
+uses free buffer positions rather than preassigned sink groups. It handles at
+most 128 sinks, 64 types, 4096 interior grid positions, and eight free interior
+positions. Area/free-count checks precede enumeration and avoid overflow or a
+large grid scan. It enumerates subsets of those free positions as direct SRC
+children, reserves their source fanout/wire budget, and rejects subsets with
+insufficient effective total capacity. Remaining sinks can attach directly to
+SRC or to any selected buffer. Backtracking assigns the sink with the fewest
+currently compatible drivers first, preferring farther constrained sinks on
+ties, and enforces nonempty buffers. A shared 262144-step budget charges subsets,
+driver/type compatibility checks and assignment trials, including rejected ones.
+The first fully retyped and validated forest receives the ordinary final bounded
+refinement. This extends feasibility to the 16/21-sink dense examples while
+preserving every earlier successful result. It samples only a two-level forest;
+hierarchical buffers, relays, more than eight free positions and exhaustive
+optimal assignment remain outside this fallback.
+
 This is a heuristic: merge
 placement and relay searches are bounded, and feasibility or optimality is not
 guaranteed. A failed construction reports an error; it does not prove the input
@@ -302,7 +319,8 @@ python3 tests/test_solver.py build/cbi
 
 The C++ search tests check direct multi-output construction, attained lower
 bounds, overflow handling, shared budget accounting, zero-budget preservation,
-the large-tree search cutoff, and a retry case improving Score 16 to 12.
+the large-tree search cutoff, a retry case improving Score 16 to 12,
+and dense-forest shared budgets and area cutoffs.
 Checks remain active in Release builds.
 The Python tests independently check serialized output, arrival times, cost, and all tree
 constraints. They also cover optimal four-output grids under reversed sink order
@@ -330,7 +348,8 @@ full-refinement alternatives with reordered sinks, different weights and costs,
 large-tree multi-output contractions with reordered sinks,
 subtree/sink exchanges with reordered sinks and buffer type changes,
 final delay revisits after candidate selection with reordered sinks,
-malformed input, and output preservation.
+dense forests with 16/21 sinks, reversed input order and almost/full coordinate
+occupancy, malformed input, and output preservation.
 
 For the fanout/scheduler update, Release and Debug tests pass. A development
 comparison against commit `81aedd0` checked 300 valid inputs generated with seed

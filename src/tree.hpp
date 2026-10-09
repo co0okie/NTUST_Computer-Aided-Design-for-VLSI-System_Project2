@@ -3,6 +3,7 @@
 #include "model.hpp"
 
 #include <algorithm>
+#include <functional>
 #include <limits>
 #include <optional>
 #include <set>
@@ -1627,6 +1628,128 @@ Tree solve_reference(Problem const& p) {
     return contract_large_tree(p, final_delay(p, std::move(improved)));
 }
 
+// Dense chips can have many pins but only a few possible buffer positions.
+// Enumerate those positions instead of fixing spatial sink groups in advance.
+std::optional<Tree> dense_forest_search(Problem const& p, std::size_t& work) {
+    if (p.sinks.empty() || p.sinks.size() > 128 || p.buffer_library.empty() ||
+        p.buffer_library.size() > 64 || p.dimensions.x <= 1 || p.dimensions.y <= 1) return {};
+    auto const width = p.dimensions.x - 1, height = p.dimensions.y - 1;
+    if (width > 4096 / height) return {};
+    std::set<std::pair<Integer, Integer>> occupied;
+    occupied.emplace(p.source.x, p.source.y);
+    for (auto sink : p.sinks) occupied.emplace(sink.x, sink.y);
+    Integer occupied_interior = 0;
+    for (auto point : occupied)
+        if (point.first > 0 && point.second > 0 && point.first < p.dimensions.x && point.second < p.dimensions.y)
+            ++occupied_interior;
+    auto const free_count = width * height - occupied_interior;
+    if (free_count <= 0 || free_count > 8) return {};
+    std::vector<Position> positions;
+    for (Integer x = 1; x < p.dimensions.x; ++x)
+        for (Integer y = 1; y < p.dimensions.y; ++y)
+            if (!occupied.count({x, y})) positions.push_back({x, y});
+    auto charge = [&] {
+        if (!work) throw std::runtime_error("dense forest work budget exceeded");
+        --work;
+    };
+    auto const sinks = static_cast<Integer>(p.sinks.size());
+    Integer buffer_capacity = 0;
+    for (auto const& type : p.buffer_library)
+        buffer_capacity = std::max(buffer_capacity, std::min({sinks, type.fanout, type.length}));
+    auto const masks = std::size_t{1} << positions.size();
+    for (std::size_t count = 1; count <= positions.size() && count <= static_cast<std::uint64_t>(p.source_limits.fanout); ++count) {
+        for (std::size_t mask = 1; mask < masks; ++mask) {
+            charge();
+            std::size_t bits = 0;
+            for (auto value = mask; value; value >>= 1) bits += value & 1;
+            if (bits != count) continue;
+            auto tree = initial_tree(p, false);
+            std::vector<std::size_t> drivers{0};
+            Integer source_wire = 0;
+            for (std::size_t i = 0; i < positions.size(); ++i) {
+                if (!(mask & (std::size_t{1} << i))) continue;
+                auto const node = tree.size();
+                tree.push_back({positions[i], 0, {}});
+                tree[0].children.push_back(node); drivers.push_back(node);
+                source_wire = add(source_wire, distance(p.source, positions[i]));
+            }
+            if (source_wire > p.source_limits.length) continue;
+            auto const direct_capacity = std::min({sinks, p.source_limits.fanout - static_cast<Integer>(count),
+                                                   p.source_limits.length - source_wire});
+            if (direct_capacity + static_cast<Integer>(count) * buffer_capacity < sinks) continue;
+            std::vector<Integer> wire(drivers.size()); wire[0] = source_wire;
+            std::vector<std::vector<Integer>> distances(p.sinks.size(), std::vector<Integer>(drivers.size()));
+            for (std::size_t sink = 0; sink < p.sinks.size(); ++sink)
+                for (std::size_t d = 0; d < drivers.size(); ++d)
+                    distances[sink][d] = distance(p.sinks[sink], tree[drivers[d]].position);
+            std::vector<bool> assigned(p.sinks.size());
+            auto compatible = [&](std::size_t d, Integer length) {
+                charge();
+                auto const fanout = tree[drivers[d]].children.size() + 1;
+                if (!d) return fanout <= static_cast<std::uint64_t>(p.source_limits.fanout) && length <= p.source_limits.length;
+                for (auto const& type : p.buffer_library) {
+                    charge();
+                    if (fanout <= static_cast<std::uint64_t>(type.fanout) && length <= type.length) return true;
+                }
+                return false;
+            };
+            std::function<bool(std::size_t)> assign = [&](std::size_t remaining) {
+                std::size_t empty = 0;
+                for (std::size_t d = 1; d < drivers.size(); ++d) empty += tree[drivers[d]].children.empty();
+                if (empty > remaining) return false;
+                if (!remaining) {
+                    try { select_buffer_types(p, tree); (void)validate_tree(p, tree); return true; }
+                    catch (std::runtime_error const&) { return false; }
+                }
+                std::size_t chosen = 0;
+                std::vector<std::size_t> options;
+                Integer hardest = -1;
+                for (std::size_t sink = 0; sink < p.sinks.size(); ++sink) {
+                    if (assigned[sink]) continue;
+                    std::vector<std::size_t> eligible;
+                    Integer nearest = std::numeric_limits<Integer>::max();
+                    for (std::size_t d = 0; d < drivers.size(); ++d) {
+                        if (!compatible(d, add(wire[d], distances[sink][d]))) continue;
+                        eligible.push_back(d); nearest = std::min(nearest, distances[sink][d]);
+                    }
+                    if (eligible.empty()) return false;
+                    if (options.empty() || eligible.size() < options.size() ||
+                        (eligible.size() == options.size() && nearest > hardest)) {
+                        chosen = sink; options = std::move(eligible); hardest = nearest;
+                    }
+                }
+                std::sort(options.begin(), options.end(), [&](auto a, auto b) {
+                    auto key = [&](auto d) {
+                        return std::make_tuple(!(d && tree[drivers[d]].children.empty()), distances[chosen][d], d);
+                    };
+                    return key(a) < key(b);
+                });
+                assigned[chosen] = true;
+                for (auto d : options) {
+                    charge();
+                    tree[drivers[d]].children.push_back(chosen + 1); wire[d] += distances[chosen][d];
+                    if (assign(remaining - 1)) return true;
+                    wire[d] -= distances[chosen][d]; tree[drivers[d]].children.pop_back();
+                }
+                assigned[chosen] = false;
+                return false;
+            };
+            if (assign(p.sinks.size())) return tree;
+        }
+    }
+    return {};
+}
+
+std::optional<Tree> dense_forest(Problem const& p, std::size_t* shared_work = nullptr) {
+    auto work = shared_work ? std::min(std::size_t{262144}, *shared_work) : std::size_t{262144};
+    auto const start = work;
+    std::optional<Tree> result;
+    try { result = dense_forest_search(p, work); }
+    catch (std::runtime_error const&) {}
+    if (shared_work) *shared_work -= start - work;
+    return result;
+}
+
 std::optional<Integer> score_lower_bound(Problem const& p) {
     if (p.sinks.empty()) return Integer{0};
     // Every edge has integer length >= 1 because coordinates are distinct.
@@ -1727,6 +1850,7 @@ Tree solve(Problem const& p) {
         auto const score = validate_tree(p, tree).score;
         if (!best || score < best_score) { best_score = score; best = std::move(tree); }
     }
+    if (!best) best = dense_forest(p);
     if (!best) throw std::runtime_error(reason.empty() ? "no legal tree constructed" : reason);
     std::size_t final_trials = 8192;
     auto tree = adaptive_refine(p, std::move(*best), &final_trials, &insertions);

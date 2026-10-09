@@ -469,6 +469,22 @@ class SolverTests(unittest.TestCase):
                 _, _, cost = check_output(text, pins, dim, source, library)
                 self.assertLessEqual(weight * skew + cost, ceiling)
 
+    def test_dense_forest_with_few_free_positions(self):
+        cases = [
+            [(2, 4), (3, 4), (0, 0), (4, 0), (4, 1), (0, 3), (2, 2),
+             (3, 3), (2, 0), (1, 0), (4, 4), (1, 4), (1, 2), (3, 0),
+             (4, 2), (2, 3)],
+            [(0, 4), (0, 2), (2, 4), (3, 4), (2, 1), (0, 0), (4, 0),
+             (4, 1), (0, 3), (0, 1), (3, 1), (2, 2), (3, 3), (2, 0),
+             (1, 0), (4, 4), (1, 4), (1, 2), (3, 0), (4, 2), (2, 3)],
+        ]
+        for sinks in cases:
+            for ordered in (sinks, list(reversed(sinks))):
+                with self.subTest(sinks=ordered):
+                    _, text = self.run_case([(4, 3)] + ordered, dim=4, source=(3, 10),
+                                            library=((9, 16, 1),), weight=1)
+                    self.assertEqual(int(text.splitlines()[0].split()[1]), 3)
+
     def test_random_sparse(self):
         rng = random.Random(20261009)
         for _ in range(40):
