@@ -1931,6 +1931,86 @@ Tree partial_hub_tree(Problem const& p, Tree best, std::size_t* shared_trials = 
     return best;
 }
 
+Tree joint_bypass_tree(Problem const& p, Tree best, std::size_t* shared_work = nullptr) {
+    if (best.size() > 512 || p.sinks.size() > 128) return best;
+    auto score = validate_tree(p, best).score;
+    auto work = shared_work ? std::min(std::size_t{8192}, *shared_work) : std::size_t{8192};
+    auto const start = work;
+    auto const trial_limit = local_trial_limit(p, best, nullptr);
+    std::size_t trials = 0;
+    for (unsigned pass = 0; pass < 8 && work && trials < trial_limit; ++pass) {
+        std::optional<Tree> improved;
+        auto next_score = score;
+        for (std::size_t parent = 0; parent < best.size() && work && trials < trial_limit; ++parent) {
+            for (std::size_t slot = 0; slot < best[parent].children.size() && work && trials < trial_limit; ++slot) {
+                auto const victim = best[parent].children[slot];
+                if (victim <= p.sinks.size() || best[victim].children.size() != 2) continue;
+                auto const children = best[victim].children;
+                if (children[0] <= p.sinks.size() || children[1] <= p.sinks.size()) continue;
+                auto stripped = best;
+                auto& edges = stripped[parent].children;
+                edges.erase(edges.begin() + static_cast<std::ptrdiff_t>(slot));
+                edges.insert(edges.begin() + static_cast<std::ptrdiff_t>(slot), children.begin(), children.end());
+                stripped.erase(stripped.begin() + static_cast<std::ptrdiff_t>(victim));
+                for (auto& node : stripped) for (auto& child : node.children) if (child > victim) --child;
+                auto const a = children[0] - (children[0] > victim), b = children[1] - (children[1] > victim);
+                auto const from = parent - (parent > victim);
+                std::set<std::pair<Integer, Integer>> occupied;
+                for (std::size_t i = 0; i < stripped.size(); ++i)
+                    if (i != a && i != b) occupied.emplace(stripped[i].position.x, stripped[i].position.y);
+                auto samples = [&](std::size_t node) {
+                    auto const origin = stripped[node].position;
+                    std::vector<Position> points;
+                    auto offer = [&](Position point) {
+                        if (!work || points.size() == 32) return;
+                        --work;
+                        if (point.x <= 0 || point.y <= 0 || point.x >= p.dimensions.x || point.y >= p.dimensions.y ||
+                            occupied.count({point.x, point.y})) return;
+                        if (std::none_of(points.begin(), points.end(), [&](auto q) { return q.x == point.x && q.y == point.y; }))
+                            points.push_back(point);
+                    };
+                    offer(origin);
+                    for (Integer dx = -2; dx <= 2; ++dx) for (Integer dy = -2; dy <= 2; ++dy) {
+                        if ((dx > 0 && origin.x > std::numeric_limits<Integer>::max() - dx) ||
+                            (dy > 0 && origin.y > std::numeric_limits<Integer>::max() - dy)) continue;
+                        offer({origin.x + dx, origin.y + dy});
+                    }
+                    auto align = [&](Position anchor) {
+                        offer({anchor.x, origin.y}); offer({origin.x, anchor.y});
+                        offer({origin.x + (anchor.x - origin.x) / 2, origin.y + (anchor.y - origin.y) / 2});
+                    };
+                    align(stripped[from].position); align(best[victim].position);
+                    for (auto child : stripped[node].children) {
+                        if (!work || points.size() == 32) break;
+                        align(stripped[child].position);
+                    }
+                    return points;
+                };
+                auto const first = samples(a), second = samples(b);
+                for (auto x : first) {
+                    if (!work || trials == trial_limit) break;
+                    for (auto y : second) {
+                        if (!work || trials == trial_limit) break;
+                        --work; ++trials;
+                        if (x.x == y.x && x.y == y.y) continue;
+                        auto candidate = stripped;
+                        candidate[a].position = x; candidate[b].position = y;
+                        try {
+                            select_buffer_types(p, candidate);
+                            auto const metrics = validate_tree(p, candidate);
+                            if (metrics.score < next_score) { next_score = metrics.score; improved = std::move(candidate); }
+                        } catch (std::runtime_error const&) {}
+                    }
+                }
+            }
+        }
+        if (!improved) break;
+        best = std::move(*improved); score = next_score;
+    }
+    if (shared_work) *shared_work -= start - work;
+    return best;
+}
+
 std::vector<int> multiway_policies(Problem const& p) {
     std::vector<std::size_t> eligible;
     for (std::size_t i = 0; i < p.buffer_library.size(); ++i)
@@ -2041,7 +2121,15 @@ Tree solve(Problem const& p) {
         auto candidate = adaptive_refine(p, std::move(*layered), &trials, &extra_insertions);
         candidate = final_delay(p, std::move(candidate), &trials, &extra_insertions);
         candidate = contract_large_tree(p, candidate);
-        if (validate_tree(p, candidate).score < validate_tree(p, tree).score) return candidate;
+        if (validate_tree(p, candidate).score < validate_tree(p, tree).score) tree = std::move(candidate);
+    }
+    std::size_t joint_work = 8192, joint_insertions = 16;
+    for (unsigned round = 0; round < 3 && joint_work; ++round) {
+        auto const score = validate_tree(p, tree).score;
+        tree = joint_bypass_tree(p, std::move(tree), &joint_work);
+        if (validate_tree(p, tree).score == score) break;
+        tree = adaptive_refine(p, std::move(tree), &joint_work, &joint_insertions);
+        tree = final_delay(p, std::move(tree), &joint_work, &joint_insertions);
     }
     return tree;
 }

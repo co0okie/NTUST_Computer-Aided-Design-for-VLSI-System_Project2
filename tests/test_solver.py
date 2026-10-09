@@ -528,6 +528,17 @@ class SolverTests(unittest.TestCase):
                     self.assertEqual(skew, 0)
                     self.assertEqual(int(text.splitlines()[0].split()[1]), 5)
 
+    def test_bypass_with_joint_child_relocation(self):
+        for sinks in ([(6, 1), (4, 9), (0, 3), (6, 3)], [(6, 3), (0, 3), (4, 9), (6, 1)]):
+            for transpose in (False, True):
+                pins = [(5, 3)] + sinks
+                if transpose:
+                    pins = [(y, x) for x, y in pins]
+                skew, text = self.run_case(pins, dim=9, source=(4, 6),
+                                          library=((2, 14, 3),), weight=34)
+                self.assertEqual(skew, 0)
+                self.assertEqual(int(text.splitlines()[0].split()[1]), 2)
+
     def test_random_sparse(self):
         rng = random.Random(20261009)
         for _ in range(40):

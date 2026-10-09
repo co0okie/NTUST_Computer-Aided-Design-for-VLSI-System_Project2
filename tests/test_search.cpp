@@ -270,12 +270,32 @@ void layered_rings() {
         require(failed && work == 0, "layered budget exhaustion has no underflow");
     }
 }
+
+void joint_bypass_budgets() {
+    cbi::Problem p{{4, 6}, {9, 9}, {{"T0", 2, 14, 3}}, 34, {5, 3}, {{6, 1}, {4, 9}, {0, 3}, {6, 3}}};
+    auto initial = cbi::initial_tree(p, false);
+    initial.push_back({{4, 3}, 0, {3, 1}}); initial.push_back({{4, 5}, 0, {4, 2}});
+    initial.push_back({{4, 4}, 0, {5, 6}}); initial[0].children = {7};
+    require(cbi::validate_tree(p, initial).score == 9, "joint bypass plateau fixture");
+    for (std::size_t cap : {std::size_t{0}, std::size_t{1}, std::size_t{100}, std::size_t{100000}}) {
+        auto work = cap;
+        auto const result = cbi::joint_bypass_tree(p, initial, &work);
+        auto const metrics = cbi::validate_tree(p, result);
+        require(work <= cap && cap - work <= 8192, "joint bypass shared work accounting");
+        require(metrics.score <= 9, "joint bypass cannot regress score");
+        if (!cap) require(!cbi::tree_less(result, initial) && !cbi::tree_less(initial, result), "joint bypass zero budget");
+        if (cap == 100000) require(metrics.score == 6 && metrics.maximum_arrival == metrics.minimum_arrival, "joint bypass keeps zero skew while deleting buffer");
+    }
+    p.source_limits.fanout = 1;
+    auto const blocked = cbi::joint_bypass_tree(p, initial);
+    require(cbi::validate_tree(p, blocked).score == 9, "joint bypass obeys source fanout");
+}
 } // namespace
 
 int main() {
     try {
         multiway(); lower_bounds(); scheduler(); retry_unlocked_move();
-        incremental_relocations(); dense_forest_budgets(); joint_hub_budgets(); layered_rings();
+        incremental_relocations(); dense_forest_budgets(); joint_hub_budgets(); layered_rings(); joint_bypass_budgets();
     }
     catch (std::exception const& error) { std::cerr << error.what() << '\n'; return 1; }
 }

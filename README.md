@@ -91,6 +91,21 @@ joint moves, and larger inputs retain the previous result and budget unchanged.
 The joint-hub work cap is 8192 in addition to the earlier 32768 trials
 and the separate 8192 layered-candidate trials.
 
+A final joint bypass pass can delete a binary branch and relocate both of its
+buffer children together. It preserves each child's descendants and directly
+checks the complete resulting tree, rather than requiring an improving
+intermediate relocation. Each child samples at most 32 points near its old
+position and alignments with the new parent, removed branch and descendants.
+Both point offers and position pairs consume a shared 8192-work counter; rejected
+and overlapping pairs are charged. Full-tree pair trials also obey the existing
+2048/tree/library-scaled limit, with at most eight passes per call and the
+128-sink/512-component cutoffs. All types are reselected and only strictly lower
+validated Score is accepted. A successful bypass can trigger adaptive refinement
+and final delay using the same remaining counter, for at most three rounds and
+16 additional delay insertions. This phase adds at most 8192 work to the earlier
+49152, and preserves all prior phase results/budgets. It samples only binary
+branches with two buffer children; larger joint moves remain outside the search.
+
 The reference strategy partitions sinks spatially, builds a binary tree from the leaves,
 and searches integer Manhattan diamond intersections for balanced merge
 positions. Long edges are subdivided with interior relay buffers along shortest
@@ -386,6 +401,8 @@ transposition, joint membership/position plateaus, malformed input, and output
 preservation.
 Layered ring tests attain five buffers and zero skew under reversed pin order
 and axis transposition, including direct fanout 32/64/128/256.
+Joint bypass tests preserve zero skew while deleting an ancestor branch, under
+reversed pins/transposed axes, exhausted work counters and tight source fanout.
 
 For the fanout/scheduler update, Release and Debug tests pass. A development
 comparison against commit `81aedd0` checked 300 valid inputs generated with seed
