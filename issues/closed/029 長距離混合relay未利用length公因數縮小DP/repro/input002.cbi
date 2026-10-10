@@ -1,0 +1,17 @@
+.limit
+fanout 1
+length 1000000
+.dimx 40000000
+.dimy 40000000
+.e
+.buflib 2
+T0 1 8000000 5
+T1 1 6000000 4
+.e
+.objective
+w_skew 1
+.e
+.pin 2
+2000000 2000000
+31000000 2000000
+.e
