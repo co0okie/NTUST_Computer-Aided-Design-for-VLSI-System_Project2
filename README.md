@@ -376,9 +376,16 @@ ties, and enforces nonempty buffers. A shared 262144-step budget charges subsets
 driver/type compatibility checks and assignment trials, including rejected ones.
 The first fully retyped and validated forest receives the ordinary final bounded
 refinement. This extends feasibility to the 16/21-sink dense examples while
-preserving every earlier successful result. It samples only a two-level forest;
-hierarchical buffers, relays, more than eight free positions and exhaustive
-optimal assignment remain outside this fallback.
+preserving every earlier successful result. If the direct forest fails before
+exhausting its budget, it enumerates buffer parent assignments using the same
+remaining quota. It rejects ancestor cycles and reserves each skeleton edge's
+fanout and summed wire before sink assignment; acyclic complete assignments
+connect every buffer to SRC. Residual driver capacity prunes impossible
+skeletons. This also handles the 21-sink layout requiring three hierarchical
+buffers with SRC fanout one. Parent attempts and library checks, including
+rejections, consume the shared budget. Relays outside the selected free slots,
+more than eight free positions and exhaustive optimal assignment remain outside
+this fallback.
 
 This is a heuristic: merge
 placement and relay searches are bounded, and feasibility or optimality is not

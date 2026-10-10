@@ -215,6 +215,29 @@ void dense_forest_budgets() {
     require(!cbi::dense_forest(large, &work) && work == 1000, "large area does not overflow or scan");
 }
 
+void dense_hierarchy_budgets() {
+    cbi::Problem p{{1,1}, {4,4}, {{"T0",8,27,1}}, 1, {4,3}, {}};
+    for (cbi::Integer x = 0; x <= 4; ++x) for (cbi::Integer y = 0; y <= 4; ++y) {
+        if ((x == 4 && y == 3) || (x == 3 && y == 3) || (x == 1 && (y == 1 || y == 3))) continue;
+        p.sinks.push_back({x,y});
+    }
+    for (std::size_t cap : {std::size_t{0}, std::size_t{1}, std::size_t{100}, std::size_t{1000000}}) {
+        auto work = cap;
+        auto result = cbi::dense_forest(p, &work);
+        require(work <= cap && cap - work <= 262144, "direct and hierarchical search share one work quota");
+        if (result) {
+            (void)cbi::validate_tree(p, *result);
+            require(result->size() == 25 && (*result)[0].children.size() == 1, "hierarchy fits three free positions and source fanout one");
+        }
+        if (cap <= 1) require(!result && work == 0, "hierarchical budget exhaustion is safe");
+        if (cap == 1000000) require(result.has_value(), "hierarchical forest constructs twenty-one sinks");
+    }
+    p.source_limits.length = 0;
+    std::size_t work = 1000000;
+    require(!cbi::dense_forest(p, &work), "hierarchy cannot invent a source connection");
+    require(1000000 - work <= 262144, "rejected skeletons stay within quota");
+}
+
 void joint_hub_budgets() {
     cbi::Problem const p{{3, 23}, {15, 15}, {{"T0", 3, 16, 6}}, 3, {2, 12}, {{2, 2}, {13, 11}, {6, 7}}};
     auto initial = cbi::initial_tree(p, false);
@@ -355,7 +378,7 @@ int main() {
     try {
         multiway(); lower_bounds(); scheduler(); retry_unlocked_move();
         incremental_relocations(); dense_forest_budgets(); joint_hub_budgets(); layered_rings();
-        joint_bypass_budgets(); local_domains(); compressed_chains();
+        joint_bypass_budgets(); local_domains(); compressed_chains(); dense_hierarchy_budgets();
     }
     catch (std::exception const& error) { std::cerr << error.what() << '\n'; return 1; }
 }

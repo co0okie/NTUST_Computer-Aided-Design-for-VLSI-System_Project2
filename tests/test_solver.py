@@ -623,6 +623,21 @@ class SolverTests(unittest.TestCase):
                     _, _, cost = check_output(text, pins, 30, (3, 32), library)
                     self.assertLessEqual(weight * skew + cost, bound)
 
+    def test_dense_hierarchical_buffers(self):
+        source = (4,3)
+        free = {(3,3),(1,1),(1,3)}
+        sinks = [(x,y) for x in range(5) for y in range(5) if (x,y) != source and (x,y) not in free]
+        for order in [sinks, list(reversed(sinks)), sinks[7:] + sinks[:7]]:
+            for swap, mirror in [(False,False),(True,False),(False,True),(True,True)]:
+                pins = [source] + order
+                if mirror:
+                    pins = [(4-x,4-y) for x,y in pins]
+                if swap:
+                    pins = [(y,x) for x,y in pins]
+                _, text = self.run_case(pins, dim=4, source=(1,1), library=((8,27,1),), weight=1)
+                check_output(text, pins, 4, (1,1), ((8,27,1),))
+                self.assertEqual(int(text.splitlines()[0].split()[1]), 3)
+
     def test_partial_hub_order_budget(self):
         sinks = [(13,11),(12,14),(3,1),(13,13),(12,10),(8,18),(2,2),(6,7)]
         rng = random.Random(31)
