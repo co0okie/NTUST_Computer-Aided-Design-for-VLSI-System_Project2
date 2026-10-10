@@ -505,3 +505,9 @@ group size and sorted coordinates, so pin IDs do not determine which early
 groups receive the budget. The original pass and all earlier winners remain
 protected. The lower bound also requires one buffer when direct SRC edges
 exceed the actual summed wire limit; reaching this proven bound stops the pass.
+
+Final issue verification (2026-10-10): tester accepted the committed fixes
+for 030 (`f682282`) and 031 (`753de06`), and moved both to `issues/closed/`;
+no opened issues remained at completion. Release and Debug CTest passed.
+The 348-input differential check preserved all previous successful results
+and their scores; the hierarchical fallback added two legal constructions.
