@@ -491,3 +491,10 @@ and submit source as `StudentID.zip`. Exclude `build/`, `inputs/`, and `results/
 Submit the required report separately as `StudentID.pdf` (at most three pages).
 The current repository is the development baseline; final report and packaging
 remain for the completed optimization stage.
+
+The final partial-hub pass reuses the remaining joint-search quota, up to 8192
+position trials. It orders memberships by total direct-arrival deficit, then
+group size and sorted coordinates, so pin IDs do not determine which early
+groups receive the budget. The original pass and all earlier winners remain
+protected. The lower bound also requires one buffer when direct SRC edges
+exceed the actual summed wire limit; reaching this proven bound stops the pass.

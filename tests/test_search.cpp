@@ -60,6 +60,11 @@ void lower_bounds() {
     p.source_limits = {1, 100};
     p.buffer_library = {{"T0", 100, 2, 2}};
     require(cbi::score_lower_bound(p) == 104, "wire limit bounds effective buffer fanout");
+    auto direct = p;
+    direct.source_limits = {100, 100};
+    direct.source = {100, 100};
+    direct.buffer_library = {{"T0", 100, 1000, 2}};
+    require(cbi::score_lower_bound(direct) == 102, "actual direct wire requires a buffer even with ample effective fanout");
     p.buffer_library[0].fanout = 1;
     require(!cbi::score_lower_bound(p), "unary library cannot grow branches");
     p.buffer_library = {{"T0", 2, 100, std::numeric_limits<cbi::Integer>::max()}};

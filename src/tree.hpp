@@ -1846,7 +1846,18 @@ std::optional<Integer> score_lower_bound(Problem const& p) {
     auto const excess = std::max(Integer{0}, static_cast<Integer>(p.sinks.size()) -
                                               std::min(p.source_limits.fanout, p.source_limits.length));
     if (excess && max_fanout <= 1) return {};
-    auto const buffers = excess ? excess / (max_fanout - 1) + (excess % (max_fanout - 1) != 0) : 0;
+    auto buffers = excess ? excess / (max_fanout - 1) + (excess % (max_fanout - 1) != 0) : 0;
+    bool direct_possible = p.sinks.size() <= static_cast<std::uint64_t>(p.source_limits.fanout);
+    Integer direct_wire = 0;
+    for (auto sink : p.sinks) {
+        if (!direct_possible) break;
+        try {
+            auto const length = distance(p.source, sink);
+            if (length > p.source_limits.length - direct_wire) direct_possible = false;
+            else direct_wire += length;
+        } catch (std::runtime_error const&) { direct_possible = false; }
+    }
+    if (!direct_possible) buffers = std::max(buffers, Integer{1});
     bool mixed_parity = false;
     auto const parity = (p.sinks.front().x % 2 + p.sinks.front().y % 2) % 2;
     for (auto sink : p.sinks) mixed_parity = mixed_parity || (sink.x % 2 + sink.y % 2) % 2 != parity;
@@ -1857,7 +1868,7 @@ std::optional<Integer> score_lower_bound(Problem const& p) {
 
 // Membership and geometry can be jointly necessary: a strict single move
 // cannot cross a plateau whose other coordinate/topology change is illegal.
-Tree partial_hub_tree(Problem const& p, Tree best, std::size_t* shared_trials = nullptr) {
+Tree partial_hub_tree(Problem const& p, Tree best, std::size_t* shared_trials = nullptr, bool prioritize_deficits = false) {
     if (p.sinks.size() < 2 || p.sinks.size() > 8 || p.buffer_library.size() > 64 ||
         p.dimensions.x <= 1 || p.dimensions.y <= 1 ||
         p.dimensions.x > std::numeric_limits<Integer>::max() / 16 ||
@@ -1875,6 +1886,27 @@ Tree partial_hub_tree(Problem const& p, Tree best, std::size_t* shared_trials = 
     // The full hub always receives a slice before partial memberships.
     std::vector<std::size_t> masks{full};
     for (std::size_t mask = 1; mask < full; ++mask) masks.push_back(mask);
+    if (prioritize_deficits) {
+        std::vector<Integer> arrivals;
+        Integer latest = 0;
+        for (auto sink : p.sinks) { arrivals.push_back(distance(p.source, sink)); latest = std::max(latest, arrivals.back()); }
+        struct Group { std::size_t mask; Integer deficit = 0; std::vector<std::pair<Integer, Integer>> coordinates; };
+        std::vector<Group> groups;
+        for (std::size_t mask = 1; mask < full; ++mask) {
+            Group group{mask, 0, {}};
+            for (std::size_t i = 0; i < p.sinks.size(); ++i) if (mask & (std::size_t{1} << i)) {
+                group.deficit = add(group.deficit, latest - arrivals[i]);
+                group.coordinates.emplace_back(p.sinks[i].x, p.sinks[i].y);
+            }
+            std::sort(group.coordinates.begin(), group.coordinates.end()); groups.push_back(std::move(group));
+        }
+        std::sort(groups.begin(), groups.end(), [](Group const& a, Group const& b) {
+            if (a.deficit != b.deficit) return a.deficit > b.deficit;
+            if (a.coordinates.size() != b.coordinates.size()) return a.coordinates.size() < b.coordinates.size();
+            return a.coordinates < b.coordinates;
+        });
+        masks = {full}; for (auto const& group : groups) masks.push_back(group.mask);
+    }
     for (auto mask : masks) {
         if (!trials || (lower_bound && score == *lower_bound)) break;
         std::vector<std::size_t> children, direct;
@@ -1905,7 +1937,7 @@ Tree partial_hub_tree(Problem const& p, Tree best, std::size_t* shared_trials = 
                 for (Integer dx = -2; dx <= 2; ++dx) for (Integer dy = -2; dy <= 2; ++dy)
                     points.emplace(x + dx, y + dy);
             for (auto point : points) {
-                if (!trials) break;
+                if (!trials || (lower_bound && score == *lower_bound)) break;
                 --trials;
                 Position const position{point.first, point.second};
                 if (position.x <= 0 || position.y <= 0 || position.x >= p.dimensions.x ||
@@ -2166,7 +2198,7 @@ Tree solve_core(Problem const& p) {
         tree = adaptive_refine(p, std::move(tree), &joint_work, &joint_insertions);
         tree = final_delay(p, std::move(tree), &joint_work, &joint_insertions);
     }
-    return tree;
+    return partial_hub_tree(p, std::move(tree), &joint_work, true);
 }
 
 // Large unused dimensions need not force large arithmetic in a compact pin

@@ -623,6 +623,23 @@ class SolverTests(unittest.TestCase):
                     _, _, cost = check_output(text, pins, 30, (3, 32), library)
                     self.assertLessEqual(weight * skew + cost, bound)
 
+    def test_partial_hub_order_budget(self):
+        sinks = [(13,11),(12,14),(3,1),(13,13),(12,10),(8,18),(2,2),(6,7)]
+        rng = random.Random(31)
+        orders = [sinks, list(reversed(sinks)), sinks[3:] + sinks[:3]]
+        for _ in range(5):
+            order = sinks.copy()
+            rng.shuffle(order)
+            orders.append(order)
+        for swap in [False, True]:
+            for order in orders:
+                pins = [(2,12)] + order
+                if swap:
+                    pins = [(y,x) for x,y in pins]
+                skew, text = self.run_case(pins, dim=20, source=(8,83), library=((3,16,6),), weight=3)
+                _, _, cost = check_output(text, pins, 20, (8,83), ((3,16,6),))
+                self.assertEqual(3 * skew + cost, 9)
+
     def test_reject_without_overwriting(self):
         good = instance([(10, 10), (20, 20)])
         bad_cases = [good.replace('20 20', '10 10'), good.replace('20 20', '101 20'),
