@@ -72,7 +72,9 @@ can reject an LP solution even when another integer placement exists.
 
 The seed builder first checks direct driving, then tries the existing binary
 constructors with both parity modes, then falls back to the established complete
-strategy. It never labels failure to find a seed as a proof of infeasibility.
+strategy. When this fallback supplies the seed, hybrid reuses its completed
+reference search instead of running it a second time. It never labels failure
+to find a seed as a proof of infeasibility.
 `current` runs the existing solver first, preserving its ordinary completed result.
 `hybrid` additionally retains a quick legal seed if the reference phase expires.
 

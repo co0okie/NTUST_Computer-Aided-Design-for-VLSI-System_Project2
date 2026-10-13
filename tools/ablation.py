@@ -88,11 +88,14 @@ def entry(text, name, statement):
     return text[:at] + "\n    " + statement + text[at:]
 
 
-def prepare(destination):
+def prepare(destination, revision):
     if destination.exists():
         raise ValueError("Use a new empty study directory; existing evidence is preserved")
     destination.mkdir(parents=True)
     project = destination / "project"
+    commit = subprocess.check_output(["git", "rev-parse", revision + "^{commit}"], cwd=ROOT, text=True).strip()
+    # Keep the current experiment corpus/tools, but pin production code so that
+    # historical gates can still be measured after their removal from the solver.
     files = subprocess.check_output(["git", "ls-files", "-z"], cwd=ROOT).decode().split("\0")
     for name in filter(None, files):
         source = ROOT / name
@@ -100,6 +103,13 @@ def prepare(destination):
             target = project / name
             target.parent.mkdir(parents=True, exist_ok=True)
             shutil.copy2(source, target)
+    shutil.rmtree(project / "src")
+    source_files = subprocess.check_output(["git", "ls-tree", "-r", "--name-only", "-z", commit,
+                                            "--", "src", "CMakeLists.txt"], cwd=ROOT).decode().split("\0")
+    for name in filter(None, source_files):
+        target = project / name
+        target.parent.mkdir(parents=True, exist_ok=True)
+        target.write_bytes(subprocess.check_output(["git", "show", commit + ":" + name], cwd=ROOT))
     # This script may be new/untracked while the experiment is being prepared.
     shutil.copy2(__file__, project / "tools/ablation.py")
     (project / "src/study_hooks.hpp").write_text(HOOK_HEADER)
@@ -159,7 +169,7 @@ def prepare(destination):
         return replace_once(s, 'delta <= 0 || unit(rng) < std::exp(-static_cast<double>(delta) / t)',
                             'delta <= 0 || (study_enabled("uphill") && unit(rng) < std::exp(-static_cast<double>(delta) / t))')
     patch("src/search/annealing.cpp", annealing)
-    metadata = {"source_commit": subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True).strip(),
+    metadata = {"source_commit": commit,
                 "patches": patches, "seeds": SEEDS, "legacy_gates": LEGACY, "search_variants": SEARCH,
                 "purpose": "Temporary instrumentation only; no production source modifications"}
     (destination / "instrumentation.json").write_text(json.dumps(metadata, indent=2))
@@ -364,13 +374,15 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("phase", choices=["prepare", "verify", "legacy", "screen", "confirm", "legacy_holdout", "init_stress", "export"])
     parser.add_argument("--work", type=pathlib.Path)
+    parser.add_argument("--revision", default="0772bca",
+                        help="prepare source revision (default: original pre-cleanup study baseline)")
     parser.add_argument("--root", type=pathlib.Path, default=ROOT)
     parser.add_argument("--output", type=pathlib.Path)
     args = parser.parse_args()
     if args.phase == "prepare":
         if args.work is None:
             parser.error("prepare requires --work")
-        prepare(args.work.resolve())
+        prepare(args.work.resolve(), args.revision)
     elif args.phase == "export":
         if args.output is None:
             parser.error("export requires --output")

@@ -329,7 +329,7 @@ class SolverTests(unittest.TestCase):
             _, _, cost = check_output(text, pins, 30, (4, 16), library)
             self.assertLessEqual(15 * skew + cost, 106)
 
-    def test_final_delay_revisit(self):
+    def test_delay_after_subtree_refinement(self):
         sinks = [(34, 20), (24, 13), (38, 19), (20, 1), (9, 35),
                  (37, 29), (1, 12), (15, 26), (34, 18), (26, 35)]
         library = ((4, 84, 1),)

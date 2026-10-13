@@ -644,21 +644,6 @@ Tree delay_tree(Problem const &p, Tree best, std::size_t *remaining_trials,
     return best;
 }
 
-// Revisit delay on the final selected tree, after subtree moves and alternative
-// candidate comparison. Its separate cap cannot consume established budgets.
-Tree final_delay(Problem const &p, Tree best, std::size_t *shared_trials,
-                 std::size_t *shared_insertions) {
-    std::size_t trials = shared_trials ? std::min(std::size_t{2048}, *shared_trials) : 2048;
-    std::size_t insertions = shared_insertions ? std::min(std::size_t{16}, *shared_insertions) : 16;
-    auto const trial_start = trials, insertion_start = insertions;
-    best = delay_tree(p, std::move(best), &trials, &insertions);
-    if (shared_trials)
-        *shared_trials -= trial_start - trials;
-    if (shared_insertions)
-        *shared_insertions -= insertion_start - insertions;
-    return best;
-}
-
 enum class Move { bypass, relocate, leaves, reparent, delay, subtrees };
 
 struct SearchBudget {

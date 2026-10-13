@@ -28,8 +28,6 @@ Tree swap_subtrees(Problem const &p, Tree best, std::size_t *remaining_trials = 
 Tree reparent_leaves(Problem const &p, Tree best, std::size_t *remaining_trials = nullptr);
 Tree delay_tree(Problem const &p, Tree best, std::size_t *remaining_trials = nullptr,
                 std::size_t *remaining_insertions = nullptr);
-Tree final_delay(Problem const &p, Tree best, std::size_t *shared_trials = nullptr,
-                 std::size_t *shared_insertions = nullptr);
 Tree scheduled_refinement(Problem const &p, Tree best, bool adaptive, std::size_t *shared_trials,
                           std::size_t *shared_insertions);
 Tree refine_tree(Problem const &p, Tree best, std::size_t *trials = nullptr,

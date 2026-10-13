@@ -1,9 +1,9 @@
 # Pipeline ablation study — 2026-10-13
 
-The study identifies candidates for simplification; production solver sources,
-strategies and defaults are unchanged. The clearest functional duplicate on the
-tested corpus is repeated `final_delay`: removing all its calls preserves the
-output byte-for-byte on **185 distinct current-strategy inputs**, including six
+The study was conducted before the production cleanup, with solver sources,
+strategies and defaults unchanged during the experiments. The clearest functional
+duplicate on the tested corpus is repeated `final_delay`: removing all its calls
+preserves the output byte-for-byte on **185 distinct current-strategy inputs**, including six
 large new inputs. Delay insertion inside adaptive search is still active.
 
 This is not a blanket recommendation to delete the other steps. Additional
@@ -12,9 +12,25 @@ on every large holdout input, and the first initial-tree pass can protect Score
 when the expanded construction pipeline runs out of its time slice. Five-second
 hybrid confirmation also has mixed outcomes, including for `final_delay`.
 
+The subsequent cleanup removes standalone `final_delay` passes and reuses a
+full reference solve when initial construction already required it. Fast initial
+candidates, adaptive delay insertion, all other search stages and defaults are
+retained. Historical measurements below describe the pre-cleanup source.
+
+Cleanup validation passed all four regression suites. Before/after outputs are
+byte-identical and independently legal for 185 current-strategy inputs and eight
+fixed-iteration SA/hybrid runs (100 iterations, seed 7), including the unary
+fallback case and all six large holdout cases. A default serial clean build in
+the same Ubuntu container took 25.06 seconds including configuration. See
+[cleanup-validation.json](cleanup-validation.json). Fixed-time SA comparisons
+above remain mixed; these checks do not establish equal Scores for every timed
+annealing run.
+
 ## Experimental controls
 
-Source commit: `0772bca`. Experiments patch an isolated source copy; the
+Source commit: `0772bca`. `tools/ablation.py prepare` now copies this committed
+revision by default (override with `--revision`) so the removed stages remain
+available for reproducing the study. Experiments patch an isolated source copy; the
 `CBI_STUDY_DISABLE` environment variable is never read by production code.
 The instrumented source hashes and the executable SHA-256 are in
 [instrumentation.json](instrumentation.json) and [metadata.json](metadata.json).

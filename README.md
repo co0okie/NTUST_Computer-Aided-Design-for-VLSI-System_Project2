@@ -134,8 +134,8 @@ with the existing 128-sink/512-component cutoffs. Each operator still validates
 the complete tree and accepts only strict improvements.
 
 The three new candidates share 24,576 local trials; the final winner has 8192
-reserved trials. Final delay revisits use those same counters, and these searches
-share 16 accepted insertions. The total extra local budget is therefore 32,768;
+reserved trials. These searches share 16 accepted insertions. The total extra
+local budget is therefore 32,768;
 all reference budgets below remain intact. Search is deterministic and bounded,
 not a convergence guarantee. General small instances can take longer because
 both strategies run; regular multi-output grids often attain the lower bound
@@ -167,7 +167,7 @@ and overlapping pairs are charged. Full-tree pair trials also obey the existing
 2048/tree/library-scaled limit, with at most eight passes per call and the
 128-sink/512-component cutoffs. All types are reselected and only strictly lower
 validated Score is accepted. A successful bypass can trigger adaptive refinement
-and final delay using the same remaining counter, for at most three rounds and
+using the same remaining counter, for at most three rounds and
 16 additional delay insertions. This phase adds at most 8192 work to the earlier
 49152, and preserves all prior phase results/budgets. It samples only binary
 branches with two buffer children; larger joint moves remain outside the search.
@@ -294,12 +294,9 @@ After retaining all prior refinement phases, up to three extra rounds of subtree
 exchange, bypass, relocation, leaf exchange and leaf reparenting share 8192 trials.
 Alternative construction candidates still use their existing global/slice limits.
 
-Once the final refined candidate has been selected, delay insertion is revisited
-once with at most 2048 additional scaled trials and 16 accepted insertions.
-This lets subtree changes or candidate selection expose useful detours without
-consuming any prior phase budgets. The same size limits, eight-pass call limit,
-full validation and strictly lower actual Score apply. A separate final revisit
-also runs for forest fallback results; large-tree contraction follows afterward.
+Delay insertion runs within the refinement scheduler. Repeated standalone final
+delay passes were removed after the ablation study; large-tree contraction still
+follows refinement and forest fallback results.
 
 After choosing the improved complete tree, a separate relocation pass adjusts
 buffer positions while preserving topology. It samples radius-two integer offsets,
@@ -485,7 +482,7 @@ dense library-arity forests requiring four/five outputs and twelve sinks,
 full-refinement alternatives with reordered sinks, different weights and costs,
 large-tree multi-output contractions with reordered sinks,
 subtree/sink exchanges with reordered sinks and buffer type changes,
-final delay revisits after candidate selection with reordered sinks,
+delay insertion after subtree refinement with reordered sinks,
 dense forests with 16/21 sinks, reversed input order and almost/full coordinate
 occupancy, source-axis hub candidates under reversed library/sink order and axis
 transposition, joint membership/position plateaus, malformed input, and output

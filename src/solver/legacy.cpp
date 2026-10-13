@@ -109,7 +109,7 @@ Tree solve_reference(Problem const &p) {
     // share a separate budget, so a new trial cannot regress its result.
     if (shortlist.empty() && allocation_shortlist.empty())
         return contract_large_tree(
-            p, final_delay(p, refine_tree(p, improve_tree(p, std::move(*best)))));
+            p, refine_tree(p, improve_tree(p, std::move(*best))));
     auto const original = *best;
     auto improved = improve_tree(p, std::move(*best));
     best_score = validate_tree(p, improved).score;
@@ -158,7 +158,7 @@ Tree solve_reference(Problem const &p) {
             improved = std::move(candidate);
         }
     }
-    return contract_large_tree(p, final_delay(p, std::move(improved)));
+    return contract_large_tree(p, improved);
 }
 
 // Dense chips can have many pins but only a few possible buffer positions.
@@ -648,7 +648,6 @@ Tree solve_core(Problem const &p) {
         auto slice = std::min(std::size_t{8192}, candidate_trials);
         auto const start = slice;
         auto tree = adaptive_refine(p, std::move(entry.second), &slice, &insertions);
-        tree = final_delay(p, std::move(tree), &slice, &insertions);
         tree = contract_large_tree(p, tree);
         candidate_trials -= start - slice;
         auto const score = validate_tree(p, tree).score;
@@ -671,14 +670,12 @@ Tree solve_core(Problem const &p) {
         throw std::runtime_error(reason.empty() ? "no legal tree constructed" : reason);
     std::size_t final_trials = 8192;
     auto tree = adaptive_refine(p, std::move(*best), &final_trials, &insertions);
-    tree = final_delay(p, std::move(tree), &final_trials, &insertions);
     tree = partial_hub_tree(p, contract_large_tree(p, tree));
     for (auto extra : {&layered, &compressed}) {
         if (!*extra)
             continue;
         std::size_t trials = 8192, extra_insertions = 16;
         auto candidate = adaptive_refine(p, std::move(**extra), &trials, &extra_insertions);
-        candidate = final_delay(p, std::move(candidate), &trials, &extra_insertions);
         candidate = contract_large_tree(p, candidate);
         if (validate_tree(p, candidate).score < validate_tree(p, tree).score)
             tree = std::move(candidate);
@@ -690,7 +687,6 @@ Tree solve_core(Problem const &p) {
         if (validate_tree(p, tree).score == score)
             break;
         tree = adaptive_refine(p, std::move(tree), &joint_work, &joint_insertions);
-        tree = final_delay(p, std::move(tree), &joint_work, &joint_insertions);
     }
     return partial_hub_tree(p, std::move(tree), &joint_work, true);
 }

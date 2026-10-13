@@ -1,0 +1,54 @@
+{
+  "date": "2026-10-13",
+  "pre_cleanup_head": "f187e2640bb271618dfedaaecc3ee3f8945a853b",
+  "baseline_solver_commit": "0772bca",
+  "environment": {
+    "os": "Ubuntu 24.04.5",
+    "compiler": "GCC 13.3",
+    "cpus": 2,
+    "memory_gib": 8,
+    "network": false,
+    "uid": 1000
+  },
+  "clean_build": {
+    "cmake_build_type": "default (no Release flag)",
+    "parallel": false,
+    "build_testing": false,
+    "configure_and_build_seconds": 25.058993884998927,
+    "peak_rss_kib": 463404,
+    "passed": true
+  },
+  "regression": {
+    "suites": [
+      "search",
+      "annealing",
+      "solver",
+      "cli"
+    ],
+    "passed": 4,
+    "failed": 0,
+    "seconds": 157.75102098800198,
+    "added_case": "unary-library fallback under current, sa_lp and hybrid"
+  },
+  "equivalence": {
+    "current_inputs": 185,
+    "fixed_iteration_runs": 8,
+    "fixed_iterations": 100,
+    "seed": 7,
+    "seconds_budget": 5,
+    "byte_identical": 193,
+    "all_outputs_independently_legal": true,
+    "includes_large_holdout_inputs": 6
+  },
+  "binary_sha256": {
+    "before": "b61c78b615e547684727ab33208cefad1d6378c0b6a782d0acdc1f0edc791e14",
+    "after": "2fda9e146c3de33c6151a4f957569a5359bd1a5b07892b6912fb6e381b468090"
+  },
+  "production_source_sha256": {
+    "src/search/local.cpp": "fca3345372a460134a21033c606c87cd6fc0cee9fd51aa420999c620bf0fe96b",
+    "src/search/local.hpp": "f21c7ca25ed5242709eca6c9d2c3ce212bef6e83eb3abae2164ffb133824217e",
+    "src/solver/legacy.cpp": "1837e7034fa3fa3d3c6ec9eabd7a813c580fbd52f62faa42d91d73c58e553ff2",
+    "src/solver/strategy.cpp": "d6a7737498ff2075a2469d53bd29f8d13aa7854c5e498cacd5d784c43b2da761"
+  },
+  "ablation_reproduction": "All original and instrumented source hashes match the original study; current holdout corpus retained."
+}

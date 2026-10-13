@@ -9,22 +9,27 @@
 
 namespace cbi {
 namespace {
-Expected<Tree> initial_solution(Problem const &p) {
+struct InitialSolution {
+    Tree tree;
+    bool reference_completed;
+};
+
+Expected<InitialSolution> initial_solution(Problem const &p) {
     auto direct = initial_tree(p, false);
     for (std::size_t i = 1; i <= p.sinks.size(); ++i)
         direct[0].children.push_back(i);
     if (!is_error(evaluate_tree(p, direct)))
-        return direct;
+        return InitialSolution{std::move(direct), false};
     for (bool parity : {true, false}) {
         try {
             auto candidate = Builder(p, parity).build();
             if (!is_error(evaluate_tree(p, candidate)))
-                return candidate;
+                return InitialSolution{std::move(candidate), false};
         } catch (std::runtime_error const &) {
         }
     }
     try {
-        return solve(p);
+        return InitialSolution{solve(p), true};
     } catch (std::runtime_error const &e) {
         return Error{e.what(), ErrorKind::solver};
     }
@@ -52,17 +57,22 @@ Expected<SolverResult> solve_with_options(Problem p, SolverOptions const &option
                           std::chrono::duration<double>(options.seconds * 0.4))
             : reference_deadline;
     auto initial = options.strategy == Strategy::current
-                       ? Expected<Tree>{Error{"reference strategy not yet run", ErrorKind::solver}}
+                       ? Expected<InitialSolution>{
+                             Error{"reference strategy not yet run", ErrorKind::solver}}
                        : initial_solution(p);
     std::optional<Tree> best;
     std::vector<Checkpoint> checkpoints;
+    bool reference_completed = false;
     if (!is_error(initial)) {
-        best = std::get<Tree>(std::move(initial));
+        auto seed = std::get<InitialSolution>(std::move(initial));
+        reference_completed = seed.reference_completed;
+        best = std::move(seed.tree);
         checkpoints.push_back(
             {std::chrono::duration<double>(std::chrono::steady_clock::now() - start).count(),
              std::get<Metrics>(evaluate_tree(p, *best))});
     }
-    if (options.strategy != Strategy::sa_lp) {
+    // A fallback seed already ran the full reference search with this deadline.
+    if (options.strategy != Strategy::sa_lp && !reference_completed) {
         try {
             auto candidate = solve(p);
             if (!best || validate_tree(p, candidate).score <= validate_tree(p, *best).score)
@@ -74,7 +84,7 @@ Expected<SolverResult> solve_with_options(Problem p, SolverOptions const &option
         auto fallback = initial_solution(p);
         if (is_error(fallback))
             return std::get<Error>(fallback);
-        best = std::get<Tree>(std::move(fallback));
+        best = std::move(std::get<InitialSolution>(fallback).tree);
     }
     SolverResult result{std::move(*best), {}, Termination::completed, {}, {}, 0};
     result.metrics = std::get<Metrics>(evaluate_tree(p, result.tree));

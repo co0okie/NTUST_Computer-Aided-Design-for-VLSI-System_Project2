@@ -29,6 +29,21 @@ class CliTests(unittest.TestCase):
                 self.assertEqual(data['strategy'],strategy)
                 self.assertLess(data['seconds'],1)
 
+    def test_unary_library_fallback(self):
+        # Direct fanout is illegal and binary construction cannot use F=1.
+        # Every strategy must retain the legal full-search fallback seed.
+        input_path = next((ROOT / 'issues/closed').glob('001 */input001.cbi'))
+        problem = read_problem(input_path)
+        with tempfile.TemporaryDirectory() as folder:
+            output = pathlib.Path(folder) / 'output.cbi'
+            for strategy in ('current', 'sa_lp', 'hybrid'):
+                run = subprocess.run([str(BINARY), str(input_path), str(output),
+                    '--strategy', strategy, '--time', '2', '--iterations', '100'],
+                    capture_output=True, text=True, timeout=5)
+                self.assertEqual(run.returncode, 0, run.stderr)
+                checked = verify(problem, output.read_text())
+                self.assertEqual(checked['score'], 2)
+
     def test_invalid_options_preserve_output(self):
         with tempfile.TemporaryDirectory() as folder:
             output = pathlib.Path(folder)/'output.cbi'
