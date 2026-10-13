@@ -59,7 +59,7 @@ def main():
     (out/'summary.json').write_text(json.dumps(result,indent=2))
     if result:
         with (out/'summary.csv').open('w',newline='') as f:
-            w=csv.DictWriter(f,list(result[0]));w.writeheader();w.writerows(result)
+            w=csv.DictWriter(f,list(result[0]),lineterminator="\n");w.writeheader();w.writerows(result)
     for r in result:
         print(r['phase'],r['variant'],f"legal {r['legal']}/{r['runs']}",f"case +/-/= {r['case_better']}/{r['case_worse']}/{r['case_equal']}",f"failed {r['paired_failed']}",f"time {r['median_time_ratio']}",flush=True)
 if __name__=='__main__':main()

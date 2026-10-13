@@ -348,7 +348,7 @@ def export(output):
               "score", "skew", "cost", "buffers", "seconds", "lp_calls", "lp_feasible", "lp_seconds",
               "repair_calls", "repair_feasible", "repair_seconds", "termination", "attempts", "error"]
     with (output / "runs.csv").open("w", newline="") as stream:
-        writer = csv.DictWriter(stream, fields, extrasaction="ignore");writer.writeheader()
+        writer = csv.DictWriter(stream, fields, extrasaction="ignore", lineterminator="\n");writer.writeheader()
         for row in sorted(rows, key=lambda r: (r['phase'], r['input'], r['variant'], r['seed'])):
             flat = dict(row)
             flat.update({k: v for k, v in row.get("statistics", {}).items() if k in fields})
