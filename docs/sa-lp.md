@@ -63,8 +63,9 @@ cheapest compatible choices; feasible search capacities remain intact. Actual
 capacity upgrades are reflected in the repaired state.
 
 An infeasible or unrepairable candidate may retry with maximum-length capacities
-for its fanouts. A final attempt inserts one clustered buffer and repeats LP and
-repair. There are at most three pipeline attempts, all sharing the deadline.
+for its fanouts. If all capacity IDs are unchanged, the identical second
+placement/repair attempt is skipped. A final attempt inserts one clustered
+buffer and repeats LP and repair. There are at most three pipeline attempts, all sharing the deadline.
 No illegal intermediate tree is accepted. The repair is deliberately finite and
 can reject an LP solution even when another integer placement exists.
 

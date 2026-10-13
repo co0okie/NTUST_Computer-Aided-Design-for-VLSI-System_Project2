@@ -1,0 +1,136 @@
+{
+  "binary_sha256": "7d947a978c2c6cb15ac87386e3741386577ed870a9b39e71fc85ce2676df264f",
+  "input_sha256": {
+    "benchmarks/sa_lp/inputs/input000.cbi": "5352f4eaee9465d4d53998d7355760e5e2bfc83d7bf75917677e598595de4fd4",
+    "benchmarks/sa_lp/inputs/input003.cbi": "38d4ac6dda15ea94b8840e59f7943eaa45675ae724be513f02a2a641bfb222c4",
+    "benchmarks/sa_lp/inputs/input006.cbi": "ed5ae6bb19c8f403a60dfe3aca4e97b521314ab86f8371deb5d1cf1c93c4cea7",
+    "benchmarks/sa_lp/inputs/input009.cbi": "7efce48bcb1696ce54133e25d7b4bbf61e4d6fdc6bf050432a932c1772ced51f",
+    "benchmarks/sa_lp/inputs/input012.cbi": "95d70ed4b54e0a9fdfb0f2d66f663c3e2bcce32ee92bec562e646351c3f3ac25",
+    "benchmarks/sa_lp/inputs/input014.cbi": "9922aa01212eeee4d2b6a3b3ae8382cd025ec17aaa64690cbb682f7d2136ff2b",
+    "example/input.cbi": "dd3853d498934da3f4a12b09619e8a25e7081894fe182bacc8560d502f63b647",
+    "issues/closed/019 \u5b50\u6a39\u8207sink\u4ea4\u63db\u53ef\u964d\u4f4ebuffer\u578b\u5225\u6210\u672c/repro/input001.cbi": "e7199d013dce1a5de37299ad70ae706c562fb9eb5bad51b290c1c4ce76272562",
+    "benchmarks/sa_lp/inputs/input015.cbi": "ab1607b09610df589b2323726d0cf87d48ff4630bb429a32287961d8516eefa3",
+    "benchmarks/sa_lp/inputs/input019.cbi": "ac479761b51e595068cb69725962adf038a19e50a904c76b733eee9845f15f9d",
+    "benchmarks/sa_lp/inputs/input023.cbi": "4a933eee6f50446fa227579b5e7015597f58dce45d87b663e2d102d606172f49",
+    "benchmarks/sa_lp/inputs/input027.cbi": "46150183a9387560bf2168320d6045f4bbfcc68c90e2c6d768b6b750a9b7433a"
+  },
+  "cpu_affinity": [
+    0,
+    1
+  ],
+  "protocol": {
+    "source_commit": "4552689b48bab9a55f4465f62c0b0da812a0c3c6",
+    "source_patches": {
+      "src/search/annealing.hpp": {
+        "original": "e049e02d414892dbe6cf7ff78961da36e5f9815a7c2176d52a84d56d0d132f54",
+        "instrumented": "d240d52302c81a3a6d6df1eb582f792bc09e8a84d01e3c2da138d0b1034c29fa"
+      },
+      "src/search/annealing.cpp": {
+        "original": "3f769552e970cbcfe5b70d4bf612f78138aa2e93c24dbacba7b4a1b6a1e979e6",
+        "instrumented": "0e5ab2f86ca20d1e7c1babb0260cc27dc88b6f0452cce43514ebd6a37d3166ad"
+      },
+      "src/solver/strategy.cpp": {
+        "original": "d6a7737498ff2075a2469d53bd29f8d13aa7854c5e498cacd5d784c43b2da761",
+        "instrumented": "685592163546d7183a31f1c85d1131943478921b37792a6db80b05dc11e13550"
+      }
+    },
+    "seeds": [
+      1,
+      7,
+      17,
+      31,
+      101
+    ],
+    "variants": {
+      "baseline": [
+        {},
+        []
+      ],
+      "retry_one": [
+        {
+          "CBI_TUNING_RETRIES": "1"
+        },
+        []
+      ],
+      "retry_two": [
+        {
+          "CBI_TUNING_RETRIES": "2"
+        },
+        []
+      ],
+      "retry_unique": [
+        {
+          "CBI_TUNING_UNIQUE": "1"
+        },
+        []
+      ],
+      "wire_off": [
+        {},
+        [
+          "--wire-tiebreak",
+          "0"
+        ]
+      ],
+      "dual_objective": [
+        {
+          "CBI_TUNING_DUAL": "1"
+        },
+        []
+      ],
+      "lp_005": [
+        {},
+        [
+          "--lp-time",
+          "0.05"
+        ]
+      ],
+      "lp_010": [
+        {},
+        [
+          "--lp-time",
+          "0.1"
+        ]
+      ],
+      "reference_020": [
+        {},
+        [
+          "--current-fraction",
+          "0.2"
+        ]
+      ],
+      "reference_060": [
+        {},
+        [
+          "--current-fraction",
+          "0.6"
+        ]
+      ]
+    },
+    "training": [
+      "benchmarks/sa_lp/inputs/input000.cbi",
+      "benchmarks/sa_lp/inputs/input003.cbi",
+      "benchmarks/sa_lp/inputs/input006.cbi",
+      "benchmarks/sa_lp/inputs/input009.cbi",
+      "benchmarks/sa_lp/inputs/input012.cbi",
+      "benchmarks/sa_lp/inputs/input014.cbi",
+      "example/input.cbi",
+      "issues/closed/019 \u5b50\u6a39\u8207sink\u4ea4\u63db\u53ef\u964d\u4f4ebuffer\u578b\u5225\u6210\u672c/repro/input001.cbi"
+    ],
+    "holdout": [
+      "benchmarks/sa_lp/inputs/input015.cbi",
+      "benchmarks/sa_lp/inputs/input019.cbi",
+      "benchmarks/sa_lp/inputs/input023.cbi",
+      "benchmarks/sa_lp/inputs/input027.cbi"
+    ],
+    "screen": {
+      "iterations": 100,
+      "seconds": 25
+    },
+    "confirm": {
+      "iterations": 0,
+      "seconds": 25
+    },
+    "selection": "Choose the non-baseline variant with the smallest mean of per-case five-seed median relative Score deltas; prefer fewer median regressions, then faster median time. A non-improving winner is exploratory, not a deployment recommendation.",
+    "constraints": "Ubuntu24 GCC13 default build; network off; 2 CPUs/8GiB; single solver at a time; independent legal verification; external 30s timeout"
+  }
+}

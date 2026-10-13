@@ -1,0 +1,115 @@
+{
+  "source_commit": "4552689b48bab9a55f4465f62c0b0da812a0c3c6",
+  "source_patches": {
+    "src/search/annealing.hpp": {
+      "original": "e049e02d414892dbe6cf7ff78961da36e5f9815a7c2176d52a84d56d0d132f54",
+      "instrumented": "d240d52302c81a3a6d6df1eb582f792bc09e8a84d01e3c2da138d0b1034c29fa"
+    },
+    "src/search/annealing.cpp": {
+      "original": "3f769552e970cbcfe5b70d4bf612f78138aa2e93c24dbacba7b4a1b6a1e979e6",
+      "instrumented": "0e5ab2f86ca20d1e7c1babb0260cc27dc88b6f0452cce43514ebd6a37d3166ad"
+    },
+    "src/solver/strategy.cpp": {
+      "original": "d6a7737498ff2075a2469d53bd29f8d13aa7854c5e498cacd5d784c43b2da761",
+      "instrumented": "685592163546d7183a31f1c85d1131943478921b37792a6db80b05dc11e13550"
+    }
+  },
+  "seeds": [
+    1,
+    7,
+    17,
+    31,
+    101
+  ],
+  "variants": {
+    "baseline": [
+      {},
+      []
+    ],
+    "retry_one": [
+      {
+        "CBI_TUNING_RETRIES": "1"
+      },
+      []
+    ],
+    "retry_two": [
+      {
+        "CBI_TUNING_RETRIES": "2"
+      },
+      []
+    ],
+    "retry_unique": [
+      {
+        "CBI_TUNING_UNIQUE": "1"
+      },
+      []
+    ],
+    "wire_off": [
+      {},
+      [
+        "--wire-tiebreak",
+        "0"
+      ]
+    ],
+    "dual_objective": [
+      {
+        "CBI_TUNING_DUAL": "1"
+      },
+      []
+    ],
+    "lp_005": [
+      {},
+      [
+        "--lp-time",
+        "0.05"
+      ]
+    ],
+    "lp_010": [
+      {},
+      [
+        "--lp-time",
+        "0.1"
+      ]
+    ],
+    "reference_020": [
+      {},
+      [
+        "--current-fraction",
+        "0.2"
+      ]
+    ],
+    "reference_060": [
+      {},
+      [
+        "--current-fraction",
+        "0.6"
+      ]
+    ]
+  },
+  "training": [
+    "benchmarks/sa_lp/inputs/input000.cbi",
+    "benchmarks/sa_lp/inputs/input003.cbi",
+    "benchmarks/sa_lp/inputs/input006.cbi",
+    "benchmarks/sa_lp/inputs/input009.cbi",
+    "benchmarks/sa_lp/inputs/input012.cbi",
+    "benchmarks/sa_lp/inputs/input014.cbi",
+    "example/input.cbi",
+    "issues/closed/019 \u5b50\u6a39\u8207sink\u4ea4\u63db\u53ef\u964d\u4f4ebuffer\u578b\u5225\u6210\u672c/repro/input001.cbi"
+  ],
+  "holdout": [
+    "benchmarks/sa_lp/inputs/input015.cbi",
+    "benchmarks/sa_lp/inputs/input019.cbi",
+    "benchmarks/sa_lp/inputs/input023.cbi",
+    "benchmarks/sa_lp/inputs/input027.cbi"
+  ],
+  "screen": {
+    "iterations": 100,
+    "seconds": 25
+  },
+  "confirm": {
+    "iterations": 0,
+    "seconds": 25
+  },
+  "selection": "Choose the non-baseline variant with the smallest mean of per-case five-seed median relative Score deltas; prefer fewer median regressions, then faster median time. A non-improving winner is exploratory, not a deployment recommendation.",
+  "constraints": "Ubuntu24 GCC13 default build; network off; 2 CPUs/8GiB; single solver at a time; independent legal verification; external 30s timeout"
+}

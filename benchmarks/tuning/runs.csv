@@ -1,0 +1,441 @@
+phase,input,variant,seed,iterations,budget,legal,score,skew,cost,buffers,seconds
+confirm,benchmarks/sa_lp/inputs/input015.cbi,baseline,1,0,25,True,39,10,29,3,25.013003183001274
+confirm,benchmarks/sa_lp/inputs/input015.cbi,baseline,7,0,25,True,37,17,20,2,25.010132381001313
+confirm,benchmarks/sa_lp/inputs/input015.cbi,baseline,17,0,25,True,37,17,20,2,25.012605592997716
+confirm,benchmarks/sa_lp/inputs/input015.cbi,baseline,31,0,25,True,41,12,29,3,25.010449670000526
+confirm,benchmarks/sa_lp/inputs/input015.cbi,baseline,101,0,25,True,43,23,20,2,25.01080910899691
+confirm,benchmarks/sa_lp/inputs/input015.cbi,dual_objective,1,0,25,True,39,19,20,2,25.009360500000184
+confirm,benchmarks/sa_lp/inputs/input015.cbi,dual_objective,7,0,25,True,38,18,20,2,25.010482174999197
+confirm,benchmarks/sa_lp/inputs/input015.cbi,dual_objective,17,0,25,True,43,14,29,3,25.011299721001706
+confirm,benchmarks/sa_lp/inputs/input015.cbi,dual_objective,31,0,25,True,43,23,20,2,25.013153643001715
+confirm,benchmarks/sa_lp/inputs/input015.cbi,dual_objective,101,0,25,True,43,23,20,2,25.011392320000596
+confirm,benchmarks/sa_lp/inputs/input019.cbi,baseline,1,0,25,True,7,3,4,2,25.007692177001445
+confirm,benchmarks/sa_lp/inputs/input019.cbi,baseline,7,0,25,True,7,3,4,2,25.010339337000914
+confirm,benchmarks/sa_lp/inputs/input019.cbi,baseline,17,0,25,True,7,3,4,2,25.009286434997193
+confirm,benchmarks/sa_lp/inputs/input019.cbi,baseline,31,0,25,True,7,3,4,2,25.0137539440002
+confirm,benchmarks/sa_lp/inputs/input019.cbi,baseline,101,0,25,True,7,3,4,2,25.007464367001376
+confirm,benchmarks/sa_lp/inputs/input019.cbi,dual_objective,1,0,25,True,7,3,4,2,25.013623687998916
+confirm,benchmarks/sa_lp/inputs/input019.cbi,dual_objective,7,0,25,True,7,3,4,2,25.01156378899759
+confirm,benchmarks/sa_lp/inputs/input019.cbi,dual_objective,17,0,25,True,7,3,4,2,25.01302430800206
+confirm,benchmarks/sa_lp/inputs/input019.cbi,dual_objective,31,0,25,True,7,3,4,2,25.008861599002557
+confirm,benchmarks/sa_lp/inputs/input019.cbi,dual_objective,101,0,25,True,7,3,4,2,25.00885479399949
+confirm,benchmarks/sa_lp/inputs/input023.cbi,baseline,1,0,25,True,107,1,7,3,25.010203708003246
+confirm,benchmarks/sa_lp/inputs/input023.cbi,baseline,7,0,25,True,106,1,6,3,25.01136084800237
+confirm,benchmarks/sa_lp/inputs/input023.cbi,baseline,17,0,25,True,107,1,7,3,25.011196272000234
+confirm,benchmarks/sa_lp/inputs/input023.cbi,baseline,31,0,25,True,107,1,7,3,25.016422667998995
+confirm,benchmarks/sa_lp/inputs/input023.cbi,baseline,101,0,25,True,105,1,5,2,25.01039767000111
+confirm,benchmarks/sa_lp/inputs/input023.cbi,dual_objective,1,0,25,True,105,1,5,2,25.00891370300087
+confirm,benchmarks/sa_lp/inputs/input023.cbi,dual_objective,7,0,25,True,105,1,5,2,25.009974254000554
+confirm,benchmarks/sa_lp/inputs/input023.cbi,dual_objective,17,0,25,True,107,1,7,3,25.009458627999265
+confirm,benchmarks/sa_lp/inputs/input023.cbi,dual_objective,31,0,25,True,107,1,7,3,25.009659274001024
+confirm,benchmarks/sa_lp/inputs/input023.cbi,dual_objective,101,0,25,True,105,1,5,2,25.00806947700039
+confirm,benchmarks/sa_lp/inputs/input027.cbi,baseline,1,0,25,True,11,1,6,3,25.008842222003295
+confirm,benchmarks/sa_lp/inputs/input027.cbi,baseline,7,0,25,True,11,1,6,3,25.0088612010004
+confirm,benchmarks/sa_lp/inputs/input027.cbi,baseline,17,0,25,True,17,1,12,6,25.008161657999153
+confirm,benchmarks/sa_lp/inputs/input027.cbi,baseline,31,0,25,True,13,1,8,4,25.01265699099895
+confirm,benchmarks/sa_lp/inputs/input027.cbi,baseline,101,0,25,True,16,1,11,5,25.00977246399998
+confirm,benchmarks/sa_lp/inputs/input027.cbi,dual_objective,1,0,25,True,13,1,8,4,25.011283769999864
+confirm,benchmarks/sa_lp/inputs/input027.cbi,dual_objective,7,0,25,True,14,1,9,4,25.0122179889986
+confirm,benchmarks/sa_lp/inputs/input027.cbi,dual_objective,17,0,25,True,11,1,6,3,25.008184832000552
+confirm,benchmarks/sa_lp/inputs/input027.cbi,dual_objective,31,0,25,True,13,1,8,4,25.01304719499967
+confirm,benchmarks/sa_lp/inputs/input027.cbi,dual_objective,101,0,25,True,12,1,7,3,25.01245833899884
+screen,benchmarks/sa_lp/inputs/input000.cbi,baseline,1,100,25,True,26,1,21,7,1.950376258999313
+screen,benchmarks/sa_lp/inputs/input000.cbi,baseline,7,100,25,True,26,1,21,7,1.1465688390017021
+screen,benchmarks/sa_lp/inputs/input000.cbi,baseline,17,100,25,True,26,1,21,7,0.9967515589996765
+screen,benchmarks/sa_lp/inputs/input000.cbi,baseline,31,100,25,True,23,1,18,6,1.1533409629992093
+screen,benchmarks/sa_lp/inputs/input000.cbi,baseline,101,100,25,True,23,1,18,6,1.1779587570017611
+screen,benchmarks/sa_lp/inputs/input000.cbi,dual_objective,1,100,25,True,26,1,21,7,3.0420372189983027
+screen,benchmarks/sa_lp/inputs/input000.cbi,dual_objective,7,100,25,True,26,1,21,7,2.20533209900168
+screen,benchmarks/sa_lp/inputs/input000.cbi,dual_objective,17,100,25,True,26,1,21,7,1.7970237150002504
+screen,benchmarks/sa_lp/inputs/input000.cbi,dual_objective,31,100,25,True,23,1,18,6,1.6875918180012377
+screen,benchmarks/sa_lp/inputs/input000.cbi,dual_objective,101,100,25,True,26,1,21,7,1.6518420180000248
+screen,benchmarks/sa_lp/inputs/input000.cbi,lp_005,1,100,25,True,26,1,21,7,1.6189400650000607
+screen,benchmarks/sa_lp/inputs/input000.cbi,lp_005,7,100,25,True,26,1,21,7,0.892569640000147
+screen,benchmarks/sa_lp/inputs/input000.cbi,lp_005,17,100,25,True,26,1,21,7,1.0870373739999195
+screen,benchmarks/sa_lp/inputs/input000.cbi,lp_005,31,100,25,True,23,1,18,6,1.0682001179993676
+screen,benchmarks/sa_lp/inputs/input000.cbi,lp_005,101,100,25,True,23,1,18,6,1.2737582049994671
+screen,benchmarks/sa_lp/inputs/input000.cbi,lp_010,1,100,25,True,26,1,21,7,1.9402907789990422
+screen,benchmarks/sa_lp/inputs/input000.cbi,lp_010,7,100,25,True,26,1,21,7,1.3384594999988622
+screen,benchmarks/sa_lp/inputs/input000.cbi,lp_010,17,100,25,True,26,1,21,7,1.0398009950004052
+screen,benchmarks/sa_lp/inputs/input000.cbi,lp_010,31,100,25,True,23,1,18,6,1.1405571499999496
+screen,benchmarks/sa_lp/inputs/input000.cbi,lp_010,101,100,25,True,23,1,18,6,1.1738721339970652
+screen,benchmarks/sa_lp/inputs/input000.cbi,reference_020,1,100,25,True,26,1,21,7,2.093283145000896
+screen,benchmarks/sa_lp/inputs/input000.cbi,reference_020,7,100,25,True,26,1,21,7,1.129159386997344
+screen,benchmarks/sa_lp/inputs/input000.cbi,reference_020,17,100,25,True,26,1,21,7,1.3852261659994838
+screen,benchmarks/sa_lp/inputs/input000.cbi,reference_020,31,100,25,True,23,1,18,6,1.4093742389995896
+screen,benchmarks/sa_lp/inputs/input000.cbi,reference_020,101,100,25,True,23,1,18,6,1.0631523049996758
+screen,benchmarks/sa_lp/inputs/input000.cbi,reference_060,1,100,25,True,26,1,21,7,1.5769709589985723
+screen,benchmarks/sa_lp/inputs/input000.cbi,reference_060,7,100,25,True,26,1,21,7,1.0811949369999638
+screen,benchmarks/sa_lp/inputs/input000.cbi,reference_060,17,100,25,True,26,1,21,7,0.9317610309990414
+screen,benchmarks/sa_lp/inputs/input000.cbi,reference_060,31,100,25,True,23,1,18,6,0.9559417050004413
+screen,benchmarks/sa_lp/inputs/input000.cbi,reference_060,101,100,25,True,23,1,18,6,0.8964922109989857
+screen,benchmarks/sa_lp/inputs/input000.cbi,retry_one,1,100,25,True,26,1,21,7,1.572615246001078
+screen,benchmarks/sa_lp/inputs/input000.cbi,retry_one,7,100,25,True,26,1,21,7,1.067872448998969
+screen,benchmarks/sa_lp/inputs/input000.cbi,retry_one,17,100,25,True,26,1,21,7,1.1964582159998827
+screen,benchmarks/sa_lp/inputs/input000.cbi,retry_one,31,100,25,True,23,1,18,6,1.255651649000356
+screen,benchmarks/sa_lp/inputs/input000.cbi,retry_one,101,100,25,True,23,1,18,6,0.9652252060004685
+screen,benchmarks/sa_lp/inputs/input000.cbi,retry_two,1,100,25,True,26,1,21,7,1.386124225002277
+screen,benchmarks/sa_lp/inputs/input000.cbi,retry_two,7,100,25,True,26,1,21,7,0.9824425789993256
+screen,benchmarks/sa_lp/inputs/input000.cbi,retry_two,17,100,25,True,26,1,21,7,1.2193801860012172
+screen,benchmarks/sa_lp/inputs/input000.cbi,retry_two,31,100,25,True,23,1,18,6,1.1024584660008259
+screen,benchmarks/sa_lp/inputs/input000.cbi,retry_two,101,100,25,True,23,1,18,6,0.9497625680014607
+screen,benchmarks/sa_lp/inputs/input000.cbi,retry_unique,1,100,25,True,26,1,21,7,1.4447753749991534
+screen,benchmarks/sa_lp/inputs/input000.cbi,retry_unique,7,100,25,True,26,1,21,7,1.0360537370033853
+screen,benchmarks/sa_lp/inputs/input000.cbi,retry_unique,17,100,25,True,26,1,21,7,1.1891226309999183
+screen,benchmarks/sa_lp/inputs/input000.cbi,retry_unique,31,100,25,True,23,1,18,6,1.0852040409990877
+screen,benchmarks/sa_lp/inputs/input000.cbi,retry_unique,101,100,25,True,23,1,18,6,0.8337497240027005
+screen,benchmarks/sa_lp/inputs/input000.cbi,wire_off,1,100,25,True,26,1,21,7,0.961716322999564
+screen,benchmarks/sa_lp/inputs/input000.cbi,wire_off,7,100,25,True,26,1,21,7,1.378289809999842
+screen,benchmarks/sa_lp/inputs/input000.cbi,wire_off,17,100,25,True,23,1,18,6,0.9179358709989174
+screen,benchmarks/sa_lp/inputs/input000.cbi,wire_off,31,100,25,True,26,1,21,7,1.1783231959998375
+screen,benchmarks/sa_lp/inputs/input000.cbi,wire_off,101,100,25,True,26,1,21,7,0.7746453350009688
+screen,benchmarks/sa_lp/inputs/input003.cbi,baseline,1,100,25,True,38,8,30,3,0.7792436119998456
+screen,benchmarks/sa_lp/inputs/input003.cbi,baseline,7,100,25,True,38,8,30,3,0.744265720997646
+screen,benchmarks/sa_lp/inputs/input003.cbi,baseline,17,100,25,True,34,4,30,3,1.0020355989981908
+screen,benchmarks/sa_lp/inputs/input003.cbi,baseline,31,100,25,True,38,8,30,3,0.9630500329985807
+screen,benchmarks/sa_lp/inputs/input003.cbi,baseline,101,100,25,True,38,8,30,3,0.8814838660000532
+screen,benchmarks/sa_lp/inputs/input003.cbi,dual_objective,1,100,25,True,38,8,30,3,1.1694111389988393
+screen,benchmarks/sa_lp/inputs/input003.cbi,dual_objective,7,100,25,True,37,7,30,3,1.1206927340026596
+screen,benchmarks/sa_lp/inputs/input003.cbi,dual_objective,17,100,25,True,37,7,30,3,1.0657004919994506
+screen,benchmarks/sa_lp/inputs/input003.cbi,dual_objective,31,100,25,True,38,8,30,3,1.16599426600078
+screen,benchmarks/sa_lp/inputs/input003.cbi,dual_objective,101,100,25,True,37,7,30,3,1.083937880997837
+screen,benchmarks/sa_lp/inputs/input003.cbi,lp_005,1,100,25,True,38,8,30,3,0.7843541689981066
+screen,benchmarks/sa_lp/inputs/input003.cbi,lp_005,7,100,25,True,38,8,30,3,0.6444997950020479
+screen,benchmarks/sa_lp/inputs/input003.cbi,lp_005,17,100,25,True,34,4,30,3,0.8004322300002968
+screen,benchmarks/sa_lp/inputs/input003.cbi,lp_005,31,100,25,True,38,8,30,3,0.9149566870000854
+screen,benchmarks/sa_lp/inputs/input003.cbi,lp_005,101,100,25,True,38,8,30,3,0.8319942099988111
+screen,benchmarks/sa_lp/inputs/input003.cbi,lp_010,1,100,25,True,38,8,30,3,0.8625579139988986
+screen,benchmarks/sa_lp/inputs/input003.cbi,lp_010,7,100,25,True,38,8,30,3,0.8081865319982171
+screen,benchmarks/sa_lp/inputs/input003.cbi,lp_010,17,100,25,True,34,4,30,3,0.8726594699983252
+screen,benchmarks/sa_lp/inputs/input003.cbi,lp_010,31,100,25,True,38,8,30,3,0.8966287410003133
+screen,benchmarks/sa_lp/inputs/input003.cbi,lp_010,101,100,25,True,38,8,30,3,0.7122786530017038
+screen,benchmarks/sa_lp/inputs/input003.cbi,reference_020,1,100,25,True,38,8,30,3,0.6109872150009323
+screen,benchmarks/sa_lp/inputs/input003.cbi,reference_020,7,100,25,True,38,8,30,3,0.9398242269999173
+screen,benchmarks/sa_lp/inputs/input003.cbi,reference_020,17,100,25,True,34,4,30,3,0.958238823001011
+screen,benchmarks/sa_lp/inputs/input003.cbi,reference_020,31,100,25,True,38,8,30,3,0.7464977540003019
+screen,benchmarks/sa_lp/inputs/input003.cbi,reference_020,101,100,25,True,38,8,30,3,1.003770364997763
+screen,benchmarks/sa_lp/inputs/input003.cbi,reference_060,1,100,25,True,38,8,30,3,0.953808828999172
+screen,benchmarks/sa_lp/inputs/input003.cbi,reference_060,7,100,25,True,38,8,30,3,0.8179404479997174
+screen,benchmarks/sa_lp/inputs/input003.cbi,reference_060,17,100,25,True,34,4,30,3,0.764392039996892
+screen,benchmarks/sa_lp/inputs/input003.cbi,reference_060,31,100,25,True,38,8,30,3,0.8282957629999146
+screen,benchmarks/sa_lp/inputs/input003.cbi,reference_060,101,100,25,True,38,8,30,3,0.7401852410002903
+screen,benchmarks/sa_lp/inputs/input003.cbi,retry_one,1,100,25,True,38,8,30,3,0.4975834959986969
+screen,benchmarks/sa_lp/inputs/input003.cbi,retry_one,7,100,25,True,38,8,30,3,0.5328353779987083
+screen,benchmarks/sa_lp/inputs/input003.cbi,retry_one,17,100,25,True,38,8,30,3,0.5328636929989443
+screen,benchmarks/sa_lp/inputs/input003.cbi,retry_one,31,100,25,True,38,8,30,3,0.8807206950004911
+screen,benchmarks/sa_lp/inputs/input003.cbi,retry_one,101,100,25,True,38,8,30,3,0.8679944670002442
+screen,benchmarks/sa_lp/inputs/input003.cbi,retry_two,1,100,25,True,38,8,30,3,0.7901787599985255
+screen,benchmarks/sa_lp/inputs/input003.cbi,retry_two,7,100,25,True,38,8,30,3,0.7717592830013018
+screen,benchmarks/sa_lp/inputs/input003.cbi,retry_two,17,100,25,True,34,4,30,3,0.7436587569973199
+screen,benchmarks/sa_lp/inputs/input003.cbi,retry_two,31,100,25,True,38,8,30,3,0.966645011001674
+screen,benchmarks/sa_lp/inputs/input003.cbi,retry_two,101,100,25,True,38,8,30,3,0.6295733580009255
+screen,benchmarks/sa_lp/inputs/input003.cbi,retry_unique,1,100,25,True,38,8,30,3,0.5938063249996048
+screen,benchmarks/sa_lp/inputs/input003.cbi,retry_unique,7,100,25,True,38,8,30,3,1.1132707500000834
+screen,benchmarks/sa_lp/inputs/input003.cbi,retry_unique,17,100,25,True,34,4,30,3,0.6778310900008364
+screen,benchmarks/sa_lp/inputs/input003.cbi,retry_unique,31,100,25,True,38,8,30,3,1.0200871920023928
+screen,benchmarks/sa_lp/inputs/input003.cbi,retry_unique,101,100,25,True,38,8,30,3,0.7309022099980211
+screen,benchmarks/sa_lp/inputs/input003.cbi,wire_off,1,100,25,True,38,8,30,3,0.8881657279998763
+screen,benchmarks/sa_lp/inputs/input003.cbi,wire_off,7,100,25,True,37,7,30,3,0.6154026330004854
+screen,benchmarks/sa_lp/inputs/input003.cbi,wire_off,17,100,25,True,37,7,30,3,0.6273090560025594
+screen,benchmarks/sa_lp/inputs/input003.cbi,wire_off,31,100,25,True,38,8,30,3,0.9270228410023265
+screen,benchmarks/sa_lp/inputs/input003.cbi,wire_off,101,100,25,True,37,7,30,3,0.571320361999824
+screen,benchmarks/sa_lp/inputs/input006.cbi,baseline,1,100,25,True,112,1,12,2,0.6383322649999172
+screen,benchmarks/sa_lp/inputs/input006.cbi,baseline,7,100,25,True,112,1,12,2,0.5818091990004177
+screen,benchmarks/sa_lp/inputs/input006.cbi,baseline,17,100,25,True,112,1,12,2,0.5147354130021995
+screen,benchmarks/sa_lp/inputs/input006.cbi,baseline,31,100,25,True,112,1,12,2,0.6089467079982569
+screen,benchmarks/sa_lp/inputs/input006.cbi,baseline,101,100,25,True,112,1,12,2,0.5483862539986148
+screen,benchmarks/sa_lp/inputs/input006.cbi,dual_objective,1,100,25,True,112,1,12,2,0.7001965249983186
+screen,benchmarks/sa_lp/inputs/input006.cbi,dual_objective,7,100,25,True,112,1,12,2,0.6495160300000862
+screen,benchmarks/sa_lp/inputs/input006.cbi,dual_objective,17,100,25,True,112,1,12,2,0.8869216810016951
+screen,benchmarks/sa_lp/inputs/input006.cbi,dual_objective,31,100,25,True,112,1,12,2,0.6736939780021203
+screen,benchmarks/sa_lp/inputs/input006.cbi,dual_objective,101,100,25,True,112,1,12,2,0.8642655170006037
+screen,benchmarks/sa_lp/inputs/input006.cbi,lp_005,1,100,25,True,112,1,12,2,0.5363588170002913
+screen,benchmarks/sa_lp/inputs/input006.cbi,lp_005,7,100,25,True,112,1,12,2,0.42712619599842583
+screen,benchmarks/sa_lp/inputs/input006.cbi,lp_005,17,100,25,True,112,1,12,2,0.5171297490014695
+screen,benchmarks/sa_lp/inputs/input006.cbi,lp_005,31,100,25,True,112,1,12,2,0.6214043140025751
+screen,benchmarks/sa_lp/inputs/input006.cbi,lp_005,101,100,25,True,112,1,12,2,0.5685915900030523
+screen,benchmarks/sa_lp/inputs/input006.cbi,lp_010,1,100,25,True,112,1,12,2,0.5556704379996518
+screen,benchmarks/sa_lp/inputs/input006.cbi,lp_010,7,100,25,True,112,1,12,2,0.41625588099850575
+screen,benchmarks/sa_lp/inputs/input006.cbi,lp_010,17,100,25,True,112,1,12,2,0.5383275599997432
+screen,benchmarks/sa_lp/inputs/input006.cbi,lp_010,31,100,25,True,112,1,12,2,0.7579846699991322
+screen,benchmarks/sa_lp/inputs/input006.cbi,lp_010,101,100,25,True,112,1,12,2,0.5237067839989322
+screen,benchmarks/sa_lp/inputs/input006.cbi,reference_020,1,100,25,True,112,1,12,2,0.8113107059980393
+screen,benchmarks/sa_lp/inputs/input006.cbi,reference_020,7,100,25,True,112,1,12,2,0.5246979970033863
+screen,benchmarks/sa_lp/inputs/input006.cbi,reference_020,17,100,25,True,112,1,12,2,0.6594421290028549
+screen,benchmarks/sa_lp/inputs/input006.cbi,reference_020,31,100,25,True,112,1,12,2,0.597753381000075
+screen,benchmarks/sa_lp/inputs/input006.cbi,reference_020,101,100,25,True,112,1,12,2,0.8239069839983131
+screen,benchmarks/sa_lp/inputs/input006.cbi,reference_060,1,100,25,True,112,1,12,2,0.6796966090005299
+screen,benchmarks/sa_lp/inputs/input006.cbi,reference_060,7,100,25,True,112,1,12,2,0.49839761499970336
+screen,benchmarks/sa_lp/inputs/input006.cbi,reference_060,17,100,25,True,112,1,12,2,0.3876486199987994
+screen,benchmarks/sa_lp/inputs/input006.cbi,reference_060,31,100,25,True,112,1,12,2,0.46027850799873704
+screen,benchmarks/sa_lp/inputs/input006.cbi,reference_060,101,100,25,True,112,1,12,2,0.4721920920019329
+screen,benchmarks/sa_lp/inputs/input006.cbi,retry_one,1,100,25,True,112,1,12,2,0.5115768499999831
+screen,benchmarks/sa_lp/inputs/input006.cbi,retry_one,7,100,25,True,112,1,12,2,0.40690378100043745
+screen,benchmarks/sa_lp/inputs/input006.cbi,retry_one,17,100,25,True,112,1,12,2,0.4358077049982967
+screen,benchmarks/sa_lp/inputs/input006.cbi,retry_one,31,100,25,True,112,1,12,2,0.3240527640009532
+screen,benchmarks/sa_lp/inputs/input006.cbi,retry_one,101,100,25,True,112,1,12,2,0.31410413599951426
+screen,benchmarks/sa_lp/inputs/input006.cbi,retry_two,1,100,25,True,112,1,12,2,0.6472519230010221
+screen,benchmarks/sa_lp/inputs/input006.cbi,retry_two,7,100,25,True,112,1,12,2,0.4422550660019624
+screen,benchmarks/sa_lp/inputs/input006.cbi,retry_two,17,100,25,True,112,1,12,2,0.4557601300002716
+screen,benchmarks/sa_lp/inputs/input006.cbi,retry_two,31,100,25,True,112,1,12,2,0.35314664600082324
+screen,benchmarks/sa_lp/inputs/input006.cbi,retry_two,101,100,25,True,112,1,12,2,0.5285357400025532
+screen,benchmarks/sa_lp/inputs/input006.cbi,retry_unique,1,100,25,True,112,1,12,2,0.7089805279974826
+screen,benchmarks/sa_lp/inputs/input006.cbi,retry_unique,7,100,25,True,112,1,12,2,0.47581608799737296
+screen,benchmarks/sa_lp/inputs/input006.cbi,retry_unique,17,100,25,True,112,1,12,2,0.37413022599866963
+screen,benchmarks/sa_lp/inputs/input006.cbi,retry_unique,31,100,25,True,112,1,12,2,0.4745282359981502
+screen,benchmarks/sa_lp/inputs/input006.cbi,retry_unique,101,100,25,True,112,1,12,2,0.4672663300007116
+screen,benchmarks/sa_lp/inputs/input006.cbi,wire_off,1,100,25,True,112,1,12,2,0.47675297100067837
+screen,benchmarks/sa_lp/inputs/input006.cbi,wire_off,7,100,25,True,112,1,12,2,0.3299365589991794
+screen,benchmarks/sa_lp/inputs/input006.cbi,wire_off,17,100,25,True,112,1,12,2,0.45703814499938744
+screen,benchmarks/sa_lp/inputs/input006.cbi,wire_off,31,100,25,True,112,1,12,2,0.7096533769981761
+screen,benchmarks/sa_lp/inputs/input006.cbi,wire_off,101,100,25,True,112,1,12,2,0.5510104360000696
+screen,benchmarks/sa_lp/inputs/input009.cbi,baseline,1,100,25,True,15,1,10,2,0.6067765920015518
+screen,benchmarks/sa_lp/inputs/input009.cbi,baseline,7,100,25,True,15,1,10,2,0.31630045199926826
+screen,benchmarks/sa_lp/inputs/input009.cbi,baseline,17,100,25,True,15,1,10,2,0.42783941999732633
+screen,benchmarks/sa_lp/inputs/input009.cbi,baseline,31,100,25,True,15,1,10,2,0.4239919669998926
+screen,benchmarks/sa_lp/inputs/input009.cbi,baseline,101,100,25,True,15,1,10,2,0.3375214549996599
+screen,benchmarks/sa_lp/inputs/input009.cbi,dual_objective,1,100,25,True,15,1,10,2,0.6200417090003612
+screen,benchmarks/sa_lp/inputs/input009.cbi,dual_objective,7,100,25,True,20,1,15,3,0.9911019550017954
+screen,benchmarks/sa_lp/inputs/input009.cbi,dual_objective,17,100,25,True,20,1,15,3,0.6680214219995833
+screen,benchmarks/sa_lp/inputs/input009.cbi,dual_objective,31,100,25,True,15,1,10,2,0.6919247999976506
+screen,benchmarks/sa_lp/inputs/input009.cbi,dual_objective,101,100,25,True,15,1,10,2,0.9253601860000344
+screen,benchmarks/sa_lp/inputs/input009.cbi,lp_005,1,100,25,True,15,1,10,2,0.39588428899878636
+screen,benchmarks/sa_lp/inputs/input009.cbi,lp_005,7,100,25,True,15,1,10,2,0.5327952659972652
+screen,benchmarks/sa_lp/inputs/input009.cbi,lp_005,17,100,25,True,15,1,10,2,0.3616703360021347
+screen,benchmarks/sa_lp/inputs/input009.cbi,lp_005,31,100,25,True,15,1,10,2,0.5858707689985749
+screen,benchmarks/sa_lp/inputs/input009.cbi,lp_005,101,100,25,True,15,1,10,2,0.2928772809973452
+screen,benchmarks/sa_lp/inputs/input009.cbi,lp_010,1,100,25,True,15,1,10,2,0.40958016899821814
+screen,benchmarks/sa_lp/inputs/input009.cbi,lp_010,7,100,25,True,15,1,10,2,0.3623017619975144
+screen,benchmarks/sa_lp/inputs/input009.cbi,lp_010,17,100,25,True,15,1,10,2,0.40138150199709344
+screen,benchmarks/sa_lp/inputs/input009.cbi,lp_010,31,100,25,True,15,1,10,2,0.4381682120001642
+screen,benchmarks/sa_lp/inputs/input009.cbi,lp_010,101,100,25,True,15,1,10,2,0.36438546900171787
+screen,benchmarks/sa_lp/inputs/input009.cbi,reference_020,1,100,25,True,15,1,10,2,0.3898302790003072
+screen,benchmarks/sa_lp/inputs/input009.cbi,reference_020,7,100,25,True,15,1,10,2,0.4775070540017623
+screen,benchmarks/sa_lp/inputs/input009.cbi,reference_020,17,100,25,True,15,1,10,2,0.3678638019991922
+screen,benchmarks/sa_lp/inputs/input009.cbi,reference_020,31,100,25,True,15,1,10,2,0.3386911029992916
+screen,benchmarks/sa_lp/inputs/input009.cbi,reference_020,101,100,25,True,15,1,10,2,0.42445816999679664
+screen,benchmarks/sa_lp/inputs/input009.cbi,reference_060,1,100,25,True,15,1,10,2,0.31692206599836936
+screen,benchmarks/sa_lp/inputs/input009.cbi,reference_060,7,100,25,True,15,1,10,2,0.3553099969976756
+screen,benchmarks/sa_lp/inputs/input009.cbi,reference_060,17,100,25,True,15,1,10,2,0.37898997199954465
+screen,benchmarks/sa_lp/inputs/input009.cbi,reference_060,31,100,25,True,15,1,10,2,0.6089520339992305
+screen,benchmarks/sa_lp/inputs/input009.cbi,reference_060,101,100,25,True,15,1,10,2,0.39012551800260553
+screen,benchmarks/sa_lp/inputs/input009.cbi,retry_one,1,100,25,True,15,1,10,2,0.45310208899900317
+screen,benchmarks/sa_lp/inputs/input009.cbi,retry_one,7,100,25,True,15,1,10,2,0.26163957199969445
+screen,benchmarks/sa_lp/inputs/input009.cbi,retry_one,17,100,25,True,15,1,10,2,0.33560315299837384
+screen,benchmarks/sa_lp/inputs/input009.cbi,retry_one,31,100,25,True,15,1,10,2,0.38129874000151176
+screen,benchmarks/sa_lp/inputs/input009.cbi,retry_one,101,100,25,True,15,1,10,2,0.3404308960016351
+screen,benchmarks/sa_lp/inputs/input009.cbi,retry_two,1,100,25,True,15,1,10,2,0.582906412997545
+screen,benchmarks/sa_lp/inputs/input009.cbi,retry_two,7,100,25,True,15,1,10,2,0.2626539409975521
+screen,benchmarks/sa_lp/inputs/input009.cbi,retry_two,17,100,25,True,15,1,10,2,0.3253411440018681
+screen,benchmarks/sa_lp/inputs/input009.cbi,retry_two,31,100,25,True,15,1,10,2,0.3459599169982539
+screen,benchmarks/sa_lp/inputs/input009.cbi,retry_two,101,100,25,True,15,1,10,2,0.4013221409986727
+screen,benchmarks/sa_lp/inputs/input009.cbi,retry_unique,1,100,25,True,15,1,10,2,0.4221381690003909
+screen,benchmarks/sa_lp/inputs/input009.cbi,retry_unique,7,100,25,True,15,1,10,2,0.22840968299715314
+screen,benchmarks/sa_lp/inputs/input009.cbi,retry_unique,17,100,25,True,15,1,10,2,0.3207701139981509
+screen,benchmarks/sa_lp/inputs/input009.cbi,retry_unique,31,100,25,True,15,1,10,2,0.4005035020018113
+screen,benchmarks/sa_lp/inputs/input009.cbi,retry_unique,101,100,25,True,15,1,10,2,0.519207909997931
+screen,benchmarks/sa_lp/inputs/input009.cbi,wire_off,1,100,25,True,20,1,15,3,0.3667828460020246
+screen,benchmarks/sa_lp/inputs/input009.cbi,wire_off,7,100,25,True,20,1,15,3,0.24924886799999513
+screen,benchmarks/sa_lp/inputs/input009.cbi,wire_off,17,100,25,True,15,1,10,2,0.2822905879984319
+screen,benchmarks/sa_lp/inputs/input009.cbi,wire_off,31,100,25,True,20,1,15,3,0.39960009599963087
+screen,benchmarks/sa_lp/inputs/input009.cbi,wire_off,101,100,25,True,15,1,10,2,0.39803419800227857
+screen,benchmarks/sa_lp/inputs/input012.cbi,baseline,1,100,25,True,107,1,7,1,0.5063229070001398
+screen,benchmarks/sa_lp/inputs/input012.cbi,baseline,7,100,25,True,107,1,7,1,0.4537768459995277
+screen,benchmarks/sa_lp/inputs/input012.cbi,baseline,17,100,25,True,107,1,7,1,0.25998665100269136
+screen,benchmarks/sa_lp/inputs/input012.cbi,baseline,31,100,25,True,107,1,7,1,0.33198239999910584
+screen,benchmarks/sa_lp/inputs/input012.cbi,baseline,101,100,25,True,107,1,7,1,0.417377341997053
+screen,benchmarks/sa_lp/inputs/input012.cbi,dual_objective,1,100,25,True,107,1,7,1,0.5424663459998555
+screen,benchmarks/sa_lp/inputs/input012.cbi,dual_objective,7,100,25,True,107,1,7,1,0.5033893260006153
+screen,benchmarks/sa_lp/inputs/input012.cbi,dual_objective,17,100,25,True,107,1,7,1,0.6190308240002196
+screen,benchmarks/sa_lp/inputs/input012.cbi,dual_objective,31,100,25,True,107,1,7,1,0.3639738550009497
+screen,benchmarks/sa_lp/inputs/input012.cbi,dual_objective,101,100,25,True,107,1,7,1,0.43258358299863175
+screen,benchmarks/sa_lp/inputs/input012.cbi,lp_005,1,100,25,True,107,1,7,1,0.3692585009994218
+screen,benchmarks/sa_lp/inputs/input012.cbi,lp_005,7,100,25,True,107,1,7,1,0.2924106730024505
+screen,benchmarks/sa_lp/inputs/input012.cbi,lp_005,17,100,25,True,107,1,7,1,0.3290070309994917
+screen,benchmarks/sa_lp/inputs/input012.cbi,lp_005,31,100,25,True,107,1,7,1,0.38336322699979064
+screen,benchmarks/sa_lp/inputs/input012.cbi,lp_005,101,100,25,True,107,1,7,1,0.3148966469998413
+screen,benchmarks/sa_lp/inputs/input012.cbi,lp_010,1,100,25,True,107,1,7,1,0.37730050300160656
+screen,benchmarks/sa_lp/inputs/input012.cbi,lp_010,7,100,25,True,107,1,7,1,0.3322183650016086
+screen,benchmarks/sa_lp/inputs/input012.cbi,lp_010,17,100,25,True,107,1,7,1,0.22591854600250372
+screen,benchmarks/sa_lp/inputs/input012.cbi,lp_010,31,100,25,True,107,1,7,1,0.30909563200111734
+screen,benchmarks/sa_lp/inputs/input012.cbi,lp_010,101,100,25,True,107,1,7,1,0.41674835099911434
+screen,benchmarks/sa_lp/inputs/input012.cbi,reference_020,1,100,25,True,107,1,7,1,0.5424951129971305
+screen,benchmarks/sa_lp/inputs/input012.cbi,reference_020,7,100,25,True,107,1,7,1,0.3171160339989001
+screen,benchmarks/sa_lp/inputs/input012.cbi,reference_020,17,100,25,True,107,1,7,1,0.18022213899894268
+screen,benchmarks/sa_lp/inputs/input012.cbi,reference_020,31,100,25,True,107,1,7,1,0.390308288999222
+screen,benchmarks/sa_lp/inputs/input012.cbi,reference_020,101,100,25,True,107,1,7,1,0.2816848999973445
+screen,benchmarks/sa_lp/inputs/input012.cbi,reference_060,1,100,25,True,107,1,7,1,0.2557389229987166
+screen,benchmarks/sa_lp/inputs/input012.cbi,reference_060,7,100,25,True,107,1,7,1,0.32597841799724847
+screen,benchmarks/sa_lp/inputs/input012.cbi,reference_060,17,100,25,True,107,1,7,1,0.2255247249995591
+screen,benchmarks/sa_lp/inputs/input012.cbi,reference_060,31,100,25,True,107,1,7,1,0.3102593240000715
+screen,benchmarks/sa_lp/inputs/input012.cbi,reference_060,101,100,25,True,107,1,7,1,0.21228944000176853
+screen,benchmarks/sa_lp/inputs/input012.cbi,retry_one,1,100,25,True,107,1,7,1,0.21633310900142533
+screen,benchmarks/sa_lp/inputs/input012.cbi,retry_one,7,100,25,True,107,1,7,1,0.13931071999832056
+screen,benchmarks/sa_lp/inputs/input012.cbi,retry_one,17,100,25,True,107,1,7,1,0.12971266100066714
+screen,benchmarks/sa_lp/inputs/input012.cbi,retry_one,31,100,25,True,107,1,7,1,0.20453411300331936
+screen,benchmarks/sa_lp/inputs/input012.cbi,retry_one,101,100,25,True,107,1,7,1,0.2108829880016856
+screen,benchmarks/sa_lp/inputs/input012.cbi,retry_two,1,100,25,True,107,1,7,1,0.12691705500037642
+screen,benchmarks/sa_lp/inputs/input012.cbi,retry_two,7,100,25,True,107,1,7,1,0.20556276100251125
+screen,benchmarks/sa_lp/inputs/input012.cbi,retry_two,17,100,25,True,107,1,7,1,0.1943239350002841
+screen,benchmarks/sa_lp/inputs/input012.cbi,retry_two,31,100,25,True,107,1,7,1,0.14908313200066914
+screen,benchmarks/sa_lp/inputs/input012.cbi,retry_two,101,100,25,True,107,1,7,1,0.12331637000170304
+screen,benchmarks/sa_lp/inputs/input012.cbi,retry_unique,1,100,25,True,107,1,7,1,0.36415744300029473
+screen,benchmarks/sa_lp/inputs/input012.cbi,retry_unique,7,100,25,True,107,1,7,1,0.3373610529997677
+screen,benchmarks/sa_lp/inputs/input012.cbi,retry_unique,17,100,25,True,107,1,7,1,0.21501454600002035
+screen,benchmarks/sa_lp/inputs/input012.cbi,retry_unique,31,100,25,True,107,1,7,1,0.5207993949989032
+screen,benchmarks/sa_lp/inputs/input012.cbi,retry_unique,101,100,25,True,107,1,7,1,0.3336573229971691
+screen,benchmarks/sa_lp/inputs/input012.cbi,wire_off,1,100,25,True,107,1,7,1,0.24065519899886567
+screen,benchmarks/sa_lp/inputs/input012.cbi,wire_off,7,100,25,True,107,1,7,1,0.18805066399727366
+screen,benchmarks/sa_lp/inputs/input012.cbi,wire_off,17,100,25,True,107,1,7,1,0.16851523500008625
+screen,benchmarks/sa_lp/inputs/input012.cbi,wire_off,31,100,25,True,107,1,7,1,0.40314600900092046
+screen,benchmarks/sa_lp/inputs/input012.cbi,wire_off,101,100,25,True,107,1,7,1,0.20345557200198527
+screen,benchmarks/sa_lp/inputs/input014.cbi,baseline,1,100,25,True,44,1,39,13,2.841138124000281
+screen,benchmarks/sa_lp/inputs/input014.cbi,baseline,7,100,25,True,44,1,39,13,2.4935251630013227
+screen,benchmarks/sa_lp/inputs/input014.cbi,baseline,17,100,25,True,44,1,39,13,2.4335039260004123
+screen,benchmarks/sa_lp/inputs/input014.cbi,baseline,31,100,25,True,44,1,39,13,1.8916761909968045
+screen,benchmarks/sa_lp/inputs/input014.cbi,baseline,101,100,25,True,44,1,39,13,2.1756776010006433
+screen,benchmarks/sa_lp/inputs/input014.cbi,dual_objective,1,100,25,True,44,1,39,13,3.511741639002139
+screen,benchmarks/sa_lp/inputs/input014.cbi,dual_objective,7,100,25,True,44,1,39,13,3.714290288000484
+screen,benchmarks/sa_lp/inputs/input014.cbi,dual_objective,17,100,25,True,44,1,39,13,3.2316951239990885
+screen,benchmarks/sa_lp/inputs/input014.cbi,dual_objective,31,100,25,True,44,1,39,13,3.7064599779987475
+screen,benchmarks/sa_lp/inputs/input014.cbi,dual_objective,101,100,25,True,44,1,39,13,3.1432011569995666
+screen,benchmarks/sa_lp/inputs/input014.cbi,lp_005,1,100,25,True,44,1,39,13,2.523596445000294
+screen,benchmarks/sa_lp/inputs/input014.cbi,lp_005,7,100,25,True,44,1,39,13,2.737690494999697
+screen,benchmarks/sa_lp/inputs/input014.cbi,lp_005,17,100,25,True,44,1,39,13,2.600040231998719
+screen,benchmarks/sa_lp/inputs/input014.cbi,lp_005,31,100,25,True,44,1,39,13,2.340163113000017
+screen,benchmarks/sa_lp/inputs/input014.cbi,lp_005,101,100,25,True,44,1,39,13,1.957123544998467
+screen,benchmarks/sa_lp/inputs/input014.cbi,lp_010,1,100,25,True,44,1,39,13,2.2588348659992334
+screen,benchmarks/sa_lp/inputs/input014.cbi,lp_010,7,100,25,True,44,1,39,13,2.2314052680012537
+screen,benchmarks/sa_lp/inputs/input014.cbi,lp_010,17,100,25,True,44,1,39,13,2.5908512890018756
+screen,benchmarks/sa_lp/inputs/input014.cbi,lp_010,31,100,25,True,44,1,39,13,1.8889235540009395
+screen,benchmarks/sa_lp/inputs/input014.cbi,lp_010,101,100,25,True,44,1,39,13,1.770165211000858
+screen,benchmarks/sa_lp/inputs/input014.cbi,reference_020,1,100,25,True,44,1,39,13,2.707237510003324
+screen,benchmarks/sa_lp/inputs/input014.cbi,reference_020,7,100,25,True,44,1,39,13,2.1284076949996233
+screen,benchmarks/sa_lp/inputs/input014.cbi,reference_020,17,100,25,True,44,1,39,13,2.679199868998694
+screen,benchmarks/sa_lp/inputs/input014.cbi,reference_020,31,100,25,True,44,1,39,13,2.4557402380014537
+screen,benchmarks/sa_lp/inputs/input014.cbi,reference_020,101,100,25,True,44,1,39,13,1.8017995650006924
+screen,benchmarks/sa_lp/inputs/input014.cbi,reference_060,1,100,25,True,44,1,39,13,2.774291428999277
+screen,benchmarks/sa_lp/inputs/input014.cbi,reference_060,7,100,25,True,44,1,39,13,2.6892362350008625
+screen,benchmarks/sa_lp/inputs/input014.cbi,reference_060,17,100,25,True,44,1,39,13,2.543884575999982
+screen,benchmarks/sa_lp/inputs/input014.cbi,reference_060,31,100,25,True,44,1,39,13,2.1948219379992224
+screen,benchmarks/sa_lp/inputs/input014.cbi,reference_060,101,100,25,True,44,1,39,13,1.935128179997264
+screen,benchmarks/sa_lp/inputs/input014.cbi,retry_one,1,100,25,True,44,1,39,13,2.5749005529978604
+screen,benchmarks/sa_lp/inputs/input014.cbi,retry_one,7,100,25,True,44,1,39,13,2.2541907880004146
+screen,benchmarks/sa_lp/inputs/input014.cbi,retry_one,17,100,25,True,44,1,39,13,2.4875628129993856
+screen,benchmarks/sa_lp/inputs/input014.cbi,retry_one,31,100,25,True,44,1,39,13,2.2003874010006257
+screen,benchmarks/sa_lp/inputs/input014.cbi,retry_one,101,100,25,True,44,1,39,13,1.7735777769994456
+screen,benchmarks/sa_lp/inputs/input014.cbi,retry_two,1,100,25,True,44,1,39,13,2.2551307550020283
+screen,benchmarks/sa_lp/inputs/input014.cbi,retry_two,7,100,25,True,44,1,39,13,2.773087809997378
+screen,benchmarks/sa_lp/inputs/input014.cbi,retry_two,17,100,25,True,44,1,39,13,2.692587552999612
+screen,benchmarks/sa_lp/inputs/input014.cbi,retry_two,31,100,25,True,44,1,39,13,2.4668598110001767
+screen,benchmarks/sa_lp/inputs/input014.cbi,retry_two,101,100,25,True,44,1,39,13,2.1186039879976306
+screen,benchmarks/sa_lp/inputs/input014.cbi,retry_unique,1,100,25,True,44,1,39,13,2.8466775359993335
+screen,benchmarks/sa_lp/inputs/input014.cbi,retry_unique,7,100,25,True,44,1,39,13,2.6793782790009573
+screen,benchmarks/sa_lp/inputs/input014.cbi,retry_unique,17,100,25,True,44,1,39,13,2.6500594659992203
+screen,benchmarks/sa_lp/inputs/input014.cbi,retry_unique,31,100,25,True,44,1,39,13,2.531883352003206
+screen,benchmarks/sa_lp/inputs/input014.cbi,retry_unique,101,100,25,True,44,1,39,13,2.010240772000543
+screen,benchmarks/sa_lp/inputs/input014.cbi,wire_off,1,100,25,True,44,1,39,13,2.411435681999137
+screen,benchmarks/sa_lp/inputs/input014.cbi,wire_off,7,100,25,True,44,1,39,13,2.4666221919978852
+screen,benchmarks/sa_lp/inputs/input014.cbi,wire_off,17,100,25,True,44,1,39,13,1.703800848001265
+screen,benchmarks/sa_lp/inputs/input014.cbi,wire_off,31,100,25,True,44,1,39,13,1.9525208250015567
+screen,benchmarks/sa_lp/inputs/input014.cbi,wire_off,101,100,25,True,44,1,39,13,1.745219979002286
+screen,example/input.cbi,baseline,1,100,25,True,38,2,36,3,0.8434427449974464
+screen,example/input.cbi,baseline,7,100,25,True,37,1,36,3,0.6429179459992156
+screen,example/input.cbi,baseline,17,100,25,True,41,1,40,4,0.8160373600003368
+screen,example/input.cbi,baseline,31,100,25,True,41,1,40,4,0.7358231890029856
+screen,example/input.cbi,baseline,101,100,25,True,41,1,40,4,0.6592486999979883
+screen,example/input.cbi,dual_objective,1,100,25,True,38,2,36,3,1.2121293250020244
+screen,example/input.cbi,dual_objective,7,100,25,True,37,1,36,3,0.8246869050017267
+screen,example/input.cbi,dual_objective,17,100,25,True,41,1,40,4,0.9540618610008096
+screen,example/input.cbi,dual_objective,31,100,25,True,41,1,40,4,1.0984696770028677
+screen,example/input.cbi,dual_objective,101,100,25,True,37,1,36,3,1.0809932470001513
+screen,example/input.cbi,lp_005,1,100,25,True,38,2,36,3,0.6255305609993229
+screen,example/input.cbi,lp_005,7,100,25,True,37,1,36,3,0.7341904099994281
+screen,example/input.cbi,lp_005,17,100,25,True,41,1,40,4,0.8934721740006353
+screen,example/input.cbi,lp_005,31,100,25,True,41,1,40,4,0.8579340959986439
+screen,example/input.cbi,lp_005,101,100,25,True,41,1,40,4,0.6412790909998876
+screen,example/input.cbi,lp_010,1,100,25,True,38,2,36,3,0.8090348709993123
+screen,example/input.cbi,lp_010,7,100,25,True,37,1,36,3,0.8809495829991647
+screen,example/input.cbi,lp_010,17,100,25,True,41,1,40,4,0.8092030259977037
+screen,example/input.cbi,lp_010,31,100,25,True,41,1,40,4,0.6902295509971736
+screen,example/input.cbi,lp_010,101,100,25,True,41,1,40,4,0.5969192980010121
+screen,example/input.cbi,reference_020,1,100,25,True,38,2,36,3,0.8853193180002563
+screen,example/input.cbi,reference_020,7,100,25,True,37,1,36,3,0.7258677530007844
+screen,example/input.cbi,reference_020,17,100,25,True,41,1,40,4,0.8901705520001997
+screen,example/input.cbi,reference_020,31,100,25,True,41,1,40,4,0.6847002909998992
+screen,example/input.cbi,reference_020,101,100,25,True,41,1,40,4,0.6662519569981669
+screen,example/input.cbi,reference_060,1,100,25,True,38,2,36,3,0.8073086950025754
+screen,example/input.cbi,reference_060,7,100,25,True,37,1,36,3,0.658933185000933
+screen,example/input.cbi,reference_060,17,100,25,True,41,1,40,4,0.8246516159997554
+screen,example/input.cbi,reference_060,31,100,25,True,41,1,40,4,0.5987472630004049
+screen,example/input.cbi,reference_060,101,100,25,True,41,1,40,4,0.8268036359986581
+screen,example/input.cbi,retry_one,1,100,25,True,37,1,36,3,0.8188531809973938
+screen,example/input.cbi,retry_one,7,100,25,True,38,2,36,3,0.7283938540022064
+screen,example/input.cbi,retry_one,17,100,25,True,41,1,40,4,0.6637099529980333
+screen,example/input.cbi,retry_one,31,100,25,True,41,1,40,4,0.739096065000922
+screen,example/input.cbi,retry_one,101,100,25,True,41,1,40,4,0.7992689210004755
+screen,example/input.cbi,retry_two,1,100,25,True,37,1,36,3,0.5120386039998266
+screen,example/input.cbi,retry_two,7,100,25,True,38,2,36,3,0.8302993239994976
+screen,example/input.cbi,retry_two,17,100,25,True,41,1,40,4,0.7066203770009452
+screen,example/input.cbi,retry_two,31,100,25,True,41,1,40,4,0.6459728689987969
+screen,example/input.cbi,retry_two,101,100,25,True,41,1,40,4,0.5538083770006779
+screen,example/input.cbi,retry_unique,1,100,25,True,38,2,36,3,0.8902555599997868
+screen,example/input.cbi,retry_unique,7,100,25,True,37,1,36,3,0.6856198960012989
+screen,example/input.cbi,retry_unique,17,100,25,True,41,1,40,4,0.8210977580019971
+screen,example/input.cbi,retry_unique,31,100,25,True,41,1,40,4,0.8236285370003316
+screen,example/input.cbi,retry_unique,101,100,25,True,41,1,40,4,0.9070841820030182
+screen,example/input.cbi,wire_off,1,100,25,True,38,2,36,3,0.4991666759997315
+screen,example/input.cbi,wire_off,7,100,25,True,41,1,40,4,0.6611846779996995
+screen,example/input.cbi,wire_off,17,100,25,True,41,1,40,4,0.6224329100004979
+screen,example/input.cbi,wire_off,31,100,25,True,41,1,40,4,0.6885223470017081
+screen,example/input.cbi,wire_off,101,100,25,True,41,1,40,4,0.6723230540010263
+screen,issues/closed/019 子樹與sink交換可降低buffer型別成本/repro/input001.cbi,baseline,1,100,25,True,90,2,60,6,1.1374655430008715
+screen,issues/closed/019 子樹與sink交換可降低buffer型別成本/repro/input001.cbi,baseline,7,100,25,True,105,3,60,6,1.1608752840002126
+screen,issues/closed/019 子樹與sink交換可降低buffer型別成本/repro/input001.cbi,baseline,17,100,25,True,90,2,60,6,1.2008132679984556
+screen,issues/closed/019 子樹與sink交換可降低buffer型別成本/repro/input001.cbi,baseline,31,100,25,True,97,2,67,7,0.8931355909990089
+screen,issues/closed/019 子樹與sink交換可降低buffer型別成本/repro/input001.cbi,baseline,101,100,25,True,97,2,67,7,1.2160754699980316
+screen,issues/closed/019 子樹與sink交換可降低buffer型別成本/repro/input001.cbi,dual_objective,1,100,25,True,70,1,55,7,1.8377180800016504
+screen,issues/closed/019 子樹與sink交換可降低buffer型別成本/repro/input001.cbi,dual_objective,7,100,25,True,90,2,60,6,1.366761168002995
+screen,issues/closed/019 子樹與sink交換可降低buffer型別成本/repro/input001.cbi,dual_objective,17,100,25,True,75,1,60,6,1.640738671998406
+screen,issues/closed/019 子樹與sink交換可降低buffer型別成本/repro/input001.cbi,dual_objective,31,100,25,True,82,1,67,7,1.2028764669994416
+screen,issues/closed/019 子樹與sink交換可降低buffer型別成本/repro/input001.cbi,dual_objective,101,100,25,True,90,2,60,6,1.4696102249981777
+screen,issues/closed/019 子樹與sink交換可降低buffer型別成本/repro/input001.cbi,lp_005,1,100,25,True,90,2,60,6,0.991112906998751
+screen,issues/closed/019 子樹與sink交換可降低buffer型別成本/repro/input001.cbi,lp_005,7,100,25,True,105,3,60,6,1.2188864540003124
+screen,issues/closed/019 子樹與sink交換可降低buffer型別成本/repro/input001.cbi,lp_005,17,100,25,True,90,2,60,6,0.832081039003242
+screen,issues/closed/019 子樹與sink交換可降低buffer型別成本/repro/input001.cbi,lp_005,31,100,25,True,97,2,67,7,1.0841032040007121
+screen,issues/closed/019 子樹與sink交換可降低buffer型別成本/repro/input001.cbi,lp_005,101,100,25,True,97,2,67,7,0.7896987819985952
+screen,issues/closed/019 子樹與sink交換可降低buffer型別成本/repro/input001.cbi,lp_010,1,100,25,True,90,2,60,6,1.2297089150015381
+screen,issues/closed/019 子樹與sink交換可降低buffer型別成本/repro/input001.cbi,lp_010,7,100,25,True,105,3,60,6,1.209707055000763
+screen,issues/closed/019 子樹與sink交換可降低buffer型別成本/repro/input001.cbi,lp_010,17,100,25,True,90,2,60,6,1.2028040559998772
+screen,issues/closed/019 子樹與sink交換可降低buffer型別成本/repro/input001.cbi,lp_010,31,100,25,True,97,2,67,7,0.8798448580018885
+screen,issues/closed/019 子樹與sink交換可降低buffer型別成本/repro/input001.cbi,lp_010,101,100,25,True,97,2,67,7,1.2438520790019538
+screen,issues/closed/019 子樹與sink交換可降低buffer型別成本/repro/input001.cbi,reference_020,1,100,25,True,90,2,60,6,0.8868343859976449
+screen,issues/closed/019 子樹與sink交換可降低buffer型別成本/repro/input001.cbi,reference_020,7,100,25,True,105,3,60,6,1.304133368001203
+screen,issues/closed/019 子樹與sink交換可降低buffer型別成本/repro/input001.cbi,reference_020,17,100,25,True,90,2,60,6,0.9701569400021981
+screen,issues/closed/019 子樹與sink交換可降低buffer型別成本/repro/input001.cbi,reference_020,31,100,25,True,97,2,67,7,0.9391905260017666
+screen,issues/closed/019 子樹與sink交換可降低buffer型別成本/repro/input001.cbi,reference_020,101,100,25,True,97,2,67,7,0.9807822120019409
+screen,issues/closed/019 子樹與sink交換可降低buffer型別成本/repro/input001.cbi,reference_060,1,100,25,True,90,2,60,6,1.2124989010007994
+screen,issues/closed/019 子樹與sink交換可降低buffer型別成本/repro/input001.cbi,reference_060,7,100,25,True,105,3,60,6,1.3191493900012574
+screen,issues/closed/019 子樹與sink交換可降低buffer型別成本/repro/input001.cbi,reference_060,17,100,25,True,90,2,60,6,0.9812152389968105
+screen,issues/closed/019 子樹與sink交換可降低buffer型別成本/repro/input001.cbi,reference_060,31,100,25,True,97,2,67,7,1.189321216999815
+screen,issues/closed/019 子樹與sink交換可降低buffer型別成本/repro/input001.cbi,reference_060,101,100,25,True,97,2,67,7,1.080509075000009
+screen,issues/closed/019 子樹與sink交換可降低buffer型別成本/repro/input001.cbi,retry_one,1,100,25,True,90,2,60,6,0.7350787830000627
+screen,issues/closed/019 子樹與sink交換可降低buffer型別成本/repro/input001.cbi,retry_one,7,100,25,True,105,3,60,6,1.0579333009991387
+screen,issues/closed/019 子樹與sink交換可降低buffer型別成本/repro/input001.cbi,retry_one,17,100,25,True,90,2,60,6,1.0138598550001916
+screen,issues/closed/019 子樹與sink交換可降低buffer型別成本/repro/input001.cbi,retry_one,31,100,25,True,90,2,60,6,0.8542806250006834
+screen,issues/closed/019 子樹與sink交換可降低buffer型別成本/repro/input001.cbi,retry_one,101,100,25,True,97,2,67,7,0.7285806889995001
+screen,issues/closed/019 子樹與sink交換可降低buffer型別成本/repro/input001.cbi,retry_two,1,100,25,True,90,2,60,6,0.9533539219992235
+screen,issues/closed/019 子樹與sink交換可降低buffer型別成本/repro/input001.cbi,retry_two,7,100,25,True,105,3,60,6,0.8430438390023482
+screen,issues/closed/019 子樹與sink交換可降低buffer型別成本/repro/input001.cbi,retry_two,17,100,25,True,90,2,60,6,0.8285551039989514
+screen,issues/closed/019 子樹與sink交換可降低buffer型別成本/repro/input001.cbi,retry_two,31,100,25,True,97,2,67,7,1.1599859099987953
+screen,issues/closed/019 子樹與sink交換可降低buffer型別成本/repro/input001.cbi,retry_two,101,100,25,True,97,2,67,7,0.7292632450007659
+screen,issues/closed/019 子樹與sink交換可降低buffer型別成本/repro/input001.cbi,retry_unique,1,100,25,True,90,2,60,6,0.9372429430004559
+screen,issues/closed/019 子樹與sink交換可降低buffer型別成本/repro/input001.cbi,retry_unique,7,100,25,True,105,3,60,6,1.00429122100104
+screen,issues/closed/019 子樹與sink交換可降低buffer型別成本/repro/input001.cbi,retry_unique,17,100,25,True,90,2,60,6,1.329304853999929
+screen,issues/closed/019 子樹與sink交換可降低buffer型別成本/repro/input001.cbi,retry_unique,31,100,25,True,97,2,67,7,1.1919006339994667
+screen,issues/closed/019 子樹與sink交換可降低buffer型別成本/repro/input001.cbi,retry_unique,101,100,25,True,97,2,67,7,0.9180912340016221
+screen,issues/closed/019 子樹與sink交換可降低buffer型別成本/repro/input001.cbi,wire_off,1,100,25,True,87,1,72,6,0.7607938360015396
+screen,issues/closed/019 子樹與sink交換可降低buffer型別成本/repro/input001.cbi,wire_off,7,100,25,True,90,2,60,6,0.6770840530007263
+screen,issues/closed/019 子樹與sink交換可降低buffer型別成本/repro/input001.cbi,wire_off,17,100,25,True,90,2,60,6,0.8081237260012131
+screen,issues/closed/019 子樹與sink交換可降低buffer型別成本/repro/input001.cbi,wire_off,31,100,25,True,82,1,67,7,0.7663271800010989
+screen,issues/closed/019 子樹與sink交換可降低buffer型別成本/repro/input001.cbi,wire_off,101,100,25,True,90,2,60,6,0.696459490001871

@@ -215,9 +215,18 @@ Expected<SearchState> evaluate_candidate(Problem const &p, SearchState state,
         if (std::chrono::steady_clock::now() >= deadline)
             return Error{"candidate deadline reached", ErrorKind::timeout};
         if (attempt > 0) {
+            auto const previous = state.capacity;
             auto const capacity = estimate_capacity(p, state, true);
             if (is_error(capacity))
                 return std::get<Error>(capacity);
+            // Identical capacities repeat the same failed placement/repair.
+            // Continue to the structural attempt, which changes the topology.
+            if (attempt == 1 &&
+                std::equal(previous.begin(), previous.end(), state.capacity.begin(),
+                           state.capacity.end(), [](auto a, auto b) {
+                               return (!a && !b) || (a && b && a->value == b->value);
+                           }))
+                continue;
             if (attempt == 2) {
                 // One bounded structural repair, after placement/capacity attempts.
                 if (!options.structural_repair)

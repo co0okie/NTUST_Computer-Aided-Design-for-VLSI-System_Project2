@@ -1,0 +1,1082 @@
+[
+  {
+    "input": "benchmarks/sa_lp/inputs/input000.cbi",
+    "seed": 1,
+    "strategy": "sa_lp",
+    "identical": true,
+    "score": 26,
+    "lp_calls_before": 112,
+    "lp_calls_after": 97
+  },
+  {
+    "input": "benchmarks/sa_lp/inputs/input000.cbi",
+    "seed": 1,
+    "strategy": "hybrid",
+    "identical": true,
+    "score": 26,
+    "lp_calls_before": 112,
+    "lp_calls_after": 97
+  },
+  {
+    "input": "benchmarks/sa_lp/inputs/input000.cbi",
+    "seed": 7,
+    "strategy": "sa_lp",
+    "identical": true,
+    "score": 26,
+    "lp_calls_before": 89,
+    "lp_calls_after": 87
+  },
+  {
+    "input": "benchmarks/sa_lp/inputs/input000.cbi",
+    "seed": 7,
+    "strategy": "hybrid",
+    "identical": true,
+    "score": 26,
+    "lp_calls_before": 89,
+    "lp_calls_after": 87
+  },
+  {
+    "input": "benchmarks/sa_lp/inputs/input000.cbi",
+    "seed": 17,
+    "strategy": "sa_lp",
+    "identical": true,
+    "score": 26,
+    "lp_calls_before": 93,
+    "lp_calls_after": 90
+  },
+  {
+    "input": "benchmarks/sa_lp/inputs/input000.cbi",
+    "seed": 17,
+    "strategy": "hybrid",
+    "identical": true,
+    "score": 26,
+    "lp_calls_before": 93,
+    "lp_calls_after": 90
+  },
+  {
+    "input": "benchmarks/sa_lp/inputs/input000.cbi",
+    "seed": 31,
+    "strategy": "sa_lp",
+    "identical": true,
+    "score": 23,
+    "lp_calls_before": 89,
+    "lp_calls_after": 86
+  },
+  {
+    "input": "benchmarks/sa_lp/inputs/input000.cbi",
+    "seed": 31,
+    "strategy": "hybrid",
+    "identical": true,
+    "score": 23,
+    "lp_calls_before": 89,
+    "lp_calls_after": 86
+  },
+  {
+    "input": "benchmarks/sa_lp/inputs/input000.cbi",
+    "seed": 101,
+    "strategy": "sa_lp",
+    "identical": true,
+    "score": 23,
+    "lp_calls_before": 108,
+    "lp_calls_after": 97
+  },
+  {
+    "input": "benchmarks/sa_lp/inputs/input000.cbi",
+    "seed": 101,
+    "strategy": "hybrid",
+    "identical": true,
+    "score": 23,
+    "lp_calls_before": 108,
+    "lp_calls_after": 97
+  },
+  {
+    "input": "benchmarks/sa_lp/inputs/input003.cbi",
+    "seed": 1,
+    "strategy": "sa_lp",
+    "identical": true,
+    "score": 74,
+    "lp_calls_before": 138,
+    "lp_calls_after": 138
+  },
+  {
+    "input": "benchmarks/sa_lp/inputs/input003.cbi",
+    "seed": 1,
+    "strategy": "hybrid",
+    "identical": true,
+    "score": 38,
+    "lp_calls_before": 175,
+    "lp_calls_after": 137
+  },
+  {
+    "input": "benchmarks/sa_lp/inputs/input003.cbi",
+    "seed": 7,
+    "strategy": "sa_lp",
+    "identical": true,
+    "score": 76,
+    "lp_calls_before": 109,
+    "lp_calls_after": 109
+  },
+  {
+    "input": "benchmarks/sa_lp/inputs/input003.cbi",
+    "seed": 7,
+    "strategy": "hybrid",
+    "identical": true,
+    "score": 38,
+    "lp_calls_before": 124,
+    "lp_calls_after": 108
+  },
+  {
+    "input": "benchmarks/sa_lp/inputs/input003.cbi",
+    "seed": 17,
+    "strategy": "sa_lp",
+    "identical": true,
+    "score": 69,
+    "lp_calls_before": 110,
+    "lp_calls_after": 110
+  },
+  {
+    "input": "benchmarks/sa_lp/inputs/input003.cbi",
+    "seed": 17,
+    "strategy": "hybrid",
+    "identical": true,
+    "score": 34,
+    "lp_calls_before": 143,
+    "lp_calls_after": 121
+  },
+  {
+    "input": "benchmarks/sa_lp/inputs/input003.cbi",
+    "seed": 31,
+    "strategy": "sa_lp",
+    "identical": true,
+    "score": 78,
+    "lp_calls_before": 101,
+    "lp_calls_after": 101
+  },
+  {
+    "input": "benchmarks/sa_lp/inputs/input003.cbi",
+    "seed": 31,
+    "strategy": "hybrid",
+    "identical": true,
+    "score": 38,
+    "lp_calls_before": 141,
+    "lp_calls_after": 119
+  },
+  {
+    "input": "benchmarks/sa_lp/inputs/input003.cbi",
+    "seed": 101,
+    "strategy": "sa_lp",
+    "identical": true,
+    "score": 59,
+    "lp_calls_before": 114,
+    "lp_calls_after": 113
+  },
+  {
+    "input": "benchmarks/sa_lp/inputs/input003.cbi",
+    "seed": 101,
+    "strategy": "hybrid",
+    "identical": true,
+    "score": 38,
+    "lp_calls_before": 172,
+    "lp_calls_after": 135
+  },
+  {
+    "input": "benchmarks/sa_lp/inputs/input006.cbi",
+    "seed": 1,
+    "strategy": "sa_lp",
+    "identical": true,
+    "score": 112,
+    "lp_calls_before": 104,
+    "lp_calls_after": 104
+  },
+  {
+    "input": "benchmarks/sa_lp/inputs/input006.cbi",
+    "seed": 1,
+    "strategy": "hybrid",
+    "identical": true,
+    "score": 112,
+    "lp_calls_before": 101,
+    "lp_calls_after": 101
+  },
+  {
+    "input": "benchmarks/sa_lp/inputs/input006.cbi",
+    "seed": 7,
+    "strategy": "sa_lp",
+    "identical": true,
+    "score": 112,
+    "lp_calls_before": 95,
+    "lp_calls_after": 95
+  },
+  {
+    "input": "benchmarks/sa_lp/inputs/input006.cbi",
+    "seed": 7,
+    "strategy": "hybrid",
+    "identical": true,
+    "score": 112,
+    "lp_calls_before": 92,
+    "lp_calls_after": 92
+  },
+  {
+    "input": "benchmarks/sa_lp/inputs/input006.cbi",
+    "seed": 17,
+    "strategy": "sa_lp",
+    "identical": true,
+    "score": 112,
+    "lp_calls_before": 96,
+    "lp_calls_after": 96
+  },
+  {
+    "input": "benchmarks/sa_lp/inputs/input006.cbi",
+    "seed": 17,
+    "strategy": "hybrid",
+    "identical": true,
+    "score": 112,
+    "lp_calls_before": 104,
+    "lp_calls_after": 104
+  },
+  {
+    "input": "benchmarks/sa_lp/inputs/input006.cbi",
+    "seed": 31,
+    "strategy": "sa_lp",
+    "identical": true,
+    "score": 118,
+    "lp_calls_before": 115,
+    "lp_calls_after": 112
+  },
+  {
+    "input": "benchmarks/sa_lp/inputs/input006.cbi",
+    "seed": 31,
+    "strategy": "hybrid",
+    "identical": true,
+    "score": 112,
+    "lp_calls_before": 109,
+    "lp_calls_after": 109
+  },
+  {
+    "input": "benchmarks/sa_lp/inputs/input006.cbi",
+    "seed": 101,
+    "strategy": "sa_lp",
+    "identical": true,
+    "score": 112,
+    "lp_calls_before": 110,
+    "lp_calls_after": 110
+  },
+  {
+    "input": "benchmarks/sa_lp/inputs/input006.cbi",
+    "seed": 101,
+    "strategy": "hybrid",
+    "identical": true,
+    "score": 112,
+    "lp_calls_before": 109,
+    "lp_calls_after": 109
+  },
+  {
+    "input": "benchmarks/sa_lp/inputs/input009.cbi",
+    "seed": 1,
+    "strategy": "sa_lp",
+    "identical": true,
+    "score": 15,
+    "lp_calls_before": 137,
+    "lp_calls_after": 114
+  },
+  {
+    "input": "benchmarks/sa_lp/inputs/input009.cbi",
+    "seed": 1,
+    "strategy": "hybrid",
+    "identical": true,
+    "score": 15,
+    "lp_calls_before": 137,
+    "lp_calls_after": 114
+  },
+  {
+    "input": "benchmarks/sa_lp/inputs/input009.cbi",
+    "seed": 7,
+    "strategy": "sa_lp",
+    "identical": true,
+    "score": 15,
+    "lp_calls_before": 161,
+    "lp_calls_after": 122
+  },
+  {
+    "input": "benchmarks/sa_lp/inputs/input009.cbi",
+    "seed": 7,
+    "strategy": "hybrid",
+    "identical": true,
+    "score": 15,
+    "lp_calls_before": 161,
+    "lp_calls_after": 122
+  },
+  {
+    "input": "benchmarks/sa_lp/inputs/input009.cbi",
+    "seed": 17,
+    "strategy": "sa_lp",
+    "identical": true,
+    "score": 15,
+    "lp_calls_before": 121,
+    "lp_calls_after": 101
+  },
+  {
+    "input": "benchmarks/sa_lp/inputs/input009.cbi",
+    "seed": 17,
+    "strategy": "hybrid",
+    "identical": true,
+    "score": 15,
+    "lp_calls_before": 121,
+    "lp_calls_after": 101
+  },
+  {
+    "input": "benchmarks/sa_lp/inputs/input009.cbi",
+    "seed": 31,
+    "strategy": "sa_lp",
+    "identical": true,
+    "score": 15,
+    "lp_calls_before": 125,
+    "lp_calls_after": 106
+  },
+  {
+    "input": "benchmarks/sa_lp/inputs/input009.cbi",
+    "seed": 31,
+    "strategy": "hybrid",
+    "identical": true,
+    "score": 15,
+    "lp_calls_before": 125,
+    "lp_calls_after": 106
+  },
+  {
+    "input": "benchmarks/sa_lp/inputs/input009.cbi",
+    "seed": 101,
+    "strategy": "sa_lp",
+    "identical": true,
+    "score": 15,
+    "lp_calls_before": 120,
+    "lp_calls_after": 103
+  },
+  {
+    "input": "benchmarks/sa_lp/inputs/input009.cbi",
+    "seed": 101,
+    "strategy": "hybrid",
+    "identical": true,
+    "score": 15,
+    "lp_calls_before": 120,
+    "lp_calls_after": 103
+  },
+  {
+    "input": "benchmarks/sa_lp/inputs/input012.cbi",
+    "seed": 1,
+    "strategy": "sa_lp",
+    "identical": true,
+    "score": 107,
+    "lp_calls_before": 105,
+    "lp_calls_after": 104
+  },
+  {
+    "input": "benchmarks/sa_lp/inputs/input012.cbi",
+    "seed": 1,
+    "strategy": "hybrid",
+    "identical": true,
+    "score": 107,
+    "lp_calls_before": 86,
+    "lp_calls_after": 77
+  },
+  {
+    "input": "benchmarks/sa_lp/inputs/input012.cbi",
+    "seed": 7,
+    "strategy": "sa_lp",
+    "identical": true,
+    "score": 112,
+    "lp_calls_before": 92,
+    "lp_calls_after": 90
+  },
+  {
+    "input": "benchmarks/sa_lp/inputs/input012.cbi",
+    "seed": 7,
+    "strategy": "hybrid",
+    "identical": true,
+    "score": 107,
+    "lp_calls_before": 76,
+    "lp_calls_after": 70
+  },
+  {
+    "input": "benchmarks/sa_lp/inputs/input012.cbi",
+    "seed": 17,
+    "strategy": "sa_lp",
+    "identical": true,
+    "score": 112,
+    "lp_calls_before": 115,
+    "lp_calls_after": 114
+  },
+  {
+    "input": "benchmarks/sa_lp/inputs/input012.cbi",
+    "seed": 17,
+    "strategy": "hybrid",
+    "identical": true,
+    "score": 107,
+    "lp_calls_before": 81,
+    "lp_calls_after": 69
+  },
+  {
+    "input": "benchmarks/sa_lp/inputs/input012.cbi",
+    "seed": 31,
+    "strategy": "sa_lp",
+    "identical": true,
+    "score": 112,
+    "lp_calls_before": 106,
+    "lp_calls_after": 106
+  },
+  {
+    "input": "benchmarks/sa_lp/inputs/input012.cbi",
+    "seed": 31,
+    "strategy": "hybrid",
+    "identical": true,
+    "score": 107,
+    "lp_calls_before": 76,
+    "lp_calls_after": 71
+  },
+  {
+    "input": "benchmarks/sa_lp/inputs/input012.cbi",
+    "seed": 101,
+    "strategy": "sa_lp",
+    "identical": true,
+    "score": 112,
+    "lp_calls_before": 114,
+    "lp_calls_after": 108
+  },
+  {
+    "input": "benchmarks/sa_lp/inputs/input012.cbi",
+    "seed": 101,
+    "strategy": "hybrid",
+    "identical": true,
+    "score": 107,
+    "lp_calls_before": 84,
+    "lp_calls_after": 72
+  },
+  {
+    "input": "benchmarks/sa_lp/inputs/input014.cbi",
+    "seed": 1,
+    "strategy": "sa_lp",
+    "identical": true,
+    "score": 44,
+    "lp_calls_before": 107,
+    "lp_calls_after": 107
+  },
+  {
+    "input": "benchmarks/sa_lp/inputs/input014.cbi",
+    "seed": 1,
+    "strategy": "hybrid",
+    "identical": true,
+    "score": 44,
+    "lp_calls_before": 107,
+    "lp_calls_after": 107
+  },
+  {
+    "input": "benchmarks/sa_lp/inputs/input014.cbi",
+    "seed": 7,
+    "strategy": "sa_lp",
+    "identical": true,
+    "score": 44,
+    "lp_calls_before": 117,
+    "lp_calls_after": 117
+  },
+  {
+    "input": "benchmarks/sa_lp/inputs/input014.cbi",
+    "seed": 7,
+    "strategy": "hybrid",
+    "identical": true,
+    "score": 44,
+    "lp_calls_before": 117,
+    "lp_calls_after": 117
+  },
+  {
+    "input": "benchmarks/sa_lp/inputs/input014.cbi",
+    "seed": 17,
+    "strategy": "sa_lp",
+    "identical": true,
+    "score": 44,
+    "lp_calls_before": 100,
+    "lp_calls_after": 100
+  },
+  {
+    "input": "benchmarks/sa_lp/inputs/input014.cbi",
+    "seed": 17,
+    "strategy": "hybrid",
+    "identical": true,
+    "score": 44,
+    "lp_calls_before": 100,
+    "lp_calls_after": 100
+  },
+  {
+    "input": "benchmarks/sa_lp/inputs/input014.cbi",
+    "seed": 31,
+    "strategy": "sa_lp",
+    "identical": true,
+    "score": 44,
+    "lp_calls_before": 109,
+    "lp_calls_after": 109
+  },
+  {
+    "input": "benchmarks/sa_lp/inputs/input014.cbi",
+    "seed": 31,
+    "strategy": "hybrid",
+    "identical": true,
+    "score": 44,
+    "lp_calls_before": 109,
+    "lp_calls_after": 109
+  },
+  {
+    "input": "benchmarks/sa_lp/inputs/input014.cbi",
+    "seed": 101,
+    "strategy": "sa_lp",
+    "identical": true,
+    "score": 44,
+    "lp_calls_before": 93,
+    "lp_calls_after": 93
+  },
+  {
+    "input": "benchmarks/sa_lp/inputs/input014.cbi",
+    "seed": 101,
+    "strategy": "hybrid",
+    "identical": true,
+    "score": 44,
+    "lp_calls_before": 93,
+    "lp_calls_after": 93
+  },
+  {
+    "input": "example/input.cbi",
+    "seed": 1,
+    "strategy": "sa_lp",
+    "identical": true,
+    "score": 38,
+    "lp_calls_before": 127,
+    "lp_calls_after": 127
+  },
+  {
+    "input": "example/input.cbi",
+    "seed": 1,
+    "strategy": "hybrid",
+    "identical": true,
+    "score": 38,
+    "lp_calls_before": 127,
+    "lp_calls_after": 127
+  },
+  {
+    "input": "example/input.cbi",
+    "seed": 7,
+    "strategy": "sa_lp",
+    "identical": true,
+    "score": 37,
+    "lp_calls_before": 124,
+    "lp_calls_after": 122
+  },
+  {
+    "input": "example/input.cbi",
+    "seed": 7,
+    "strategy": "hybrid",
+    "identical": true,
+    "score": 37,
+    "lp_calls_before": 124,
+    "lp_calls_after": 122
+  },
+  {
+    "input": "example/input.cbi",
+    "seed": 17,
+    "strategy": "sa_lp",
+    "identical": true,
+    "score": 41,
+    "lp_calls_before": 108,
+    "lp_calls_after": 108
+  },
+  {
+    "input": "example/input.cbi",
+    "seed": 17,
+    "strategy": "hybrid",
+    "identical": true,
+    "score": 41,
+    "lp_calls_before": 108,
+    "lp_calls_after": 108
+  },
+  {
+    "input": "example/input.cbi",
+    "seed": 31,
+    "strategy": "sa_lp",
+    "identical": true,
+    "score": 41,
+    "lp_calls_before": 110,
+    "lp_calls_after": 110
+  },
+  {
+    "input": "example/input.cbi",
+    "seed": 31,
+    "strategy": "hybrid",
+    "identical": true,
+    "score": 41,
+    "lp_calls_before": 110,
+    "lp_calls_after": 110
+  },
+  {
+    "input": "example/input.cbi",
+    "seed": 101,
+    "strategy": "sa_lp",
+    "identical": true,
+    "score": 41,
+    "lp_calls_before": 120,
+    "lp_calls_after": 120
+  },
+  {
+    "input": "example/input.cbi",
+    "seed": 101,
+    "strategy": "hybrid",
+    "identical": true,
+    "score": 41,
+    "lp_calls_before": 120,
+    "lp_calls_after": 120
+  },
+  {
+    "input": "issues/closed/019 \u5b50\u6a39\u8207sink\u4ea4\u63db\u53ef\u964d\u4f4ebuffer\u578b\u5225\u6210\u672c/repro/input001.cbi",
+    "seed": 1,
+    "strategy": "sa_lp",
+    "identical": true,
+    "score": 106,
+    "lp_calls_before": 83,
+    "lp_calls_after": 79
+  },
+  {
+    "input": "issues/closed/019 \u5b50\u6a39\u8207sink\u4ea4\u63db\u53ef\u964d\u4f4ebuffer\u578b\u5225\u6210\u672c/repro/input001.cbi",
+    "seed": 1,
+    "strategy": "hybrid",
+    "identical": true,
+    "score": 90,
+    "lp_calls_before": 107,
+    "lp_calls_after": 97
+  },
+  {
+    "input": "issues/closed/019 \u5b50\u6a39\u8207sink\u4ea4\u63db\u53ef\u964d\u4f4ebuffer\u578b\u5225\u6210\u672c/repro/input001.cbi",
+    "seed": 7,
+    "strategy": "sa_lp",
+    "identical": true,
+    "score": 90,
+    "lp_calls_before": 88,
+    "lp_calls_after": 85
+  },
+  {
+    "input": "issues/closed/019 \u5b50\u6a39\u8207sink\u4ea4\u63db\u53ef\u964d\u4f4ebuffer\u578b\u5225\u6210\u672c/repro/input001.cbi",
+    "seed": 7,
+    "strategy": "hybrid",
+    "identical": true,
+    "score": 105,
+    "lp_calls_before": 106,
+    "lp_calls_after": 106
+  },
+  {
+    "input": "issues/closed/019 \u5b50\u6a39\u8207sink\u4ea4\u63db\u53ef\u964d\u4f4ebuffer\u578b\u5225\u6210\u672c/repro/input001.cbi",
+    "seed": 17,
+    "strategy": "sa_lp",
+    "identical": true,
+    "score": 98,
+    "lp_calls_before": 102,
+    "lp_calls_after": 99
+  },
+  {
+    "input": "issues/closed/019 \u5b50\u6a39\u8207sink\u4ea4\u63db\u53ef\u964d\u4f4ebuffer\u578b\u5225\u6210\u672c/repro/input001.cbi",
+    "seed": 17,
+    "strategy": "hybrid",
+    "identical": true,
+    "score": 90,
+    "lp_calls_before": 95,
+    "lp_calls_after": 93
+  },
+  {
+    "input": "issues/closed/019 \u5b50\u6a39\u8207sink\u4ea4\u63db\u53ef\u964d\u4f4ebuffer\u578b\u5225\u6210\u672c/repro/input001.cbi",
+    "seed": 31,
+    "strategy": "sa_lp",
+    "identical": true,
+    "score": 98,
+    "lp_calls_before": 89,
+    "lp_calls_after": 89
+  },
+  {
+    "input": "issues/closed/019 \u5b50\u6a39\u8207sink\u4ea4\u63db\u53ef\u964d\u4f4ebuffer\u578b\u5225\u6210\u672c/repro/input001.cbi",
+    "seed": 31,
+    "strategy": "hybrid",
+    "identical": true,
+    "score": 97,
+    "lp_calls_before": 105,
+    "lp_calls_after": 105
+  },
+  {
+    "input": "issues/closed/019 \u5b50\u6a39\u8207sink\u4ea4\u63db\u53ef\u964d\u4f4ebuffer\u578b\u5225\u6210\u672c/repro/input001.cbi",
+    "seed": 101,
+    "strategy": "sa_lp",
+    "identical": true,
+    "score": 97,
+    "lp_calls_before": 86,
+    "lp_calls_after": 81
+  },
+  {
+    "input": "issues/closed/019 \u5b50\u6a39\u8207sink\u4ea4\u63db\u53ef\u964d\u4f4ebuffer\u578b\u5225\u6210\u672c/repro/input001.cbi",
+    "seed": 101,
+    "strategy": "hybrid",
+    "identical": true,
+    "score": 97,
+    "lp_calls_before": 111,
+    "lp_calls_after": 110
+  },
+  {
+    "input": "benchmarks/sa_lp/inputs/input015.cbi",
+    "seed": 1,
+    "strategy": "sa_lp",
+    "identical": true,
+    "score": 51,
+    "lp_calls_before": 114,
+    "lp_calls_after": 114
+  },
+  {
+    "input": "benchmarks/sa_lp/inputs/input015.cbi",
+    "seed": 1,
+    "strategy": "hybrid",
+    "identical": true,
+    "score": 46,
+    "lp_calls_before": 109,
+    "lp_calls_after": 109
+  },
+  {
+    "input": "benchmarks/sa_lp/inputs/input015.cbi",
+    "seed": 7,
+    "strategy": "sa_lp",
+    "identical": true,
+    "score": 76,
+    "lp_calls_before": 119,
+    "lp_calls_after": 119
+  },
+  {
+    "input": "benchmarks/sa_lp/inputs/input015.cbi",
+    "seed": 7,
+    "strategy": "hybrid",
+    "identical": true,
+    "score": 46,
+    "lp_calls_before": 101,
+    "lp_calls_after": 101
+  },
+  {
+    "input": "benchmarks/sa_lp/inputs/input015.cbi",
+    "seed": 17,
+    "strategy": "sa_lp",
+    "identical": true,
+    "score": 118,
+    "lp_calls_before": 111,
+    "lp_calls_after": 111
+  },
+  {
+    "input": "benchmarks/sa_lp/inputs/input015.cbi",
+    "seed": 17,
+    "strategy": "hybrid",
+    "identical": true,
+    "score": 46,
+    "lp_calls_before": 125,
+    "lp_calls_after": 125
+  },
+  {
+    "input": "benchmarks/sa_lp/inputs/input015.cbi",
+    "seed": 31,
+    "strategy": "sa_lp",
+    "identical": true,
+    "score": 77,
+    "lp_calls_before": 110,
+    "lp_calls_after": 110
+  },
+  {
+    "input": "benchmarks/sa_lp/inputs/input015.cbi",
+    "seed": 31,
+    "strategy": "hybrid",
+    "identical": true,
+    "score": 46,
+    "lp_calls_before": 106,
+    "lp_calls_after": 106
+  },
+  {
+    "input": "benchmarks/sa_lp/inputs/input015.cbi",
+    "seed": 101,
+    "strategy": "sa_lp",
+    "identical": true,
+    "score": 83,
+    "lp_calls_before": 106,
+    "lp_calls_after": 106
+  },
+  {
+    "input": "benchmarks/sa_lp/inputs/input015.cbi",
+    "seed": 101,
+    "strategy": "hybrid",
+    "identical": true,
+    "score": 46,
+    "lp_calls_before": 127,
+    "lp_calls_after": 127
+  },
+  {
+    "input": "benchmarks/sa_lp/inputs/input019.cbi",
+    "seed": 1,
+    "strategy": "sa_lp",
+    "identical": true,
+    "score": 8,
+    "lp_calls_before": 112,
+    "lp_calls_after": 96
+  },
+  {
+    "input": "benchmarks/sa_lp/inputs/input019.cbi",
+    "seed": 1,
+    "strategy": "hybrid",
+    "identical": true,
+    "score": 7,
+    "lp_calls_before": 114,
+    "lp_calls_after": 99
+  },
+  {
+    "input": "benchmarks/sa_lp/inputs/input019.cbi",
+    "seed": 7,
+    "strategy": "sa_lp",
+    "identical": true,
+    "score": 11,
+    "lp_calls_before": 102,
+    "lp_calls_after": 96
+  },
+  {
+    "input": "benchmarks/sa_lp/inputs/input019.cbi",
+    "seed": 7,
+    "strategy": "hybrid",
+    "identical": true,
+    "score": 7,
+    "lp_calls_before": 99,
+    "lp_calls_after": 89
+  },
+  {
+    "input": "benchmarks/sa_lp/inputs/input019.cbi",
+    "seed": 17,
+    "strategy": "sa_lp",
+    "identical": true,
+    "score": 11,
+    "lp_calls_before": 103,
+    "lp_calls_after": 92
+  },
+  {
+    "input": "benchmarks/sa_lp/inputs/input019.cbi",
+    "seed": 17,
+    "strategy": "hybrid",
+    "identical": true,
+    "score": 7,
+    "lp_calls_before": 114,
+    "lp_calls_after": 98
+  },
+  {
+    "input": "benchmarks/sa_lp/inputs/input019.cbi",
+    "seed": 31,
+    "strategy": "sa_lp",
+    "identical": true,
+    "score": 11,
+    "lp_calls_before": 107,
+    "lp_calls_after": 98
+  },
+  {
+    "input": "benchmarks/sa_lp/inputs/input019.cbi",
+    "seed": 31,
+    "strategy": "hybrid",
+    "identical": true,
+    "score": 7,
+    "lp_calls_before": 93,
+    "lp_calls_after": 87
+  },
+  {
+    "input": "benchmarks/sa_lp/inputs/input019.cbi",
+    "seed": 101,
+    "strategy": "sa_lp",
+    "identical": true,
+    "score": 10,
+    "lp_calls_before": 104,
+    "lp_calls_after": 93
+  },
+  {
+    "input": "benchmarks/sa_lp/inputs/input019.cbi",
+    "seed": 101,
+    "strategy": "hybrid",
+    "identical": true,
+    "score": 7,
+    "lp_calls_before": 114,
+    "lp_calls_after": 99
+  },
+  {
+    "input": "benchmarks/sa_lp/inputs/input023.cbi",
+    "seed": 1,
+    "strategy": "sa_lp",
+    "identical": true,
+    "score": 107,
+    "lp_calls_before": 102,
+    "lp_calls_after": 102
+  },
+  {
+    "input": "benchmarks/sa_lp/inputs/input023.cbi",
+    "seed": 1,
+    "strategy": "hybrid",
+    "identical": true,
+    "score": 107,
+    "lp_calls_before": 114,
+    "lp_calls_after": 114
+  },
+  {
+    "input": "benchmarks/sa_lp/inputs/input023.cbi",
+    "seed": 7,
+    "strategy": "sa_lp",
+    "identical": true,
+    "score": 108,
+    "lp_calls_before": 119,
+    "lp_calls_after": 117
+  },
+  {
+    "input": "benchmarks/sa_lp/inputs/input023.cbi",
+    "seed": 7,
+    "strategy": "hybrid",
+    "identical": true,
+    "score": 106,
+    "lp_calls_before": 107,
+    "lp_calls_after": 106
+  },
+  {
+    "input": "benchmarks/sa_lp/inputs/input023.cbi",
+    "seed": 17,
+    "strategy": "sa_lp",
+    "identical": true,
+    "score": 108,
+    "lp_calls_before": 108,
+    "lp_calls_after": 108
+  },
+  {
+    "input": "benchmarks/sa_lp/inputs/input023.cbi",
+    "seed": 17,
+    "strategy": "hybrid",
+    "identical": true,
+    "score": 107,
+    "lp_calls_before": 112,
+    "lp_calls_after": 110
+  },
+  {
+    "input": "benchmarks/sa_lp/inputs/input023.cbi",
+    "seed": 31,
+    "strategy": "sa_lp",
+    "identical": true,
+    "score": 108,
+    "lp_calls_before": 115,
+    "lp_calls_after": 114
+  },
+  {
+    "input": "benchmarks/sa_lp/inputs/input023.cbi",
+    "seed": 31,
+    "strategy": "hybrid",
+    "identical": true,
+    "score": 106,
+    "lp_calls_before": 127,
+    "lp_calls_after": 127
+  },
+  {
+    "input": "benchmarks/sa_lp/inputs/input023.cbi",
+    "seed": 101,
+    "strategy": "sa_lp",
+    "identical": true,
+    "score": 106,
+    "lp_calls_before": 119,
+    "lp_calls_after": 118
+  },
+  {
+    "input": "benchmarks/sa_lp/inputs/input023.cbi",
+    "seed": 101,
+    "strategy": "hybrid",
+    "identical": true,
+    "score": 105,
+    "lp_calls_before": 115,
+    "lp_calls_after": 113
+  },
+  {
+    "input": "benchmarks/sa_lp/inputs/input027.cbi",
+    "seed": 1,
+    "strategy": "sa_lp",
+    "identical": true,
+    "score": 17,
+    "lp_calls_before": 115,
+    "lp_calls_after": 111
+  },
+  {
+    "input": "benchmarks/sa_lp/inputs/input027.cbi",
+    "seed": 1,
+    "strategy": "hybrid",
+    "identical": true,
+    "score": 17,
+    "lp_calls_before": 115,
+    "lp_calls_after": 111
+  },
+  {
+    "input": "benchmarks/sa_lp/inputs/input027.cbi",
+    "seed": 7,
+    "strategy": "sa_lp",
+    "identical": true,
+    "score": 16,
+    "lp_calls_before": 110,
+    "lp_calls_after": 106
+  },
+  {
+    "input": "benchmarks/sa_lp/inputs/input027.cbi",
+    "seed": 7,
+    "strategy": "hybrid",
+    "identical": true,
+    "score": 16,
+    "lp_calls_before": 110,
+    "lp_calls_after": 106
+  },
+  {
+    "input": "benchmarks/sa_lp/inputs/input027.cbi",
+    "seed": 17,
+    "strategy": "sa_lp",
+    "identical": true,
+    "score": 17,
+    "lp_calls_before": 114,
+    "lp_calls_after": 110
+  },
+  {
+    "input": "benchmarks/sa_lp/inputs/input027.cbi",
+    "seed": 17,
+    "strategy": "hybrid",
+    "identical": true,
+    "score": 17,
+    "lp_calls_before": 114,
+    "lp_calls_after": 110
+  },
+  {
+    "input": "benchmarks/sa_lp/inputs/input027.cbi",
+    "seed": 31,
+    "strategy": "sa_lp",
+    "identical": true,
+    "score": 17,
+    "lp_calls_before": 113,
+    "lp_calls_after": 108
+  },
+  {
+    "input": "benchmarks/sa_lp/inputs/input027.cbi",
+    "seed": 31,
+    "strategy": "hybrid",
+    "identical": true,
+    "score": 17,
+    "lp_calls_before": 113,
+    "lp_calls_after": 108
+  },
+  {
+    "input": "benchmarks/sa_lp/inputs/input027.cbi",
+    "seed": 101,
+    "strategy": "sa_lp",
+    "identical": true,
+    "score": 17,
+    "lp_calls_before": 111,
+    "lp_calls_after": 111
+  },
+  {
+    "input": "benchmarks/sa_lp/inputs/input027.cbi",
+    "seed": 101,
+    "strategy": "hybrid",
+    "identical": true,
+    "score": 17,
+    "lp_calls_before": 111,
+    "lp_calls_after": 111
+  }
+]

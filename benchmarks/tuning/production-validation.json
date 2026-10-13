@@ -1,0 +1,67 @@
+{
+  "environment": {
+    "os": "PRETTY_NAME=\"Ubuntu 24.04.5 LTS\"\nNAME=\"Ubuntu\"\nVERSION_ID=\"24.04\"\nVERSION=\"24.04.5 LTS (Noble Numbat)\"\nVERSION_CODENAME=noble\nID=ubuntu\nID_LIKE=debian\nHOME_URL=\"https://www.ubuntu.com/\"\nSUPPORT_URL=\"https://help.ubuntu.com/\"\nBUG_REPORT_URL=\"https://bugs.launchpad.net/ubuntu/\"\nPRIVACY_POLICY_URL=\"https://www.ubuntu.com/legal/terms-and-policies/privacy-policy\"\nUBUNTU_CODENAME=noble\nLOGO=ubuntu-logo\n",
+    "uid": 1000,
+    "cpu_max": "200000 100000\n",
+    "memory_max": "8589934592\n",
+    "network_interfaces": [
+      "lo"
+    ],
+    "cpu_affinity": [
+      0,
+      1
+    ],
+    "versions": {
+      "g++": "g++ (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0",
+      "cmake": "cmake version 3.28.3",
+      "python3": "Python 3.12.3",
+      "ldd": "ldd (Ubuntu GLIBC 2.39-0ubuntu8.9) 2.39"
+    }
+  },
+  "clean_build": {
+    "configure_and_build_seconds": 27.50418104900018,
+    "peak_rss_kib": 463812,
+    "serial": true,
+    "build_testing": false,
+    "passed": true
+  },
+  "regression": {
+    "suites": [
+      "search",
+      "annealing",
+      "solver",
+      "cli"
+    ],
+    "passed": 4,
+    "failed": 0,
+    "seconds": 99.12620598900321
+  },
+  "equivalence": {
+    "cases": 12,
+    "seeds": [
+      1,
+      7,
+      17,
+      31,
+      101
+    ],
+    "strategies": [
+      "sa_lp",
+      "hybrid"
+    ],
+    "iterations": 100,
+    "seconds_budget": 25,
+    "comparisons": 120,
+    "byte_identical": true,
+    "independently_legal": true,
+    "lp_calls_before": 13263,
+    "lp_calls_after": 12576,
+    "lp_reduction": 0.05179823569328206
+  },
+  "before_binary_sha256": "2fda9e146c3de33c6151a4f957569a5359bd1a5b07892b6912fb6e381b468090",
+  "after_binary_sha256": "1886a5949fbf85b11e09ce202cd0dd7ab62f61e0cd1b1355f91fa698052be9e3",
+  "production_source_sha256": {
+    "src/search/annealing.cpp": "466a57b5caf60ae1267f1889fc82b9f1f954943c6033541405e9683f42eaf025"
+  },
+  "limitations": "Fixed-time annealing may follow a different trajectory after skipping work. These checks establish fixed-iteration output identity and fewer LP calls, not universal timed Score improvement."
+}

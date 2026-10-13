@@ -1,0 +1,266 @@
+[
+  {
+    "input": "benchmarks/sa_lp/inputs/input000.cbi",
+    "strategy": "sa_lp",
+    "baseline_identical": true,
+    "unique_identical": true,
+    "scores": [
+      26,
+      26,
+      26
+    ]
+  },
+  {
+    "input": "benchmarks/sa_lp/inputs/input000.cbi",
+    "strategy": "hybrid",
+    "baseline_identical": true,
+    "unique_identical": true,
+    "scores": [
+      26,
+      26,
+      26
+    ]
+  },
+  {
+    "input": "benchmarks/sa_lp/inputs/input003.cbi",
+    "strategy": "sa_lp",
+    "baseline_identical": true,
+    "unique_identical": true,
+    "scores": [
+      76,
+      76,
+      76
+    ]
+  },
+  {
+    "input": "benchmarks/sa_lp/inputs/input003.cbi",
+    "strategy": "hybrid",
+    "baseline_identical": true,
+    "unique_identical": true,
+    "scores": [
+      38,
+      38,
+      38
+    ]
+  },
+  {
+    "input": "benchmarks/sa_lp/inputs/input006.cbi",
+    "strategy": "sa_lp",
+    "baseline_identical": true,
+    "unique_identical": true,
+    "scores": [
+      112,
+      112,
+      112
+    ]
+  },
+  {
+    "input": "benchmarks/sa_lp/inputs/input006.cbi",
+    "strategy": "hybrid",
+    "baseline_identical": true,
+    "unique_identical": true,
+    "scores": [
+      112,
+      112,
+      112
+    ]
+  },
+  {
+    "input": "benchmarks/sa_lp/inputs/input009.cbi",
+    "strategy": "sa_lp",
+    "baseline_identical": true,
+    "unique_identical": true,
+    "scores": [
+      15,
+      15,
+      15
+    ]
+  },
+  {
+    "input": "benchmarks/sa_lp/inputs/input009.cbi",
+    "strategy": "hybrid",
+    "baseline_identical": true,
+    "unique_identical": true,
+    "scores": [
+      15,
+      15,
+      15
+    ]
+  },
+  {
+    "input": "benchmarks/sa_lp/inputs/input012.cbi",
+    "strategy": "sa_lp",
+    "baseline_identical": true,
+    "unique_identical": true,
+    "scores": [
+      112,
+      112,
+      112
+    ]
+  },
+  {
+    "input": "benchmarks/sa_lp/inputs/input012.cbi",
+    "strategy": "hybrid",
+    "baseline_identical": true,
+    "unique_identical": true,
+    "scores": [
+      107,
+      107,
+      107
+    ]
+  },
+  {
+    "input": "benchmarks/sa_lp/inputs/input014.cbi",
+    "strategy": "sa_lp",
+    "baseline_identical": true,
+    "unique_identical": true,
+    "scores": [
+      44,
+      44,
+      44
+    ]
+  },
+  {
+    "input": "benchmarks/sa_lp/inputs/input014.cbi",
+    "strategy": "hybrid",
+    "baseline_identical": true,
+    "unique_identical": true,
+    "scores": [
+      44,
+      44,
+      44
+    ]
+  },
+  {
+    "input": "example/input.cbi",
+    "strategy": "sa_lp",
+    "baseline_identical": true,
+    "unique_identical": true,
+    "scores": [
+      37,
+      37,
+      37
+    ]
+  },
+  {
+    "input": "example/input.cbi",
+    "strategy": "hybrid",
+    "baseline_identical": true,
+    "unique_identical": true,
+    "scores": [
+      37,
+      37,
+      37
+    ]
+  },
+  {
+    "input": "issues/closed/019 \u5b50\u6a39\u8207sink\u4ea4\u63db\u53ef\u964d\u4f4ebuffer\u578b\u5225\u6210\u672c/repro/input001.cbi",
+    "strategy": "sa_lp",
+    "baseline_identical": true,
+    "unique_identical": true,
+    "scores": [
+      90,
+      90,
+      90
+    ]
+  },
+  {
+    "input": "issues/closed/019 \u5b50\u6a39\u8207sink\u4ea4\u63db\u53ef\u964d\u4f4ebuffer\u578b\u5225\u6210\u672c/repro/input001.cbi",
+    "strategy": "hybrid",
+    "baseline_identical": true,
+    "unique_identical": true,
+    "scores": [
+      105,
+      105,
+      105
+    ]
+  },
+  {
+    "input": "benchmarks/sa_lp/inputs/input015.cbi",
+    "strategy": "sa_lp",
+    "baseline_identical": true,
+    "unique_identical": true,
+    "scores": [
+      76,
+      76,
+      76
+    ]
+  },
+  {
+    "input": "benchmarks/sa_lp/inputs/input015.cbi",
+    "strategy": "hybrid",
+    "baseline_identical": true,
+    "unique_identical": true,
+    "scores": [
+      46,
+      46,
+      46
+    ]
+  },
+  {
+    "input": "benchmarks/sa_lp/inputs/input019.cbi",
+    "strategy": "sa_lp",
+    "baseline_identical": true,
+    "unique_identical": true,
+    "scores": [
+      11,
+      11,
+      11
+    ]
+  },
+  {
+    "input": "benchmarks/sa_lp/inputs/input019.cbi",
+    "strategy": "hybrid",
+    "baseline_identical": true,
+    "unique_identical": true,
+    "scores": [
+      7,
+      7,
+      7
+    ]
+  },
+  {
+    "input": "benchmarks/sa_lp/inputs/input023.cbi",
+    "strategy": "sa_lp",
+    "baseline_identical": true,
+    "unique_identical": true,
+    "scores": [
+      108,
+      108,
+      108
+    ]
+  },
+  {
+    "input": "benchmarks/sa_lp/inputs/input023.cbi",
+    "strategy": "hybrid",
+    "baseline_identical": true,
+    "unique_identical": true,
+    "scores": [
+      106,
+      106,
+      106
+    ]
+  },
+  {
+    "input": "benchmarks/sa_lp/inputs/input027.cbi",
+    "strategy": "sa_lp",
+    "baseline_identical": true,
+    "unique_identical": true,
+    "scores": [
+      16,
+      16,
+      16
+    ]
+  },
+  {
+    "input": "benchmarks/sa_lp/inputs/input027.cbi",
+    "strategy": "hybrid",
+    "baseline_identical": true,
+    "unique_identical": true,
+    "scores": [
+      16,
+      16,
+      16
+    ]
+  }
+]

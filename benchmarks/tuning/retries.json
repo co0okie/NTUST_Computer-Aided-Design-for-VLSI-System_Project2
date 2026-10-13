@@ -1,0 +1,60 @@
+{
+  "confirm": [
+    {
+      "attempts": 47778,
+      "successful": 39310,
+      "improvements": 34,
+      "lp_failed": 5878,
+      "repair_failed": 2590,
+      "skipped": 0,
+      "seconds": 368.542483933
+    },
+    {
+      "attempts": 8456,
+      "successful": 454,
+      "improvements": 0,
+      "lp_failed": 5558,
+      "repair_failed": 2444,
+      "skipped": 0,
+      "seconds": 55.346916326
+    },
+    {
+      "attempts": 7999,
+      "successful": 1211,
+      "improvements": 0,
+      "lp_failed": 4610,
+      "repair_failed": 2178,
+      "skipped": 0,
+      "seconds": 58.345634645
+    }
+  ],
+  "screen": [
+    {
+      "attempts": 3370,
+      "successful": 2789,
+      "improvements": 20,
+      "lp_failed": 503,
+      "repair_failed": 78,
+      "skipped": 0,
+      "seconds": 21.908765651
+    },
+    {
+      "attempts": 581,
+      "successful": 65,
+      "improvements": 0,
+      "lp_failed": 442,
+      "repair_failed": 74,
+      "skipped": 0,
+      "seconds": 2.057257098
+    },
+    {
+      "attempts": 516,
+      "successful": 84,
+      "improvements": 0,
+      "lp_failed": 372,
+      "repair_failed": 60,
+      "skipped": 0,
+      "seconds": 2.101698398
+    }
+  ]
+}
