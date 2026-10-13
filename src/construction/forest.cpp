@@ -61,8 +61,8 @@ std::vector<int> buffer_policies(Problem const& p, bool branching) {
 bool tree_less(Tree const& a, Tree const& b) {
     return std::lexicographical_compare(a.begin(), a.end(), b.begin(), b.end(),
         [](Node const& x, Node const& y) {
-            return std::tie(x.position.x, x.position.y, x.type, x.children) <
-                   std::tie(y.position.x, y.position.y, y.type, y.children);
+            return std::make_tuple(x.position.x, x.position.y, x.ordering_key(), x.children) <
+                   std::make_tuple(y.position.x, y.position.y, y.ordering_key(), y.children);
         });
 }
 
@@ -201,13 +201,13 @@ std::optional<Tree> small_forest(Problem const& p, std::size_t& remaining_trials
                         for (auto it = slots.rbegin(); it != slots.rend(); ++it)
                             trial.roots.erase(trial.roots.begin() + static_cast<std::ptrdiff_t>(*it));
                         trial.roots.push_back(trial.tree.size());
-                        trial.tree.push_back({s, type, children});
+                        trial.tree.push_back({s, BufferTypeId{static_cast<std::size_t>(type)}, children});
                         trial.priority = 0;
                         for (auto root : trial.roots)
                             trial.priority = add(trial.priority, distance(p.source, trial.tree[root].position));
                         for (auto const& n : trial.tree)
-                            if (n.type >= 0) trial.priority = add(trial.priority,
-                                p.buffer_library[static_cast<std::size_t>(n.type)].cost);
+                            if (n.is_buffer()) trial.priority = add(trial.priority,
+                                p.buffer_library[n.type_index()].cost);
                         auto it = std::lower_bound(next.begin(), next.end(), trial, less);
                         if (it == next.end() || less(trial, *it)) next.insert(it, std::move(trial));
                         if (next.size() > 64) next.pop_back();
@@ -354,7 +354,7 @@ std::optional<Tree> dense_forest_search(Problem const& p, std::size_t& work, boo
             for (std::size_t i = 0; i < positions.size(); ++i) {
                 if (!(mask & (std::size_t{1} << i))) continue;
                 auto const node = tree.size();
-                tree.push_back({positions[i], 0, {}});
+                tree.push_back({positions[i], BufferTypeId{0}, {}});
                 drivers.push_back(node);
                 if (!hierarchical) {
                     tree[0].children.push_back(node);

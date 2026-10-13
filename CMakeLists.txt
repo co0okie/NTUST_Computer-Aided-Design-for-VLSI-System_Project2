@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.16)
 project(cbi LANGUAGES CXX)
 
 add_library(cbi_core STATIC
-    src/core/tree.cpp src/io/input.cpp src/io/output.cpp
+    src/core/tree.cpp src/core/check.cpp src/io/input.cpp src/io/output.cpp
     src/construction/builder.cpp src/construction/forest.cpp
     src/search/local.cpp src/solver/legacy.cpp)
 target_include_directories(cbi_core PUBLIC src)

@@ -17,12 +17,12 @@ std::string serialize_tree(Problem const& p, Tree const& tree) {
     std::size_t buffers = 0, sinks = 0;
     names[0] = "SRC";
     for (std::size_t i = 1; i < tree.size(); ++i)
-        names[i] = tree[i].type == -2 ? "S" + std::to_string(++sinks) : "B" + std::to_string(++buffers);
+        names[i] = tree[i].is_sink() ? "S" + std::to_string(++sinks) : "B" + std::to_string(++buffers);
     std::ostringstream output;
     output << ".buffer " << buffers << '\n';
     for (std::size_t i = 1; i < tree.size(); ++i) {
-        if (tree[i].type < 0) continue;
-        output << names[i] << ' ' << p.buffer_library[static_cast<std::size_t>(tree[i].type)].name
+        if (!tree[i].is_buffer()) continue;
+        output << names[i] << ' ' << p.buffer_library[tree[i].type_index()].name
                << ' ' << tree[i].position.x << ' ' << tree[i].position.y << '\n';
     }
     std::vector<std::size_t> queue{0};

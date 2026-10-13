@@ -147,13 +147,13 @@ Tree contract_large_tree(Problem const& p, Tree const& original, std::size_t* sh
     bool changed = false;
     for (auto it = order.rbegin(); it != order.rend() && work; ++it) {
         auto const parent = *it;
-        if (tree[parent].type == -2 || tree[parent].children.size() > 64) continue;
+        if (tree[parent].is_sink() || tree[parent].children.size() > 64) continue;
         for (std::size_t slot = 0; slot < tree[parent].children.size() && work;) {
             --work;
             auto const child = tree[parent].children[slot];
             auto const& grandchildren = tree[child].children;
             auto const degree = tree[parent].children.size() - 1 + grandchildren.size();
-            if (tree[child].type < 0 || degree > 64) { ++slot; continue; }
+            if (!tree[child].is_buffer() || degree > 64) { ++slot; continue; }
             try {
                 auto const edge = distance(tree[parent].position, tree[child].position);
                 Integer length = wire[parent] - edge;
@@ -168,8 +168,8 @@ Tree contract_large_tree(Problem const& p, Tree const& original, std::size_t* sh
                     length = add(length, direct);
                 }
                 if (!equal) { ++slot; continue; }
-                auto const old_cost = parent == 0 ? 0 : p.buffer_library[static_cast<std::size_t>(tree[parent].type)].cost;
-                auto const saved_cost = add(old_cost, p.buffer_library[static_cast<std::size_t>(tree[child].type)].cost);
+                auto const old_cost = parent == 0 ? 0 : p.buffer_library[tree[parent].type_index()].cost;
+                auto const saved_cost = add(old_cost, p.buffer_library[tree[child].type_index()].cost);
                 int type = -1;
                 Integer cost = 0;
                 if (parent == 0) {
@@ -189,7 +189,7 @@ Tree contract_large_tree(Problem const& p, Tree const& original, std::size_t* sh
                 children.erase(children.begin() + static_cast<std::ptrdiff_t>(slot));
                 children.insert(children.begin() + static_cast<std::ptrdiff_t>(slot), grandchildren.begin(), grandchildren.end());
                 tree[parent].children = std::move(children);
-                if (parent != 0) tree[parent].type = type;
+                if (parent != 0) tree[parent].set_buffer_type(BufferTypeId{static_cast<std::size_t>(type)});
                 wire[parent] = length; removed[child] = true; changed = true;
                 // Newly exposed grandchildren were already processed bottom-up.
                 slot += grandchildren.size();
@@ -385,7 +385,7 @@ Tree reparent_leaves(Problem const& p, Tree best, std::size_t* remaining_trials)
             // Keep every existing component connected and every buffer nonempty.
             if (best[from].children.size() == 1) continue;
             for (std::size_t target = 0; target < best.size() && trials < trial_limit; ++target) {
-                if (target == from || best[target].type == -2) continue;
+                if (target == from || best[target].is_sink()) continue;
                 auto const capacity = target == 0 ? p.source_limits.fanout : max_fanout;
                 if (best[target].children.size() >= static_cast<std::uint64_t>(capacity)) continue;
                 ++trials;
@@ -483,7 +483,7 @@ Tree delay_tree(Problem const& p, Tree best, std::size_t* remaining_trials,
                         if (add(distance(a, point), distance(point, b)) <= distance(a, b)) continue;
                         auto candidate = best;
                         candidate[parent].children[k] = candidate.size();
-                        candidate.push_back({point, 0, {child}});
+                        candidate.push_back({point, BufferTypeId{0}, {child}});
                         select_buffer_types(p, candidate);
                         auto const metrics = validate_tree(p, candidate);
                         if (metrics.score < next_score) {

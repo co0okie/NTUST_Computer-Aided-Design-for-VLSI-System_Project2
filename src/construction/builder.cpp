@@ -74,7 +74,7 @@ class BuilderImpl {
             --*construction_work;
         }
         occupied.emplace(s.x, s.y);
-        tree.push_back({s, type, std::move(children)});
+        tree.push_back({s, BufferTypeId{static_cast<std::size_t>(type)}, std::move(children)});
         return tree.size() - 1;
     }
 
@@ -308,7 +308,7 @@ class BuilderImpl {
                 select_buffer_types(p, trial.tree);
                 Integer cost = 0;
                 for (std::size_t i = p.sinks.size() + 1; i < trial.tree.size(); ++i)
-                    cost = add(cost, p.buffer_library[static_cast<std::size_t>(trial.tree[i].type)].cost);
+                    cost = add(cost, p.buffer_library[trial.tree[i].type_index()].cost);
                 if (!best || cost < best_cost) { best_cost = cost; best.emplace(std::move(trial)); }
             } catch (std::runtime_error const&) {}
         }

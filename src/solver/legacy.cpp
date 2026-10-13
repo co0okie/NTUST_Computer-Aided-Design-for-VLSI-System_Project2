@@ -255,7 +255,7 @@ Tree partial_hub_tree(Problem const& p, Tree best, std::size_t* shared_trials, b
                     if (next_score >= score) continue;
                     auto candidate = initial_tree(p, false);
                     candidate[0].children = direct; candidate[0].children.push_back(candidate.size());
-                    candidate.push_back({position, type, children});
+                    candidate.push_back({position, BufferTypeId{static_cast<std::size_t>(type)}, children});
                     auto const metrics = validate_tree(p, candidate);
                     if (metrics.score < score) { score = metrics.score; best = std::move(candidate); }
                 } catch (std::runtime_error const&) {}

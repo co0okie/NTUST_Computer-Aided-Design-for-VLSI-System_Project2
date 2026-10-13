@@ -78,11 +78,11 @@ void scheduler() {
     cbi::Problem const p{{3, 78}, {40, 40}, {{"T0", 4, 84, 1}}, 9, {12, 28},
                         {{34,20},{24,13},{38,19},{20,1},{9,35},{37,29},{1,12},{15,26},{34,18},{26,35}}};
     auto initial = cbi::initial_tree(p, false);
-    initial.push_back({{9,5}, 0, {7,4}});
-    initial.push_back({{23,31}, 0, {2,13,5}});
-    initial.push_back({{28,29}, 0, {10,6}});
-    initial.push_back({{29,27}, 0, {9,3,1,8}});
-    initial.push_back({{15,20}, 0, {11,12,14}});
+    initial.push_back({{9,5}, cbi::BufferTypeId{0}, {7,4}});
+    initial.push_back({{23,31}, cbi::BufferTypeId{0}, {2,13,5}});
+    initial.push_back({{28,29}, cbi::BufferTypeId{0}, {10,6}});
+    initial.push_back({{29,27}, cbi::BufferTypeId{0}, {9,3,1,8}});
+    initial.push_back({{15,20}, cbi::BufferTypeId{0}, {11,12,14}});
     initial[0].children = {15};
     auto const start = cbi::validate_tree(p, initial).score;
     require(start == 50, "scheduler fixture score");
@@ -166,7 +166,7 @@ void incremental_relocations() {
     // All unchanged buffers must also receive their cheapest compatible type.
     p.buffer_library.push_back({"T1", 4, 1000, 7});
     for (std::size_t i = p.sinks.size() + 1; i < tree.size(); ++i) {
-        tree[i].type = 1;
+        tree[i].set_buffer_type(cbi::BufferTypeId{1});
         // Construction's virtual offsets must never replace actual arrivals.
         tree[i].low = 12345; tree[i].high = 67890;
     }
@@ -185,7 +185,7 @@ void incremental_relocations() {
     p = {{1, maximum}, {maximum, maximum}, {{"T0", 2, maximum, 1}},
          1, {0, 0}, {{10, 10}, {10, 12}}};
     tree = cbi::initial_tree(p, false);
-    tree.push_back({{9, 11}, 0, {1, 2}}); tree[0].children = {3};
+    tree.push_back({{9, 11}, cbi::BufferTypeId{0}, {1, 2}}); tree[0].children = {3};
     compare_relocations(p, tree, {{9, 11}, {maximum - 1, 1}, {1, maximum - 1}, {maximum - 1, maximum - 1}});
     // Overflow in weighted skew and buffer-cost reselection must be rejected.
     p.skew_weight = maximum;
@@ -242,7 +242,7 @@ void dense_hierarchy_budgets() {
 void joint_hub_budgets() {
     cbi::Problem const p{{3, 23}, {15, 15}, {{"T0", 3, 16, 6}}, 3, {2, 12}, {{2, 2}, {13, 11}, {6, 7}}};
     auto initial = cbi::initial_tree(p, false);
-    initial.push_back({{7, 11}, 0, {3, 2}}); initial[0].children = {1, 4};
+    initial.push_back({{7, 11}, cbi::BufferTypeId{0}, {3, 2}}); initial[0].children = {1, 4};
     require(cbi::validate_tree(p, initial).score == 12, "joint move plateau fixture");
     for (std::size_t cap : {std::size_t{0}, std::size_t{1}, std::size_t{100}, std::size_t{100000}}) {
         auto trials = cap;
@@ -303,8 +303,8 @@ void layered_rings() {
 void joint_bypass_budgets() {
     cbi::Problem p{{4, 6}, {9, 9}, {{"T0", 2, 14, 3}}, 34, {5, 3}, {{6, 1}, {4, 9}, {0, 3}, {6, 3}}};
     auto initial = cbi::initial_tree(p, false);
-    initial.push_back({{4, 3}, 0, {3, 1}}); initial.push_back({{4, 5}, 0, {4, 2}});
-    initial.push_back({{4, 4}, 0, {5, 6}}); initial[0].children = {7};
+    initial.push_back({{4, 3}, cbi::BufferTypeId{0}, {3, 1}}); initial.push_back({{4, 5}, cbi::BufferTypeId{0}, {4, 2}});
+    initial.push_back({{4, 4}, cbi::BufferTypeId{0}, {5, 6}}); initial[0].children = {7};
     require(cbi::validate_tree(p, initial).score == 9, "joint bypass plateau fixture");
     for (std::size_t cap : {std::size_t{0}, std::size_t{1}, std::size_t{100}, std::size_t{100000}}) {
         auto work = cap;

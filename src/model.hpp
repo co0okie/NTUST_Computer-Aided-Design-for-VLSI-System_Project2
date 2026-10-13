@@ -7,8 +7,11 @@
 
 namespace cbi {
 
+enum class ErrorKind { input, structure, geometry, capacity, overflow, timeout, numerical, solver };
+
 struct Error {
     std::string message;
+    ErrorKind kind = ErrorKind::input;
 };
 
 template <typename T>
