@@ -1,8 +1,9 @@
 # Clock Buffer Insertion
 
 C++17 solver for CAD Project 2. It reads driving limits, a buffer library and
-fixed pins, then writes a legal levelized clock tree. Runtime dependencies are
-limited to the C++ standard library.
+fixed pins, then writes a legal levelized clock tree. A pinned HiGHS static
+library is bundled under `src/vendor/highs/`; builds need no network access or
+third-party compilation. Linux x86-64 with the GNU C++ ABI is required.
 
 ## Build and run
 
@@ -16,6 +17,39 @@ The first two arguments are input and output paths; relative paths are supported
 Success prints `T_max`, `T_min`, and `Score`. Failures print a diagnostic to stderr
 and return nonzero. Parsing and tree validation finish before the output file is
 opened, so rejected instances preserve any existing output.
+
+## Strategy selection and new search
+
+The default is `hybrid`, preserving the established solver's legal incumbent
+before SA + LP searches for improvements. Both methods remain selectable:
+
+```sh
+./build/cbi example/input.cbi /tmp/output001.cbi --strategy current
+./build/cbi example/input.cbi /tmp/output001.cbi --strategy sa_lp --seed 7 --time 5
+./build/cbi example/input.cbi /tmp/output001.cbi --strategy hybrid --time 55 --stats /tmp/search.json
+```
+
+The default whole-program search limit is 55 seconds, with headroom under the
+assignment's 60-second runtime limit. `--time` accepts `(0,55]`; reaching a proven
+Score lower bound stops search early. No failed candidate replaces a legal result.
+
+Search controls include `--iterations`, `--seed`, `--temperature`,
+`--cooling-ratio`, `--move-weights` (seven comma-separated weights), `--locality`,
+`--locality-k`, `--subtree-sinks`, `--current-fraction`, `--lp-time`,
+`--repair-trials`, `--max-lp-nodes`, `--structural-repair 0|1` and
+`--wire-tiebreak 0|1`. Fixed iterations provide reproducibility when timeouts do
+not intervene. `--stats FILE` writes JSON with actual incumbent checkpoints and
+per-move/LP/repair counts and timing.
+
+See [implementation and trade-offs](docs/sa-lp.md) and
+[comparison results](benchmarks/sa_lp/README.md). Source is separated into core,
+IO, construction, search and orchestration modules. It follows explicit ownership,
+value semantics, typed node roles/IDs, checked arithmetic and result-based search
+errors, retaining C++17.
+
+Run all tests with `ctest --test-dir build --output-on-failure`. For ASan/UBSan,
+configure a Debug build with `-DCBI_SANITIZERS=ON`; on ptrace-restricted environments
+use `ASAN_OPTIONS=detect_leaks=0` when running tests.
 
 ## Construction and optimization
 

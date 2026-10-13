@@ -1,0 +1,261 @@
+{
+  "short_cases": 79,
+  "runs": {
+    "short": 869,
+    "long": 33,
+    "ablation": 144,
+    "holdout": 90
+  },
+  "illegal_or_failed": 0,
+  "sa_lp": {
+    "median_cases": {
+      "better": 11,
+      "equal": 43,
+      "worse": 25
+    },
+    "seed_runs": {
+      "equal": 214,
+      "better": 61,
+      "worse": 120
+    }
+  },
+  "hybrid": {
+    "median_cases": {
+      "better": 14,
+      "equal": 65
+    },
+    "seed_runs": {
+      "equal": 319,
+      "better": 76
+    }
+  },
+  "long": {
+    "example/input.cbi": {
+      "current": [
+        41
+      ],
+      "sa_lp": [
+        37,
+        37,
+        37,
+        37,
+        37
+      ],
+      "hybrid": [
+        37,
+        37,
+        37,
+        37,
+        37
+      ]
+    },
+    "benchmarks/sa_lp/inputs/input024.cbi": {
+      "current": [
+        64
+      ],
+      "sa_lp": [
+        50,
+        53,
+        50,
+        50,
+        50
+      ],
+      "hybrid": [
+        50,
+        51,
+        51,
+        50,
+        53
+      ]
+    },
+    "issues/closed/019 子樹與sink交換可降低buffer型別成本/repro/input001.cbi": {
+      "current": [
+        105
+      ],
+      "sa_lp": [
+        63,
+        69,
+        63,
+        69,
+        63
+      ],
+      "hybrid": [
+        63,
+        63,
+        63,
+        70,
+        68
+      ]
+    }
+  },
+  "metadata": {
+    "short": {
+      "binary_sha256": "28ac2cc8853e41de28a1b8df2253760629b2ed47a6d2490e8151486666f5004e",
+      "platform": "Linux-5.14.0-687.17.1.el9_8.x86_64-x86_64-with-glibc2.34",
+      "jobs": 3,
+      "budgets": [
+        1.0
+      ],
+      "seeds": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "extra": [],
+      "inputs": [
+        "example/input.cbi",
+        "benchmarks/sa_lp/inputs/input000.cbi",
+        "benchmarks/sa_lp/inputs/input001.cbi",
+        "benchmarks/sa_lp/inputs/input002.cbi",
+        "benchmarks/sa_lp/inputs/input003.cbi",
+        "benchmarks/sa_lp/inputs/input004.cbi",
+        "benchmarks/sa_lp/inputs/input005.cbi",
+        "benchmarks/sa_lp/inputs/input006.cbi",
+        "benchmarks/sa_lp/inputs/input007.cbi",
+        "benchmarks/sa_lp/inputs/input008.cbi",
+        "benchmarks/sa_lp/inputs/input009.cbi",
+        "benchmarks/sa_lp/inputs/input010.cbi",
+        "benchmarks/sa_lp/inputs/input011.cbi",
+        "benchmarks/sa_lp/inputs/input012.cbi",
+        "benchmarks/sa_lp/inputs/input013.cbi",
+        "benchmarks/sa_lp/inputs/input014.cbi",
+        "benchmarks/sa_lp/inputs/input015.cbi",
+        "benchmarks/sa_lp/inputs/input016.cbi",
+        "benchmarks/sa_lp/inputs/input017.cbi",
+        "benchmarks/sa_lp/inputs/input018.cbi",
+        "benchmarks/sa_lp/inputs/input019.cbi",
+        "benchmarks/sa_lp/inputs/input020.cbi",
+        "benchmarks/sa_lp/inputs/input021.cbi",
+        "benchmarks/sa_lp/inputs/input022.cbi",
+        "benchmarks/sa_lp/inputs/input023.cbi",
+        "benchmarks/sa_lp/inputs/input024.cbi",
+        "benchmarks/sa_lp/inputs/input025.cbi",
+        "benchmarks/sa_lp/inputs/input026.cbi",
+        "benchmarks/sa_lp/inputs/input027.cbi",
+        "benchmarks/sa_lp/inputs/input028.cbi",
+        "benchmarks/sa_lp/inputs/input029.cbi",
+        "issues/closed/001 單輸出buffer庫誤判SRC可分支的合法解/input001.cbi",
+        "issues/closed/001 單輸出buffer庫誤判SRC可分支的合法解/input002.cbi",
+        "issues/closed/002 邊界同軸連線缺少向內繞行的relay/input001.cbi",
+        "issues/closed/003 固定二元樹漏掉低成本多輸出合併/input001.cbi",
+        "issues/closed/004 hub選點漏算SRC接入relay成本/input001.cbi",
+        "issues/closed/005 relay固定最大線長型別造成高成本/input001.cbi",
+        "issues/closed/006 relay間距政策缺少中段混合型別優化/input001.cbi",
+        "issues/closed/007 分支buffer固定最大線長漏掉廉價分支加relay/input001.cbi",
+        "issues/closed/008 局部子樹仍固定二元分支漏掉多輸出合併/input001.cbi",
+        "issues/closed/009 建構同分候選提前丟棄錯失局部改善/input001.cbi",
+        "issues/closed/010 分支總線長平均分配漏掉較低relay成本/input001.cbi",
+        "issues/closed/011 固定拓樸缺少buffer位置微調錯失較低skew/input001.cbi",
+        "issues/closed/012 缺少跨分支sink交換造成可避免的skew/input001.cbi",
+        "issues/closed/013 後續位置與連線改善後未重試buffer合併/input001.cbi",
+        "issues/closed/014 缺少單一sink改接以使用分支剩餘容量/input001.cbi",
+        "issues/closed/015 短路徑缺少延遲relay插入而錯失零skew/input001.cbi",
+        "issues/closed/015 短路徑缺少延遲relay插入而錯失零skew/input002.cbi",
+        "issues/closed/016 局部建構候選無回退漏掉小型合法樹/input001.cbi",
+        "issues/closed/017 完整refinement前依初始Score淘汰可改善候選/input001.cbi",
+        "issues/closed/018 大樹跳過多輸出改善保留三倍buffer成本/input001.cbi",
+        "issues/closed/019 子樹與sink交換可降低buffer型別成本/repro/input001.cbi",
+        "issues/closed/020 密集晶片二元建構漏掉合法三輸出forest/repro/input001.cbi",
+        "issues/closed/020 密集晶片二元建構漏掉合法三輸出forest/repro/input002.cbi",
+        "issues/closed/021 固定三根merge漏掉合法四五輸出forest/repro/input001.cbi",
+        "issues/closed/021 固定三根merge漏掉合法四五輸出forest/repro/input002.cbi",
+        "issues/closed/021 固定三根merge漏掉合法四五輸出forest/repro/input003.cbi",
+        "issues/closed/022 最終結果漏掉既有delay改善/repro/input001.cbi",
+        "issues/closed/023 密集晶片多輸出建構漏掉十六sink合法forest/repro/input001.cbi",
+        "issues/closed/023 密集晶片多輸出建構漏掉十六sink合法forest/repro/input002.cbi",
+        "issues/closed/024 hub取點漏掉SRC可達區域與sink平衡座標交點/repro/input001.cbi",
+        "issues/closed/024 hub取點漏掉SRC可達區域與sink平衡座標交點/repro/input002.cbi",
+        "issues/closed/025 sink分組與buffer位置需同步改動才能降低skew/repro/input001.cbi",
+        "issues/closed/025 sink分組與buffer位置需同步改動才能降低skew/repro/input002.cbi",
+        "issues/closed/026 分層ring布局保留八十二至一百二十九buffer成本/repro/input001.cbi",
+        "issues/closed/026 分層ring布局保留八十二至一百二十九buffer成本/repro/input002.cbi",
+        "issues/closed/027 bypass需同步重定位子buffer才能保持零skew/repro/input001.cbi",
+        "issues/closed/027 bypass需同步重定位子buffer才能保持零skew/repro/input002.cbi",
+        "issues/closed/028 巨大晶片尺寸使近原點可表示合法解遭拒/repro/input001.cbi",
+        "issues/closed/028 巨大晶片尺寸使近原點可表示合法解遭拒/repro/input002.cbi",
+        "issues/closed/028 巨大晶片尺寸使近原點可表示合法解遭拒/repro/input003.cbi",
+        "issues/closed/028 巨大晶片尺寸使近原點可表示合法解遭拒/repro/input004.cbi",
+        "issues/closed/029 長距離混合relay未利用length公因數縮小DP/repro/input001.cbi",
+        "issues/closed/029 長距離混合relay未利用length公因數縮小DP/repro/input002.cbi",
+        "issues/closed/029 長距離混合relay未利用length公因數縮小DP/repro/input003.cbi",
+        "issues/closed/030 密集forest僅SRC直連buffer漏掉階層合法樹/repro/input001.cbi",
+        "issues/closed/030 密集forest僅SRC直連buffer漏掉階層合法樹/repro/input002.cbi",
+        "issues/closed/031 partial_hub預算偏向低位mask使sink反序改變最優結果/repro/input001.cbi",
+        "issues/closed/031 partial_hub預算偏向低位mask使sink反序改變最優結果/repro/input002.cbi"
+      ]
+    },
+    "long": {
+      "binary_sha256": "28ac2cc8853e41de28a1b8df2253760629b2ed47a6d2490e8151486666f5004e",
+      "platform": "Linux-5.14.0-687.17.1.el9_8.x86_64-x86_64-with-glibc2.34",
+      "jobs": 3,
+      "budgets": [
+        55.0
+      ],
+      "seeds": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "extra": [],
+      "inputs": [
+        "example/input.cbi",
+        "benchmarks/sa_lp/inputs/input024.cbi",
+        "issues/closed/019 子樹與sink交換可降低buffer型別成本/repro/input001.cbi"
+      ]
+    },
+    "ablation": {
+      "binary_sha256": "53bb7e5dc8726cee0b97f06ab1579ce7179a7982ad67cfea8ff1f9160e86fffa",
+      "configurations": {
+        "default": [],
+        "global": [
+          "--locality",
+          "0"
+        ],
+        "local_only": [
+          "--locality",
+          "1"
+        ],
+        "cost_moves": [
+          "--move-weights",
+          "20,15,10,25,15,10,5"
+        ],
+        "repair64": [
+          "--repair-trials",
+          "64"
+        ],
+        "no_wire_tiebreak": [
+          "--wire-tiebreak",
+          "0"
+        ]
+      },
+      "seeds": [
+        1,
+        2,
+        3
+      ],
+      "jobs": 3,
+      "budget": 1
+    },
+    "holdout": {
+      "binary_sha256": "53bb7e5dc8726cee0b97f06ab1579ce7179a7982ad67cfea8ff1f9160e86fffa",
+      "configurations": {
+        "default": [],
+        "cost_moves": [
+          "--move-weights",
+          "20,15,10,25,15,10,5"
+        ]
+      },
+      "seeds": [
+        1,
+        2,
+        3
+      ],
+      "jobs": 3,
+      "budget": 1
+    }
+  }
+}

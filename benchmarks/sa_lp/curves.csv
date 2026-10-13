@@ -1,0 +1,166 @@
+input,strategy,seed,seconds,score,skew
+example/input.cbi,current,1,1,41,1
+example/input.cbi,current,1,5,41,1
+example/input.cbi,current,1,15,41,1
+example/input.cbi,current,1,30,41,1
+example/input.cbi,current,1,55,41,1
+example/input.cbi,sa_lp,1,1,41,1
+example/input.cbi,sa_lp,1,5,41,1
+example/input.cbi,sa_lp,1,15,41,1
+example/input.cbi,sa_lp,1,30,38,2
+example/input.cbi,sa_lp,1,55,37,1
+example/input.cbi,sa_lp,2,1,41,1
+example/input.cbi,sa_lp,2,5,41,1
+example/input.cbi,sa_lp,2,15,41,1
+example/input.cbi,sa_lp,2,30,37,1
+example/input.cbi,sa_lp,2,55,37,1
+example/input.cbi,sa_lp,3,1,41,1
+example/input.cbi,sa_lp,3,5,41,1
+example/input.cbi,sa_lp,3,15,41,1
+example/input.cbi,sa_lp,3,30,37,1
+example/input.cbi,sa_lp,3,55,37,1
+example/input.cbi,sa_lp,4,1,37,1
+example/input.cbi,sa_lp,4,5,37,1
+example/input.cbi,sa_lp,4,15,37,1
+example/input.cbi,sa_lp,4,30,37,1
+example/input.cbi,sa_lp,4,55,37,1
+example/input.cbi,sa_lp,5,1,41,1
+example/input.cbi,sa_lp,5,5,41,1
+example/input.cbi,sa_lp,5,15,41,1
+example/input.cbi,sa_lp,5,30,41,1
+example/input.cbi,sa_lp,5,55,37,1
+example/input.cbi,hybrid,1,1,41,1
+example/input.cbi,hybrid,1,5,41,1
+example/input.cbi,hybrid,1,15,41,1
+example/input.cbi,hybrid,1,30,38,2
+example/input.cbi,hybrid,1,55,37,1
+example/input.cbi,hybrid,2,1,41,1
+example/input.cbi,hybrid,2,5,41,1
+example/input.cbi,hybrid,2,15,41,1
+example/input.cbi,hybrid,2,30,37,1
+example/input.cbi,hybrid,2,55,37,1
+example/input.cbi,hybrid,3,1,41,1
+example/input.cbi,hybrid,3,5,41,1
+example/input.cbi,hybrid,3,15,37,1
+example/input.cbi,hybrid,3,30,37,1
+example/input.cbi,hybrid,3,55,37,1
+example/input.cbi,hybrid,4,1,37,1
+example/input.cbi,hybrid,4,5,37,1
+example/input.cbi,hybrid,4,15,37,1
+example/input.cbi,hybrid,4,30,37,1
+example/input.cbi,hybrid,4,55,37,1
+benchmarks/sa_lp/inputs/input024.cbi,current,1,1,64,20
+benchmarks/sa_lp/inputs/input024.cbi,current,1,5,64,20
+benchmarks/sa_lp/inputs/input024.cbi,current,1,15,64,20
+benchmarks/sa_lp/inputs/input024.cbi,current,1,30,64,20
+benchmarks/sa_lp/inputs/input024.cbi,current,1,55,64,20
+example/input.cbi,hybrid,5,1,41,1
+example/input.cbi,hybrid,5,5,41,1
+example/input.cbi,hybrid,5,15,41,1
+example/input.cbi,hybrid,5,30,41,1
+example/input.cbi,hybrid,5,55,37,1
+benchmarks/sa_lp/inputs/input024.cbi,sa_lp,1,1,120,1
+benchmarks/sa_lp/inputs/input024.cbi,sa_lp,1,5,120,1
+benchmarks/sa_lp/inputs/input024.cbi,sa_lp,1,15,66,22
+benchmarks/sa_lp/inputs/input024.cbi,sa_lp,1,30,59,15
+benchmarks/sa_lp/inputs/input024.cbi,sa_lp,1,55,50,10
+benchmarks/sa_lp/inputs/input024.cbi,sa_lp,2,1,120,1
+benchmarks/sa_lp/inputs/input024.cbi,sa_lp,2,5,120,1
+benchmarks/sa_lp/inputs/input024.cbi,sa_lp,2,15,84,37
+benchmarks/sa_lp/inputs/input024.cbi,sa_lp,2,30,60,16
+benchmarks/sa_lp/inputs/input024.cbi,sa_lp,2,55,53,13
+benchmarks/sa_lp/inputs/input024.cbi,sa_lp,3,1,110,11
+benchmarks/sa_lp/inputs/input024.cbi,sa_lp,3,5,110,11
+benchmarks/sa_lp/inputs/input024.cbi,sa_lp,3,15,85,24
+benchmarks/sa_lp/inputs/input024.cbi,sa_lp,3,30,59,19
+benchmarks/sa_lp/inputs/input024.cbi,sa_lp,3,55,50,6
+benchmarks/sa_lp/inputs/input024.cbi,sa_lp,4,1,119,3
+benchmarks/sa_lp/inputs/input024.cbi,sa_lp,4,5,119,3
+benchmarks/sa_lp/inputs/input024.cbi,sa_lp,4,15,119,3
+benchmarks/sa_lp/inputs/input024.cbi,sa_lp,4,30,68,24
+benchmarks/sa_lp/inputs/input024.cbi,sa_lp,4,55,50,10
+benchmarks/sa_lp/inputs/input024.cbi,sa_lp,5,1,120,1
+benchmarks/sa_lp/inputs/input024.cbi,sa_lp,5,5,120,1
+benchmarks/sa_lp/inputs/input024.cbi,sa_lp,5,15,79,25
+benchmarks/sa_lp/inputs/input024.cbi,sa_lp,5,30,54,14
+benchmarks/sa_lp/inputs/input024.cbi,sa_lp,5,55,50,10
+benchmarks/sa_lp/inputs/input024.cbi,hybrid,1,1,64,20
+benchmarks/sa_lp/inputs/input024.cbi,hybrid,1,5,64,20
+benchmarks/sa_lp/inputs/input024.cbi,hybrid,1,15,64,20
+benchmarks/sa_lp/inputs/input024.cbi,hybrid,1,30,56,12
+benchmarks/sa_lp/inputs/input024.cbi,hybrid,1,55,50,6
+benchmarks/sa_lp/inputs/input024.cbi,hybrid,2,1,64,20
+benchmarks/sa_lp/inputs/input024.cbi,hybrid,2,5,64,20
+benchmarks/sa_lp/inputs/input024.cbi,hybrid,2,15,64,20
+benchmarks/sa_lp/inputs/input024.cbi,hybrid,2,30,62,22
+benchmarks/sa_lp/inputs/input024.cbi,hybrid,2,55,51,11
+benchmarks/sa_lp/inputs/input024.cbi,hybrid,3,1,64,20
+benchmarks/sa_lp/inputs/input024.cbi,hybrid,3,5,64,20
+benchmarks/sa_lp/inputs/input024.cbi,hybrid,3,15,64,20
+benchmarks/sa_lp/inputs/input024.cbi,hybrid,3,30,60,16
+benchmarks/sa_lp/inputs/input024.cbi,hybrid,3,55,51,11
+issues/closed/019 子樹與sink交換可降低buffer型別成本/repro/input001.cbi,current,1,1,105,3
+issues/closed/019 子樹與sink交換可降低buffer型別成本/repro/input001.cbi,current,1,5,105,3
+issues/closed/019 子樹與sink交換可降低buffer型別成本/repro/input001.cbi,current,1,15,105,3
+issues/closed/019 子樹與sink交換可降低buffer型別成本/repro/input001.cbi,current,1,30,105,3
+issues/closed/019 子樹與sink交換可降低buffer型別成本/repro/input001.cbi,current,1,55,105,3
+benchmarks/sa_lp/inputs/input024.cbi,hybrid,4,1,64,20
+benchmarks/sa_lp/inputs/input024.cbi,hybrid,4,5,64,20
+benchmarks/sa_lp/inputs/input024.cbi,hybrid,4,15,64,20
+benchmarks/sa_lp/inputs/input024.cbi,hybrid,4,30,62,22
+benchmarks/sa_lp/inputs/input024.cbi,hybrid,4,55,50,6
+benchmarks/sa_lp/inputs/input024.cbi,hybrid,5,1,63,19
+benchmarks/sa_lp/inputs/input024.cbi,hybrid,5,5,63,19
+benchmarks/sa_lp/inputs/input024.cbi,hybrid,5,15,63,19
+benchmarks/sa_lp/inputs/input024.cbi,hybrid,5,30,57,13
+benchmarks/sa_lp/inputs/input024.cbi,hybrid,5,55,53,13
+issues/closed/019 子樹與sink交換可降低buffer型別成本/repro/input001.cbi,sa_lp,1,1,106,3
+issues/closed/019 子樹與sink交換可降低buffer型別成本/repro/input001.cbi,sa_lp,1,5,106,3
+issues/closed/019 子樹與sink交換可降低buffer型別成本/repro/input001.cbi,sa_lp,1,15,106,3
+issues/closed/019 子樹與sink交換可降低buffer型別成本/repro/input001.cbi,sa_lp,1,30,106,3
+issues/closed/019 子樹與sink交換可降低buffer型別成本/repro/input001.cbi,sa_lp,1,55,63,1
+issues/closed/019 子樹與sink交換可降低buffer型別成本/repro/input001.cbi,sa_lp,2,1,111,2
+issues/closed/019 子樹與sink交換可降低buffer型別成本/repro/input001.cbi,sa_lp,2,5,111,2
+issues/closed/019 子樹與sink交換可降低buffer型別成本/repro/input001.cbi,sa_lp,2,15,111,2
+issues/closed/019 子樹與sink交換可降低buffer型別成本/repro/input001.cbi,sa_lp,2,30,111,2
+issues/closed/019 子樹與sink交換可降低buffer型別成本/repro/input001.cbi,sa_lp,2,55,69,1
+issues/closed/019 子樹與sink交換可降低buffer型別成本/repro/input001.cbi,sa_lp,3,1,106,3
+issues/closed/019 子樹與sink交換可降低buffer型別成本/repro/input001.cbi,sa_lp,3,5,106,3
+issues/closed/019 子樹與sink交換可降低buffer型別成本/repro/input001.cbi,sa_lp,3,15,106,3
+issues/closed/019 子樹與sink交換可降低buffer型別成本/repro/input001.cbi,sa_lp,3,30,106,3
+issues/closed/019 子樹與sink交換可降低buffer型別成本/repro/input001.cbi,sa_lp,3,55,63,1
+issues/closed/019 子樹與sink交換可降低buffer型別成本/repro/input001.cbi,sa_lp,4,1,98,2
+issues/closed/019 子樹與sink交換可降低buffer型別成本/repro/input001.cbi,sa_lp,4,5,98,2
+issues/closed/019 子樹與sink交換可降低buffer型別成本/repro/input001.cbi,sa_lp,4,15,98,2
+issues/closed/019 子樹與sink交換可降低buffer型別成本/repro/input001.cbi,sa_lp,4,30,84,1
+issues/closed/019 子樹與sink交換可降低buffer型別成本/repro/input001.cbi,sa_lp,4,55,69,1
+issues/closed/019 子樹與sink交換可降低buffer型別成本/repro/input001.cbi,sa_lp,5,1,125,3
+issues/closed/019 子樹與sink交換可降低buffer型別成本/repro/input001.cbi,sa_lp,5,5,125,3
+issues/closed/019 子樹與sink交換可降低buffer型別成本/repro/input001.cbi,sa_lp,5,15,125,3
+issues/closed/019 子樹與sink交換可降低buffer型別成本/repro/input001.cbi,sa_lp,5,30,119,2
+issues/closed/019 子樹與sink交換可降低buffer型別成本/repro/input001.cbi,sa_lp,5,55,63,1
+issues/closed/019 子樹與sink交換可降低buffer型別成本/repro/input001.cbi,hybrid,1,1,90,2
+issues/closed/019 子樹與sink交換可降低buffer型別成本/repro/input001.cbi,hybrid,1,5,90,2
+issues/closed/019 子樹與sink交換可降低buffer型別成本/repro/input001.cbi,hybrid,1,15,90,2
+issues/closed/019 子樹與sink交換可降低buffer型別成本/repro/input001.cbi,hybrid,1,30,90,2
+issues/closed/019 子樹與sink交換可降低buffer型別成本/repro/input001.cbi,hybrid,1,55,63,1
+issues/closed/019 子樹與sink交換可降低buffer型別成本/repro/input001.cbi,hybrid,2,1,90,2
+issues/closed/019 子樹與sink交換可降低buffer型別成本/repro/input001.cbi,hybrid,2,5,90,2
+issues/closed/019 子樹與sink交換可降低buffer型別成本/repro/input001.cbi,hybrid,2,15,90,2
+issues/closed/019 子樹與sink交換可降低buffer型別成本/repro/input001.cbi,hybrid,2,30,90,2
+issues/closed/019 子樹與sink交換可降低buffer型別成本/repro/input001.cbi,hybrid,2,55,63,1
+issues/closed/019 子樹與sink交換可降低buffer型別成本/repro/input001.cbi,hybrid,3,1,98,2
+issues/closed/019 子樹與sink交換可降低buffer型別成本/repro/input001.cbi,hybrid,3,5,98,2
+issues/closed/019 子樹與sink交換可降低buffer型別成本/repro/input001.cbi,hybrid,3,15,98,2
+issues/closed/019 子樹與sink交換可降低buffer型別成本/repro/input001.cbi,hybrid,3,30,98,2
+issues/closed/019 子樹與sink交換可降低buffer型別成本/repro/input001.cbi,hybrid,3,55,63,1
+issues/closed/019 子樹與sink交換可降低buffer型別成本/repro/input001.cbi,hybrid,4,1,90,2
+issues/closed/019 子樹與sink交換可降低buffer型別成本/repro/input001.cbi,hybrid,4,5,90,2
+issues/closed/019 子樹與sink交換可降低buffer型別成本/repro/input001.cbi,hybrid,4,15,90,2
+issues/closed/019 子樹與sink交換可降低buffer型別成本/repro/input001.cbi,hybrid,4,30,90,2
+issues/closed/019 子樹與sink交換可降低buffer型別成本/repro/input001.cbi,hybrid,4,55,70,1
+issues/closed/019 子樹與sink交換可降低buffer型別成本/repro/input001.cbi,hybrid,5,1,85,2
+issues/closed/019 子樹與sink交換可降低buffer型別成本/repro/input001.cbi,hybrid,5,5,85,2
+issues/closed/019 子樹與sink交換可降低buffer型別成本/repro/input001.cbi,hybrid,5,15,85,2
+issues/closed/019 子樹與sink交換可降低buffer型別成本/repro/input001.cbi,hybrid,5,30,81,1
+issues/closed/019 子樹與sink交換可降低buffer型別成本/repro/input001.cbi,hybrid,5,55,68,1
