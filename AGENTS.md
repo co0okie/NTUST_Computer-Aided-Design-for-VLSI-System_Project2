@@ -9,6 +9,15 @@
 - 依指定角色工作，沿用目前進度；不要自行啟動或重啟 agent。
 - 保留另一個 agent 的工作；commit 只包含自己負責的變更。
 
+# 開發與文件
+
+- 根目錄 `README.md` 給助教使用，保留編譯條件、指令、執行介面、輸出與時間預算。
+- 演算法細節放 `docs/construction.md`、`docs/sa-lp.md`；測試與搜尋參數放 `docs/development.md`；實驗紀錄放 `benchmarks/`。
+- 文件依讀者需要說明操作與理由；逐句檢查用途、冗餘、背景與術語，避免依賴對話脈絡。
+- 程式維持 C++17，沿用明確 ownership、value semantics、typed node roles／IDs、檢查過的整數運算及 `Expected`／`Error` 結果；搜尋狀態由容器擁有，避免新增 owning raw pointers 或 mutable globals。
+- Git 追蹤 source、建置設定、測試、文件、範例、報告與完整 issue 紀錄；保留共享角色設定 `.codex/agents/`。
+- 產生的 build、輸出與實驗暫存維持忽略；重現問題所需的 issue 測資與 witness 輸出繼續追蹤。
+
 # Issue 流程
 
 每個 issue 放在 `issues/opened/<NNN 問題概述>/`，包含：
