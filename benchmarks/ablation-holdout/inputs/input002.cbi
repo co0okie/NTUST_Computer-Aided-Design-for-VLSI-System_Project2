@@ -1,0 +1,30 @@
+.limit
+fanout 3
+length 43
+.dimx 14
+.dimy 14
+.e
+.buflib 3
+T0 4 13 6
+T1 8 54 3
+T2 2 23 1
+.e
+.objective
+w_skew 100
+.e
+.pin 14
+4 10
+6 10
+2 0
+7 6
+6 7
+1 8
+2 3
+2 6
+14 2
+13 11
+14 4
+12 6
+12 14
+13 14
+.e

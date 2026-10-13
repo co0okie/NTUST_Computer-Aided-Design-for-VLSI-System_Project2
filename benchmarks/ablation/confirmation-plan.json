@@ -1,0 +1,18 @@
+{
+  "cases": [
+    "example/input.cbi",
+    "issues/closed/019 \u5b50\u6a39\u8207sink\u4ea4\u63db\u53ef\u964d\u4f4ebuffer\u578b\u5225\u6210\u672c/repro/input001.cbi",
+    "benchmarks/sa_lp/inputs/input015.cbi",
+    "benchmarks/sa_lp/inputs/input019.cbi",
+    "benchmarks/sa_lp/inputs/input023.cbi",
+    "benchmarks/sa_lp/inputs/input027.cbi"
+  ],
+  "variants": [
+    "baseline",
+    "no_initial_pass",
+    "no_seed_lp",
+    "lean_initialization",
+    "no_final_delay"
+  ],
+  "reason": "Two previously challenging cases plus four evenly spaced generated IDs reserved from SA screening. Tests both independent removals and their combination."
+}

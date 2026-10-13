@@ -42,7 +42,8 @@ not intervene. `--stats FILE` writes JSON with actual incumbent checkpoints and
 per-move/LP/repair counts and timing.
 
 See [implementation and trade-offs](docs/sa-lp.md) and
-[comparison results](benchmarks/sa_lp/README.md). Source is separated into core,
+[comparison results](benchmarks/sa_lp/README.md), and
+[leave-one-out ablation study](benchmarks/ablation/README.md). Source is separated into core,
 IO, construction, search and orchestration modules. It follows explicit ownership,
 value semantics, typed node roles/IDs, checked arithmetic and result-based search
 errors, retaining C++17.

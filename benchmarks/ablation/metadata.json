@@ -1,0 +1,460 @@
+{
+  "binary_sha256": "e214ed0ccea1361786bd0031a9bbac604e14a18ff83b1acd361d19af837bc155",
+  "input_sha256": {
+    "example/input.cbi": "dd3853d498934da3f4a12b09619e8a25e7081894fe182bacc8560d502f63b647",
+    "issues/closed/001 \u55ae\u8f38\u51fabuffer\u5eab\u8aa4\u5224SRC\u53ef\u5206\u652f\u7684\u5408\u6cd5\u89e3/input001.cbi": "69e477d9942427d676084e713ab4066a89357b15bcab4b20b3fad267a402490b",
+    "issues/closed/001 \u55ae\u8f38\u51fabuffer\u5eab\u8aa4\u5224SRC\u53ef\u5206\u652f\u7684\u5408\u6cd5\u89e3/input002.cbi": "dd143bde89ff774f745edbc4bc91b3fc9829ebb37b47f1d7c3744b838157a4a3",
+    "issues/closed/002 \u908a\u754c\u540c\u8ef8\u9023\u7dda\u7f3a\u5c11\u5411\u5167\u7e5e\u884c\u7684relay/input001.cbi": "87821febd96cb515de7c5c0031e4bcc222ce0f72c64ca7ae05d02c7721ad6994",
+    "issues/closed/003 \u56fa\u5b9a\u4e8c\u5143\u6a39\u6f0f\u6389\u4f4e\u6210\u672c\u591a\u8f38\u51fa\u5408\u4f75/input001.cbi": "af63d5c7d60874067ce1061145c42bf9fe956d952f44a34c804eab23acc09a98",
+    "issues/closed/004 hub\u9078\u9ede\u6f0f\u7b97SRC\u63a5\u5165relay\u6210\u672c/input001.cbi": "fe882bc7c2749e6dc51343f626f8ac45987476db46ab135c8798802e14a247d5",
+    "issues/closed/005 relay\u56fa\u5b9a\u6700\u5927\u7dda\u9577\u578b\u5225\u9020\u6210\u9ad8\u6210\u672c/input001.cbi": "b5e94c430bd11bde78c5f01c21ec89d4ea4fe72aa7cb238e0a6a4e49e36ba2fb",
+    "issues/closed/006 relay\u9593\u8ddd\u653f\u7b56\u7f3a\u5c11\u4e2d\u6bb5\u6df7\u5408\u578b\u5225\u512a\u5316/input001.cbi": "c565adbb349829a5bc7022051d5094c9463c4ba3a052ad8933991c10e2fecb7f",
+    "issues/closed/007 \u5206\u652fbuffer\u56fa\u5b9a\u6700\u5927\u7dda\u9577\u6f0f\u6389\u5ec9\u50f9\u5206\u652f\u52a0relay/input001.cbi": "5d5e9a2512d28d5d3523c140db41546c4ca76f282d9f1bd16c263b533c7cec9c",
+    "issues/closed/008 \u5c40\u90e8\u5b50\u6a39\u4ecd\u56fa\u5b9a\u4e8c\u5143\u5206\u652f\u6f0f\u6389\u591a\u8f38\u51fa\u5408\u4f75/input001.cbi": "51852c05d40dfaaef91b46f7a8938443b98ec6234f23e744742efc3e33897d59",
+    "issues/closed/009 \u5efa\u69cb\u540c\u5206\u5019\u9078\u63d0\u524d\u4e1f\u68c4\u932f\u5931\u5c40\u90e8\u6539\u5584/input001.cbi": "2ad456301a844484919f3232f971140c8d3a81faf8c11339f8b1b6591a14b435",
+    "issues/closed/010 \u5206\u652f\u7e3d\u7dda\u9577\u5e73\u5747\u5206\u914d\u6f0f\u6389\u8f03\u4f4erelay\u6210\u672c/input001.cbi": "fc290d634bfdc3d7f38e5a12420fc2df32e3c52009079945fba96aa6af9d5239",
+    "issues/closed/011 \u56fa\u5b9a\u62d3\u6a38\u7f3a\u5c11buffer\u4f4d\u7f6e\u5fae\u8abf\u932f\u5931\u8f03\u4f4eskew/input001.cbi": "e0b5b1f25177b86d50d9196ccd09867bce69ff10a8551db13605896e6887acb4",
+    "issues/closed/012 \u7f3a\u5c11\u8de8\u5206\u652fsink\u4ea4\u63db\u9020\u6210\u53ef\u907f\u514d\u7684skew/input001.cbi": "20bab5a057223bef6f1267d0ca4d56009e54125a04d9d40464f4500eda57ef7d",
+    "issues/closed/013 \u5f8c\u7e8c\u4f4d\u7f6e\u8207\u9023\u7dda\u6539\u5584\u5f8c\u672a\u91cd\u8a66buffer\u5408\u4f75/input001.cbi": "5c15e16703e1d3402098ccd1675dd3140bd06616cb1fda163e6f24e7cc1690cb",
+    "issues/closed/014 \u7f3a\u5c11\u55ae\u4e00sink\u6539\u63a5\u4ee5\u4f7f\u7528\u5206\u652f\u5269\u9918\u5bb9\u91cf/input001.cbi": "3c41338a411a7fa946ce956ae2f108ba135da89711b7b9921be28fd4ba48c433",
+    "issues/closed/015 \u77ed\u8def\u5f91\u7f3a\u5c11\u5ef6\u9072relay\u63d2\u5165\u800c\u932f\u5931\u96f6skew/input001.cbi": "6ba2b7fa93695924b6d3a971f3bc176241de1ab32e4135e130b0a57e2a3ea6d1",
+    "issues/closed/015 \u77ed\u8def\u5f91\u7f3a\u5c11\u5ef6\u9072relay\u63d2\u5165\u800c\u932f\u5931\u96f6skew/input002.cbi": "365ab2e40c058a9b6b493445a8457a5b4e89ba839b645be614c941691be68d46",
+    "issues/closed/016 \u5c40\u90e8\u5efa\u69cb\u5019\u9078\u7121\u56de\u9000\u6f0f\u6389\u5c0f\u578b\u5408\u6cd5\u6a39/input001.cbi": "bccfd29219cf9741de3575457a4e04238938b16deb514b91425cb854ef8d3b2e",
+    "issues/closed/017 \u5b8c\u6574refinement\u524d\u4f9d\u521d\u59cbScore\u6dd8\u6c70\u53ef\u6539\u5584\u5019\u9078/input001.cbi": "f25a7244de7c92e251e20e54942771d8f426c40377b87c3b60d61fe6c13268ff",
+    "issues/closed/018 \u5927\u6a39\u8df3\u904e\u591a\u8f38\u51fa\u6539\u5584\u4fdd\u7559\u4e09\u500dbuffer\u6210\u672c/input001.cbi": "af8d08f0e4a9b07d147bac9b641b90d017f91de10389196e7b7064becebb9fd2",
+    "issues/closed/019 \u5b50\u6a39\u8207sink\u4ea4\u63db\u53ef\u964d\u4f4ebuffer\u578b\u5225\u6210\u672c/repro/input001.cbi": "e7199d013dce1a5de37299ad70ae706c562fb9eb5bad51b290c1c4ce76272562",
+    "issues/closed/020 \u5bc6\u96c6\u6676\u7247\u4e8c\u5143\u5efa\u69cb\u6f0f\u6389\u5408\u6cd5\u4e09\u8f38\u51faforest/repro/input001.cbi": "00f5cdce639b4b5f2470a6794776b217f90b1cb6e1cb29eee3df5b4ea1d503b4",
+    "issues/closed/020 \u5bc6\u96c6\u6676\u7247\u4e8c\u5143\u5efa\u69cb\u6f0f\u6389\u5408\u6cd5\u4e09\u8f38\u51faforest/repro/input002.cbi": "e367663fffe25815251055bc430593b43f043463a6078e8828cd8ba33db92ab7",
+    "issues/closed/021 \u56fa\u5b9a\u4e09\u6839merge\u6f0f\u6389\u5408\u6cd5\u56db\u4e94\u8f38\u51faforest/repro/input001.cbi": "cc668104b65046e8b8e8713005dd3985e8b0871b0874b31106f917b11a792658",
+    "issues/closed/021 \u56fa\u5b9a\u4e09\u6839merge\u6f0f\u6389\u5408\u6cd5\u56db\u4e94\u8f38\u51faforest/repro/input002.cbi": "f78131fb085962f05013000f59b78fa506df40146afda693e9408483e1fc02cb",
+    "issues/closed/021 \u56fa\u5b9a\u4e09\u6839merge\u6f0f\u6389\u5408\u6cd5\u56db\u4e94\u8f38\u51faforest/repro/input003.cbi": "d2debcf9c93c7c99e24f0f2fbc1140bfc3d2d7e9b284b430ed40f58c212a26b7",
+    "issues/closed/022 \u6700\u7d42\u7d50\u679c\u6f0f\u6389\u65e2\u6709delay\u6539\u5584/repro/input001.cbi": "b18a372205b021e01ce336316b9f2fb09fac38175702d49899caa8b5d54183c4",
+    "issues/closed/023 \u5bc6\u96c6\u6676\u7247\u591a\u8f38\u51fa\u5efa\u69cb\u6f0f\u6389\u5341\u516dsink\u5408\u6cd5forest/repro/input001.cbi": "5d8b7f6717bfcbbb7383467136e7ac2f20ec0053a61b1948065a230354035cbd",
+    "issues/closed/023 \u5bc6\u96c6\u6676\u7247\u591a\u8f38\u51fa\u5efa\u69cb\u6f0f\u6389\u5341\u516dsink\u5408\u6cd5forest/repro/input002.cbi": "516d460fe4432857840b05a8beb41ea26f9d7aa2bf4b928915a55893518270bd",
+    "issues/closed/024 hub\u53d6\u9ede\u6f0f\u6389SRC\u53ef\u9054\u5340\u57df\u8207sink\u5e73\u8861\u5ea7\u6a19\u4ea4\u9ede/repro/input001.cbi": "904d10659669980f2c1315cc19166bb81dc6a0dd3e5d95e42cc82d5044adb3ff",
+    "issues/closed/024 hub\u53d6\u9ede\u6f0f\u6389SRC\u53ef\u9054\u5340\u57df\u8207sink\u5e73\u8861\u5ea7\u6a19\u4ea4\u9ede/repro/input002.cbi": "e5b1b4e12cbb47b8c21c7229b62977e522db9073c62eb03dbea9f459fe332f5e",
+    "issues/closed/025 sink\u5206\u7d44\u8207buffer\u4f4d\u7f6e\u9700\u540c\u6b65\u6539\u52d5\u624d\u80fd\u964d\u4f4eskew/repro/input001.cbi": "3e5f8781da02cd9fb6cae779604d8ff6b9840e2f4642080570dbbe96dc0f0d08",
+    "issues/closed/025 sink\u5206\u7d44\u8207buffer\u4f4d\u7f6e\u9700\u540c\u6b65\u6539\u52d5\u624d\u80fd\u964d\u4f4eskew/repro/input002.cbi": "ec34d15120677a23a85f2326366d5b27c99a22e8103a928969b9e205f64a5eb3",
+    "issues/closed/026 \u5206\u5c64ring\u5e03\u5c40\u4fdd\u7559\u516b\u5341\u4e8c\u81f3\u4e00\u767e\u4e8c\u5341\u4e5dbuffer\u6210\u672c/repro/input001.cbi": "bf39f94aac4aee0293113c880841516c4196c74721e3c05160eddc4ab67eebdd",
+    "issues/closed/026 \u5206\u5c64ring\u5e03\u5c40\u4fdd\u7559\u516b\u5341\u4e8c\u81f3\u4e00\u767e\u4e8c\u5341\u4e5dbuffer\u6210\u672c/repro/input002.cbi": "d70bbbaf5ea17f60af74572ae163b162f6a191965a5f8e0b9627ae291a740ab3",
+    "issues/closed/027 bypass\u9700\u540c\u6b65\u91cd\u5b9a\u4f4d\u5b50buffer\u624d\u80fd\u4fdd\u6301\u96f6skew/repro/input001.cbi": "fd5de96922d83d779d5df5ab9c32887e641beec23d65d7f1742617c4f4163945",
+    "issues/closed/027 bypass\u9700\u540c\u6b65\u91cd\u5b9a\u4f4d\u5b50buffer\u624d\u80fd\u4fdd\u6301\u96f6skew/repro/input002.cbi": "4f0174f5d9701a7ba163c0035c8b80655c173c8a0b8c30c7e6b956310e682327",
+    "issues/closed/028 \u5de8\u5927\u6676\u7247\u5c3a\u5bf8\u4f7f\u8fd1\u539f\u9ede\u53ef\u8868\u793a\u5408\u6cd5\u89e3\u906d\u62d2/repro/input001.cbi": "49a9c5e3a182d190f33dde02733f1ac3263c495e95a28bb86f86f10abd2f010e",
+    "issues/closed/028 \u5de8\u5927\u6676\u7247\u5c3a\u5bf8\u4f7f\u8fd1\u539f\u9ede\u53ef\u8868\u793a\u5408\u6cd5\u89e3\u906d\u62d2/repro/input002.cbi": "1c15ca646b882dbc21f302725f880a5dd9581c53a6539e3237350d725dea3151",
+    "issues/closed/028 \u5de8\u5927\u6676\u7247\u5c3a\u5bf8\u4f7f\u8fd1\u539f\u9ede\u53ef\u8868\u793a\u5408\u6cd5\u89e3\u906d\u62d2/repro/input003.cbi": "44660d256ed51ad53c731c406bb2ad99e021d8d77a69a054fb3e197897055ae6",
+    "issues/closed/028 \u5de8\u5927\u6676\u7247\u5c3a\u5bf8\u4f7f\u8fd1\u539f\u9ede\u53ef\u8868\u793a\u5408\u6cd5\u89e3\u906d\u62d2/repro/input004.cbi": "411b08c110bbafcb53af0c4cb2fd1219e0a5abd5326d409242e67fff86b17f17",
+    "issues/closed/029 \u9577\u8ddd\u96e2\u6df7\u5408relay\u672a\u5229\u7528length\u516c\u56e0\u6578\u7e2e\u5c0fDP/repro/input001.cbi": "6b72736e1af834205679f4bdff06d30df61f6e3dfac9d1bfb36403e2302876ef",
+    "issues/closed/029 \u9577\u8ddd\u96e2\u6df7\u5408relay\u672a\u5229\u7528length\u516c\u56e0\u6578\u7e2e\u5c0fDP/repro/input002.cbi": "607b83afc3d010d0bc83d1c551c0298381f2e2db9cc90fb9a80c5db933a1fe02",
+    "issues/closed/029 \u9577\u8ddd\u96e2\u6df7\u5408relay\u672a\u5229\u7528length\u516c\u56e0\u6578\u7e2e\u5c0fDP/repro/input003.cbi": "561390d401ee53b29fc745d869c69c0cd4af399b781c5110d4f273a9287e1f78",
+    "issues/closed/030 \u5bc6\u96c6forest\u50c5SRC\u76f4\u9023buffer\u6f0f\u6389\u968e\u5c64\u5408\u6cd5\u6a39/repro/input001.cbi": "eefd4b7144ea0865cdc43fdad9db36c7ef778a0cce74ee90d96b1d509fb0e94c",
+    "issues/closed/030 \u5bc6\u96c6forest\u50c5SRC\u76f4\u9023buffer\u6f0f\u6389\u968e\u5c64\u5408\u6cd5\u6a39/repro/input002.cbi": "d7d7f98ad86ebe7422cd9991e8e608b35240a4204a060d32be6ca4331338be79",
+    "issues/closed/031 partial_hub\u9810\u7b97\u504f\u5411\u4f4e\u4f4dmask\u4f7fsink\u53cd\u5e8f\u6539\u8b8a\u6700\u512a\u7d50\u679c/repro/input001.cbi": "e1b1b20bae965520950876692ba93cb2c8da9d8fd6076574dcbde30ae7c2b085",
+    "issues/closed/031 partial_hub\u9810\u7b97\u504f\u5411\u4f4e\u4f4dmask\u4f7fsink\u53cd\u5e8f\u6539\u8b8a\u6700\u512a\u7d50\u679c/repro/input002.cbi": "80880482b3de5b980e2f4d5baf3cf8aac638289ffafc093840bfd5f138074429",
+    "benchmarks/sa_lp/inputs/input000.cbi": "5352f4eaee9465d4d53998d7355760e5e2bfc83d7bf75917677e598595de4fd4",
+    "benchmarks/sa_lp/inputs/input001.cbi": "ca3fab2ae20aae8cd088e10e6046e2844098e4da5558799264f2f2bce1cf956d",
+    "benchmarks/sa_lp/inputs/input002.cbi": "578390120a86349da6dd69e112bb6dce1734c9911828c48536d14cd6e6ba0f96",
+    "benchmarks/sa_lp/inputs/input003.cbi": "38d4ac6dda15ea94b8840e59f7943eaa45675ae724be513f02a2a641bfb222c4",
+    "benchmarks/sa_lp/inputs/input004.cbi": "1763fc350e755aa04005620984d87e0a137519796b807c4f93010f9f72008552",
+    "benchmarks/sa_lp/inputs/input005.cbi": "785d82c0e31c61be4a6c4549a72ab3081a9843c28381000762949bedcf182c25",
+    "benchmarks/sa_lp/inputs/input006.cbi": "ed5ae6bb19c8f403a60dfe3aca4e97b521314ab86f8371deb5d1cf1c93c4cea7",
+    "benchmarks/sa_lp/inputs/input007.cbi": "03d9aaacc0b9c6e343452048a322b9e6e81512410905fa6078b12d3422378431",
+    "benchmarks/sa_lp/inputs/input008.cbi": "ab9ae56ac118719532c4f18fe6a3017108f8c234535fd98aec007d9ca2770ac8",
+    "benchmarks/sa_lp/inputs/input009.cbi": "7efce48bcb1696ce54133e25d7b4bbf61e4d6fdc6bf050432a932c1772ced51f",
+    "benchmarks/sa_lp/inputs/input010.cbi": "1318cb6985dd270c152d9b78958496dafa885c93bd33d25e1a9f8250a87a7d3c",
+    "benchmarks/sa_lp/inputs/input011.cbi": "0ec7cc345d13e3b7d69f8fb3f0cfedb23d7002e46287ca8af528ccb5b511e44d",
+    "benchmarks/sa_lp/inputs/input012.cbi": "95d70ed4b54e0a9fdfb0f2d66f663c3e2bcce32ee92bec562e646351c3f3ac25",
+    "benchmarks/sa_lp/inputs/input013.cbi": "0a8f2b5d4c7ce156feb41c1ef336f8dbcf33ed9d251b66a65d40998e644f0d0f",
+    "benchmarks/sa_lp/inputs/input014.cbi": "9922aa01212eeee4d2b6a3b3ae8382cd025ec17aaa64690cbb682f7d2136ff2b",
+    "benchmarks/sa_lp/inputs/input015.cbi": "ab1607b09610df589b2323726d0cf87d48ff4630bb429a32287961d8516eefa3",
+    "benchmarks/sa_lp/inputs/input016.cbi": "493c7829a62b407dee503f2d90540004dc6457411d43b84140b03c3b69824f29",
+    "benchmarks/sa_lp/inputs/input017.cbi": "4667a57de7fbb9384b05d07490fa5498ecaf4b970f681c10965abd60732bb06f",
+    "benchmarks/sa_lp/inputs/input018.cbi": "807723f8590db4a40d6d161227bac50769a58816b1af2329c3d43d86ef911ff9",
+    "benchmarks/sa_lp/inputs/input019.cbi": "ac479761b51e595068cb69725962adf038a19e50a904c76b733eee9845f15f9d",
+    "benchmarks/sa_lp/inputs/input020.cbi": "e2529dcb6aafadf901386201188b4f770db15d3bb8f05133afd4c48bb421b9db",
+    "benchmarks/sa_lp/inputs/input021.cbi": "cfe19605e8c8feae2ef436ec7c5a716a65aa8972d060623e801f8086f9422419",
+    "benchmarks/sa_lp/inputs/input022.cbi": "95c0bf495c7934f6140140688c836ab0bbd74e656eb17d059b4ae26b5b667c7c",
+    "benchmarks/sa_lp/inputs/input023.cbi": "4a933eee6f50446fa227579b5e7015597f58dce45d87b663e2d102d606172f49",
+    "benchmarks/sa_lp/inputs/input024.cbi": "39489e0a5752e66aaf46d6f849016f725f139af37bbc02042f4ad7314b05a397",
+    "benchmarks/sa_lp/inputs/input025.cbi": "998ead8759cf4fb381057928734713170749f3a474b16bc86717c1afa81ff48f",
+    "benchmarks/sa_lp/inputs/input026.cbi": "0c278c9188cba12fe3a5720e5676788a4f26e9ad371981b95ab943c4160ce3c0",
+    "benchmarks/sa_lp/inputs/input027.cbi": "46150183a9387560bf2168320d6045f4bbfcc68c90e2c6d768b6b750a9b7433a",
+    "benchmarks/sa_lp/inputs/input028.cbi": "d7dc505211e5f09f3072ae05dc7c76c25227ec49728a1ce94ed9721fb9db2670",
+    "benchmarks/sa_lp/inputs/input029.cbi": "9c7cc74c26cef1dbf3a7f2d08359611d5f9fee5a2192accc1bade19936abebc1"
+  },
+  "legacy_variants": {
+    "baseline": [],
+    "no_layered": [
+      "layered"
+    ],
+    "no_compressed": [
+      "compressed"
+    ],
+    "no_multiway": [
+      "multiway"
+    ],
+    "no_reference_tree": [
+      "reference_tree"
+    ],
+    "no_dense": [
+      "dense"
+    ],
+    "no_small_forest": [
+      "small_forest"
+    ],
+    "no_local_search": [
+      "local_search"
+    ],
+    "no_adaptive": [
+      "adaptive"
+    ],
+    "no_final_delay": [
+      "final_delay"
+    ],
+    "no_joint_hub": [
+      "joint_hub"
+    ],
+    "no_joint_bypass": [
+      "joint_bypass"
+    ],
+    "no_large_contract": [
+      "large_contract"
+    ]
+  },
+  "search_variants": {
+    "baseline": [
+      [],
+      []
+    ],
+    "no_initial_pass": [
+      [
+        "initial_pass"
+      ],
+      []
+    ],
+    "no_reference_pass": [
+      [
+        "reference_pass"
+      ],
+      []
+    ],
+    "no_sa": [
+      [
+        "sa"
+      ],
+      []
+    ],
+    "no_lp": [
+      [
+        "lp"
+      ],
+      []
+    ],
+    "no_seed_lp": [
+      [
+        "seed_lp"
+      ],
+      []
+    ],
+    "no_capacity_retry": [
+      [
+        "capacity_retry"
+      ],
+      []
+    ],
+    "greedy": [
+      [
+        "uphill"
+      ],
+      []
+    ],
+    "no_structural_repair": [
+      [],
+      [
+        "--structural-repair",
+        "0"
+      ]
+    ],
+    "no_integer_repair": [
+      [],
+      [
+        "--repair-trials",
+        "0"
+      ]
+    ],
+    "no_locality": [
+      [],
+      [
+        "--locality",
+        "0"
+      ]
+    ],
+    "no_wire_lp": [
+      [],
+      [
+        "--wire-tiebreak",
+        "0"
+      ]
+    ],
+    "no_move_sink": [
+      [],
+      [
+        "--move-weights",
+        "0,15,15,10,20,10,5"
+      ]
+    ],
+    "no_swap_sinks": [
+      [],
+      [
+        "--move-weights",
+        "25,0,15,10,20,10,5"
+      ]
+    ],
+    "no_insert_buffer": [
+      [],
+      [
+        "--move-weights",
+        "25,15,0,10,20,10,5"
+      ]
+    ],
+    "no_delete_buffer": [
+      [],
+      [
+        "--move-weights",
+        "25,15,15,0,20,10,5"
+      ]
+    ],
+    "no_change_direction": [
+      [],
+      [
+        "--move-weights",
+        "25,15,15,10,0,10,5"
+      ]
+    ],
+    "no_change_type": [
+      [],
+      [
+        "--move-weights",
+        "25,15,15,10,20,0,5"
+      ]
+    ],
+    "no_move_subtree": [
+      [],
+      [
+        "--move-weights",
+        "25,15,15,10,20,10,0"
+      ]
+    ]
+  },
+  "seeds": [
+    1,
+    7,
+    17
+  ],
+  "single_process": true,
+  "compiler_build_type": "default, no Release flag",
+  "cpu_affinity": [
+    0,
+    1
+  ],
+  "protocol": "legacy 25-second safety cap; screening 100 iterations and 25-second safety cap; confirmation 5 seconds",
+  "initial_cpu_affinity": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19
+  ],
+  "environment": {
+    "ubuntu": "24.04.5",
+    "gcc": "13.3.0",
+    "cmake": "3.28.3",
+    "glibc": "2.39",
+    "cpu_max": "200000 100000",
+    "memory_max": 8589934592,
+    "network": "none",
+    "uid": 1000
+  },
+  "legacy_holdout": {
+    "generation_seed": 20261014,
+    "random_count": 100,
+    "large_count": 6,
+    "input_sha256": {
+      "benchmarks/ablation-holdout/inputs/input000.cbi": "aa243b1e1ee2d8b1ab347d81f83c5bcf8be70d7235fec090497de44edfb9f8e2",
+      "benchmarks/ablation-holdout/inputs/input001.cbi": "047716fe6f5784a0537c60bfa22987df07596b2e2e059177cb6003aa9f18e1dc",
+      "benchmarks/ablation-holdout/inputs/input002.cbi": "06868e1b0de1be20d825b1bf936a3707f7330f8c5adda7a2f5fc33e9e792d444",
+      "benchmarks/ablation-holdout/inputs/input003.cbi": "9f7e23bbe63acb0859e49e2601d9a75cb435ded08aad569730234340c0fd16a5",
+      "benchmarks/ablation-holdout/inputs/input004.cbi": "59647a92b208bfdbcbb8aac9dd3c4652a72eca9105ec77b1efff425f6f6adb8f",
+      "benchmarks/ablation-holdout/inputs/input005.cbi": "3b5274e62d8e9a8673fb32ab0a6a7d5955d5f8866321d3ad1fb88ac842cd3da4",
+      "benchmarks/ablation-holdout/inputs/input006.cbi": "63f4ce5a69e1939b481d35a52c811b3744b3ca713e15c76c494c96e82e2ded03",
+      "benchmarks/ablation-holdout/inputs/input007.cbi": "473c9d6ea31f65a878521619aaaf54ec7caeb1ad80df104dff0b5a96cc947492",
+      "benchmarks/ablation-holdout/inputs/input008.cbi": "b353fb7a55818155f8715286f35ff3345162f50b0bd03ec6c1aa6e24984640c6",
+      "benchmarks/ablation-holdout/inputs/input009.cbi": "590cb27857ba9891ed859885dc8ee5489b80628d97b40748d5939d981d91d268",
+      "benchmarks/ablation-holdout/inputs/input010.cbi": "6acfa7f95c52f0d98c77aeaac2922baa8c1caf0de2844b4c72f3717a8a68489e",
+      "benchmarks/ablation-holdout/inputs/input011.cbi": "aaa3b8b448f1538f719a1f6dbdbd81680ea69e69f4fabc46f4eee35345b085a8",
+      "benchmarks/ablation-holdout/inputs/input012.cbi": "4d6649b0cf72a7dd396aed2bb1f021c9f6ea0f8bcd4bf8a121d4598394b08d3b",
+      "benchmarks/ablation-holdout/inputs/input013.cbi": "75276b86f9aa5d986f684dc3a98e130acf17a87fe9e6a45c9a29b714a90165e3",
+      "benchmarks/ablation-holdout/inputs/input014.cbi": "bb2cd289d3163cfb2ca7fd5f5f43b534c11de186f39c65cf411b720b79a063e1",
+      "benchmarks/ablation-holdout/inputs/input015.cbi": "343b70dea86094b78b6fd3ad589eca0cca8de28de1b6fc3904305d3390417dea",
+      "benchmarks/ablation-holdout/inputs/input016.cbi": "24d55ecd752fe103b01341f013e2be117e1e3b8a85fe0971dc9e674c944dbaa7",
+      "benchmarks/ablation-holdout/inputs/input017.cbi": "aec4f73010892a24a9ec1a070ad0b915f0ba997b22f49a496b4339ec5d5fcaf1",
+      "benchmarks/ablation-holdout/inputs/input018.cbi": "975da0b3d9a0fb5a3166636f165ac649965b8b83b04f160c03f3d9a1cf6d3e5a",
+      "benchmarks/ablation-holdout/inputs/input019.cbi": "c37d7c87a96d7d8e774eb7678a5e2ac7070bc5ce37b3198206a2b531542213bf",
+      "benchmarks/ablation-holdout/inputs/input020.cbi": "4f0d66ba415c5f20d7c06f922b320ae52c118f681cf1e972b50923cea80c12b1",
+      "benchmarks/ablation-holdout/inputs/input021.cbi": "0c99f1d8fe34069f8f7350fbd6ebf80bf61277aa89969f5d71ebe77b98bff594",
+      "benchmarks/ablation-holdout/inputs/input022.cbi": "ba0ffbbf4d62d9eee4a4773c35051244e0b7b966911e41f2b1b619d490c2a12b",
+      "benchmarks/ablation-holdout/inputs/input023.cbi": "a47f2b71898ca9a7d2506a65a808e5c1e0374ea40168c790b0827d6fe1fab75a",
+      "benchmarks/ablation-holdout/inputs/input024.cbi": "67a56e2ca636134badad2822c3ecd682215184cb92fbee72a26a93e4d7ea87ee",
+      "benchmarks/ablation-holdout/inputs/input025.cbi": "85fb1b4510836359fbeded17a5711e99dcc6b569838ecca0157168639935f6e9",
+      "benchmarks/ablation-holdout/inputs/input026.cbi": "52730506b04f6947fccbaeb6b8969dc8802da521b62a7649757ea4a272640097",
+      "benchmarks/ablation-holdout/inputs/input027.cbi": "f85ebf74092f5b4c8ae5e040b3f1a49788aef2e1049cf845478dda7c66f67aac",
+      "benchmarks/ablation-holdout/inputs/input028.cbi": "0728a79701bd1a91f312b970226e6529ba780beac110b12a948cf803f7d474a9",
+      "benchmarks/ablation-holdout/inputs/input029.cbi": "cb77822e9e6a3b3679b7dd1a1339dcbf6dd28888a4b1b303fc2834d7812ade4e",
+      "benchmarks/ablation-holdout/inputs/input030.cbi": "821f6e482dd15927e39df14c8b86b3fbd792b013f1e18706254e6f21ec0d09d0",
+      "benchmarks/ablation-holdout/inputs/input031.cbi": "b5e72f3d7ffe17d468e046b8d10ca46904aa11f3983343769db3a9e6b7efe4dc",
+      "benchmarks/ablation-holdout/inputs/input032.cbi": "1de8cc02f6e45d4bfa22565896356ec7504ace7dc6694d9bd390da0f48fc633d",
+      "benchmarks/ablation-holdout/inputs/input033.cbi": "9a416c5c5df7d0c9fb71ae6008a78bc0c1fbf6bca21f229e9fef68f89ae1322c",
+      "benchmarks/ablation-holdout/inputs/input034.cbi": "ce9a04281da44af3ff31b49178fee517b02c91b5e2f7a2616bc5bbd4f5524e32",
+      "benchmarks/ablation-holdout/inputs/input035.cbi": "2165203cf48624b75e5ba9241055a9008d4b9417eb93a41fcf01a95547cfbdd8",
+      "benchmarks/ablation-holdout/inputs/input036.cbi": "603ccaaf12ebb13c3eabbbd9b1d216841d457e1e1debc36d7bf3ed976159cc06",
+      "benchmarks/ablation-holdout/inputs/input037.cbi": "275e107ff6003a9f23bae04985e20b634e4dbf021051d22da48b7ec8f1a23bd9",
+      "benchmarks/ablation-holdout/inputs/input038.cbi": "f5614e3538cd46aeb0962c2f4f16c94429cd4d73fd53356ffd0ed553e40fcbf4",
+      "benchmarks/ablation-holdout/inputs/input039.cbi": "0a46e3adf819bae6e656839e6180b6228efa9c24d2d6fc500ea3839430e1c9d2",
+      "benchmarks/ablation-holdout/inputs/input040.cbi": "5898dd1f4485397fc54b848bf168a90eb736103ad92f672970544b5873ac9412",
+      "benchmarks/ablation-holdout/inputs/input041.cbi": "30ca296b76b45fd35df3e7b36577073bb8e8046eb78725983250e35bfc624218",
+      "benchmarks/ablation-holdout/inputs/input042.cbi": "47486e3bbdd91b88853cefa0fd314c62f19dfdf198df58b9695ccf01cc18c1c6",
+      "benchmarks/ablation-holdout/inputs/input043.cbi": "dd19b40fd46d661724dfe4c07ecfb562845973460bf84c8f470641fa15f17047",
+      "benchmarks/ablation-holdout/inputs/input044.cbi": "13fba86cb19f08d0effa519399991e5900c816feb0b345a343eca61fb87fe8ad",
+      "benchmarks/ablation-holdout/inputs/input045.cbi": "db32f9855f735365610c86985f924799246ce1ab34d7ecd79098c673e93a1936",
+      "benchmarks/ablation-holdout/inputs/input046.cbi": "2527f8c409a559ab92bd4d7944528554067a0883ecb7945df8b879e1c1903c76",
+      "benchmarks/ablation-holdout/inputs/input047.cbi": "47789853ac2ab058b1b7f51d6b5fb9b25d3b11a7f00882d5430291101b8e34d4",
+      "benchmarks/ablation-holdout/inputs/input048.cbi": "78c7e90cd2702fca6cea060e9449a3398a57249d6a8f8ef210b4a774ae157e71",
+      "benchmarks/ablation-holdout/inputs/input049.cbi": "ad3616f780aeb541914eb38d3c5eebcf660b92f5e007d41c76a2ee2a15339076",
+      "benchmarks/ablation-holdout/inputs/input050.cbi": "5f2c9dce6a1a81c7a261e1044bf915a3a38029dedc70ca08ae83001c4a514e7b",
+      "benchmarks/ablation-holdout/inputs/input051.cbi": "2cceda59d21db60258dbe1889d2a8160c2743262a08feba0355b3465df505c30",
+      "benchmarks/ablation-holdout/inputs/input052.cbi": "c7b69a849368bae197c19b009d68986c87216a078d16dfc49d8fe98f1a2f955b",
+      "benchmarks/ablation-holdout/inputs/input053.cbi": "a44fd3a2f7d6a84960a0d033dc0c7312af2c8713600903207be8b759cdb5f4a2",
+      "benchmarks/ablation-holdout/inputs/input054.cbi": "82390280f19425b388cb5dbc47592a3eaea0579d34252c74632c0308f1fda79a",
+      "benchmarks/ablation-holdout/inputs/input055.cbi": "cfcbce4d4caf22302d099b1bb088acab39eb302c0943d6bdb082ca2377b39a01",
+      "benchmarks/ablation-holdout/inputs/input056.cbi": "ea676718f3fab2e5adde55e61c70be85ca0c9a7d2820e90568bb82dcc738c38a",
+      "benchmarks/ablation-holdout/inputs/input057.cbi": "cd8ae65e8b90568f73a6f36890699f6491a1a80a5a2d5fd671c28ff77637d426",
+      "benchmarks/ablation-holdout/inputs/input058.cbi": "fd9fe6da24436304b3d1c83ac7e0f9e955d7e8e27e1e221d20a0563396e9324d",
+      "benchmarks/ablation-holdout/inputs/input059.cbi": "5621752df99c427a49628329a01a99419369bd22b18e74efbc4269de0744f5ee",
+      "benchmarks/ablation-holdout/inputs/input060.cbi": "0e23c1f724bdfcfaf0e4a6391d40917d0e62af3966e211f9668ba4807e2f3c59",
+      "benchmarks/ablation-holdout/inputs/input061.cbi": "961e5237d802d9245017de319c7a035cd119138222ac727271881e95a376b243",
+      "benchmarks/ablation-holdout/inputs/input062.cbi": "228b8cd716fdcc27614ca122e85d4c3310a679093c66266ee69fd42164ffb4db",
+      "benchmarks/ablation-holdout/inputs/input063.cbi": "1015d74340f0bda978de3476f8d4dc0ed0606caa77ed1ccfe8066f0a9243aa19",
+      "benchmarks/ablation-holdout/inputs/input064.cbi": "c6784316d6db0b981599b5d6eaab5598a765387d2cd1998a864ff500eac02ffe",
+      "benchmarks/ablation-holdout/inputs/input065.cbi": "728dda574698bc94a64f9fde2de1b26cd48d42fbfc8dcd4290ee8c3a85689c24",
+      "benchmarks/ablation-holdout/inputs/input066.cbi": "eec53217c9730fe636a8438e65ca4d67f974ef1245fd4723044c5e621452ca25",
+      "benchmarks/ablation-holdout/inputs/input067.cbi": "f43db82dbd339c34bc4b2e26667dd067ed816ec7aa8d1e25ac1b28f1a6962f04",
+      "benchmarks/ablation-holdout/inputs/input068.cbi": "41ca82b9990b08292dd2f38f63357f1fb8392c013c512d72220c5bfec9ad7a63",
+      "benchmarks/ablation-holdout/inputs/input069.cbi": "c66893afa421e14c0024a8abe4fa64b8dd0bb4aa35fee75826db56d879484944",
+      "benchmarks/ablation-holdout/inputs/input070.cbi": "62d77da85f66898a3f429640ca3c845926fc8a00021c4c6101975c1d62bc94d0",
+      "benchmarks/ablation-holdout/inputs/input071.cbi": "3d7c1b8b88a539d048dee481c09a58f5b99eb3b0d9235735f37fa85c223df3c9",
+      "benchmarks/ablation-holdout/inputs/input072.cbi": "cd7fe0b78a58b989a1c21b1e4295d9547c29bca37772bf053b619d9a70c21e06",
+      "benchmarks/ablation-holdout/inputs/input073.cbi": "0e869d1e0b9769c118a1eb1194e8d45cc303f60e1532e354580becb849f4c8f3",
+      "benchmarks/ablation-holdout/inputs/input074.cbi": "f4fc9c4117ef365fc2d4dbc80cfc5dc284bd9d80672ab7851afe5e1171db222c",
+      "benchmarks/ablation-holdout/inputs/input075.cbi": "2504633b9a7eed3733575daa53e141454af887a7e665dfd9ff51b711f4f44766",
+      "benchmarks/ablation-holdout/inputs/input076.cbi": "efc435091c04eb5e458854dfd53c436cb4b577937b4627c7b406d7d8d5c053f0",
+      "benchmarks/ablation-holdout/inputs/input077.cbi": "8d7f0510ed38b340af73ae8f13764ce19a99c9d4bde870538e0261f904f09a52",
+      "benchmarks/ablation-holdout/inputs/input078.cbi": "2b0e69993f9b2852e31f03b74c432b29d77b10ec9669d53f1469b6e4c7f44930",
+      "benchmarks/ablation-holdout/inputs/input079.cbi": "03b0c562bac89f2710ba66b9ce60a69130d19e121f72d05521503401769899a6",
+      "benchmarks/ablation-holdout/inputs/input080.cbi": "c79e8a50e7bf5816a059e74a9773553dedfe82a2b5962774f6d31c5806f814f0",
+      "benchmarks/ablation-holdout/inputs/input081.cbi": "730d5275afb6ef403a261343eeaf7e0692db8587b5137d3577db220c8c7dde7a",
+      "benchmarks/ablation-holdout/inputs/input082.cbi": "243524a8ae42e633d9966762bfd1bb917e1f5001f02e881bca7cd3143d57dd2a",
+      "benchmarks/ablation-holdout/inputs/input083.cbi": "e12e86a94a1d151d4c8826f1bedfbe1546bf7d2d9a4bab742576323981ff9d61",
+      "benchmarks/ablation-holdout/inputs/input084.cbi": "4d517b194830e94a17db5e39964b515bb204537c25aa3ee75f6e3e00e2fb42ab",
+      "benchmarks/ablation-holdout/inputs/input085.cbi": "954e8ab749d3ebd6d067148e21161fe89f20d4c694aed63c02564badff4d28d7",
+      "benchmarks/ablation-holdout/inputs/input086.cbi": "010b860b058931e7e6fee89bc10cd8a3722afc1751521db163c66a2bd14db042",
+      "benchmarks/ablation-holdout/inputs/input087.cbi": "9262be6e3fa1ce996e189804dc385d7932a3cd73592a8add0b0fb25695f23c66",
+      "benchmarks/ablation-holdout/inputs/input088.cbi": "fd94416d483666846b1cafb47615a95648bb511e725b4d08afb7ba7bab27f519",
+      "benchmarks/ablation-holdout/inputs/input089.cbi": "eed16c3929b3c31e5994ca686be90087c0e9687b68cc7de1471ad3a5855a248f",
+      "benchmarks/ablation-holdout/inputs/input090.cbi": "e3062cc33f58366a5adc9d9c0daaeae64c3bae910d84701dd08d0ed54e331b26",
+      "benchmarks/ablation-holdout/inputs/input091.cbi": "917480f9712afe6016068beba4c32f1c92cb733108f9d1177b59b683b18c74db",
+      "benchmarks/ablation-holdout/inputs/input092.cbi": "149d242771210b2e312f93382de41fcb7b3e7b6a226e2c1ba50baa9bb321b8dc",
+      "benchmarks/ablation-holdout/inputs/input093.cbi": "e10f4256315d754e7f7221fe0a263e9c8c7fc4907fc2dbd6a49e6b15b2b1872b",
+      "benchmarks/ablation-holdout/inputs/input094.cbi": "2213a8bc03974f075417cc0ed4034ddbaf17cfbb9f62fbb6d490019442ebe6a6",
+      "benchmarks/ablation-holdout/inputs/input095.cbi": "3019ccfe785b32a96383fdea34704e9ebdeb5736dac3e3a1fffa8d6a6c17ab5d",
+      "benchmarks/ablation-holdout/inputs/input096.cbi": "2452a779ccf08ca1ead6b9d09bdee4d044f87b21d9735b9870ae48787a9e7a29",
+      "benchmarks/ablation-holdout/inputs/input097.cbi": "7e8d516de1294ef2ac9930c1a00ebe8707fcc100af06ab8f129cd69894ea664b",
+      "benchmarks/ablation-holdout/inputs/input098.cbi": "ab647fb2b57ca5aa10064b92034e33c4120b00b2e00f3bf147d4ca36a9ee3d4d",
+      "benchmarks/ablation-holdout/inputs/input099.cbi": "b95279af3aa4b7816e7b7758cfbf837cc8d9cf6eb28f1069f641ffcd1af1702a",
+      "benchmarks/ablation-holdout/inputs/large000.cbi": "35d8392246a8a7fc8a6fefe7bb778e57e2bdd2187d7489f747a88ddadca3cb62",
+      "benchmarks/ablation-holdout/inputs/large001.cbi": "d7e4a4b2083c5bf61ae70301fc07f46eae5debeea28e7358f0f05de0b05dabe5",
+      "benchmarks/ablation-holdout/inputs/large002.cbi": "2c28181f8cbddd3f06e578c306228d4204c20e91ed99f021a3b4999a19337bd5",
+      "benchmarks/ablation-holdout/inputs/large003.cbi": "88455f9f9110b4b578d0f255b1450c80b41eabb4b44284573f54435a698fcd0d",
+      "benchmarks/ablation-holdout/inputs/large004.cbi": "76ce35d3e461a8ae7cdbbb9d8865ef7353fabec693f7a45e833e43ac6a4c8b33",
+      "benchmarks/ablation-holdout/inputs/large005.cbi": "5daa11f531c08dcd5e729f9c50174235cab492ab9a6c07be661bc740595dff85"
+    }
+  },
+  "confirmation": {
+    "cases": [
+      "example/input.cbi",
+      "issues/closed/019 \u5b50\u6a39\u8207sink\u4ea4\u63db\u53ef\u964d\u4f4ebuffer\u578b\u5225\u6210\u672c/repro/input001.cbi",
+      "benchmarks/sa_lp/inputs/input015.cbi",
+      "benchmarks/sa_lp/inputs/input019.cbi",
+      "benchmarks/sa_lp/inputs/input023.cbi",
+      "benchmarks/sa_lp/inputs/input027.cbi"
+    ],
+    "variants": [
+      "baseline",
+      "no_initial_pass",
+      "no_seed_lp",
+      "lean_initialization",
+      "no_final_delay"
+    ],
+    "reason": "Two previously challenging cases plus four evenly spaced generated IDs reserved from SA screening. Tests both independent removals and their combination.",
+    "combinations": {
+      "lean_initialization": [
+        [
+          "initial_pass",
+          "seed_lp"
+        ],
+        []
+      ],
+      "no_final_delay": [
+        [
+          "final_delay"
+        ],
+        []
+      ]
+    }
+  },
+  "initialization_stress": {
+    "seed": 20261015,
+    "sizes": [
+      256,
+      512,
+      1024,
+      2048
+    ],
+    "budgets": [
+      0.25,
+      0.5,
+      1,
+      2
+    ],
+    "reason": "Adversarial mix of a cheap long binary type and expensive/high-fanout short types. Test loss of the cheap incumbent when the expanded construction pipeline uses its time slice.",
+    "input_sha256": {
+      "benchmarks/ablation-stress/inputs/input000.cbi": "677d1fea993f5973142200953c6509eaa3746380b533f0cd31631e6a93d979ac",
+      "benchmarks/ablation-stress/inputs/input001.cbi": "7b1979b6fd4fdefd83d845f69d4b8a1267eff3b4a01469b1f4f647c4bc1027ad",
+      "benchmarks/ablation-stress/inputs/input002.cbi": "2b4c9caebc3309a49d28741d1802b5fec97b3eb00c2c91db053deb72c036a5e7",
+      "benchmarks/ablation-stress/inputs/input003.cbi": "3dcc130b7b774deff1a45a3cae5ecc8d2b2e1c5acab07e25bf382e6618214be0"
+    }
+  }
+}

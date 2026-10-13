@@ -1,0 +1,1112 @@
+[
+  {
+    "input": "issues/closed/001 \u55ae\u8f38\u51fabuffer\u5eab\u8aa4\u5224SRC\u53ef\u5206\u652f\u7684\u5408\u6cd5\u89e3/input001.cbi",
+    "baseline_score": 2,
+    "without_final_delay_score": 2,
+    "byte_identical": true
+  },
+  {
+    "input": "issues/closed/021 \u56fa\u5b9a\u4e09\u6839merge\u6f0f\u6389\u5408\u6cd5\u56db\u4e94\u8f38\u51faforest/repro/input001.cbi",
+    "baseline_score": 102,
+    "without_final_delay_score": 102,
+    "byte_identical": true
+  },
+  {
+    "input": "benchmarks/sa_lp/inputs/input026.cbi",
+    "baseline_score": 127,
+    "without_final_delay_score": 127,
+    "byte_identical": true
+  },
+  {
+    "input": "benchmarks/sa_lp/inputs/input021.cbi",
+    "baseline_score": 17,
+    "without_final_delay_score": 17,
+    "byte_identical": true
+  },
+  {
+    "input": "benchmarks/sa_lp/inputs/input003.cbi",
+    "baseline_score": 38,
+    "without_final_delay_score": 38,
+    "byte_identical": true
+  },
+  {
+    "input": "issues/closed/009 \u5efa\u69cb\u540c\u5206\u5019\u9078\u63d0\u524d\u4e1f\u68c4\u932f\u5931\u5c40\u90e8\u6539\u5584/input001.cbi",
+    "baseline_score": 17,
+    "without_final_delay_score": 17,
+    "byte_identical": true
+  },
+  {
+    "input": "issues/closed/022 \u6700\u7d42\u7d50\u679c\u6f0f\u6389\u65e2\u6709delay\u6539\u5584/repro/input001.cbi",
+    "baseline_score": 34,
+    "without_final_delay_score": 34,
+    "byte_identical": true
+  },
+  {
+    "input": "issues/closed/013 \u5f8c\u7e8c\u4f4d\u7f6e\u8207\u9023\u7dda\u6539\u5584\u5f8c\u672a\u91cd\u8a66buffer\u5408\u4f75/input001.cbi",
+    "baseline_score": 17,
+    "without_final_delay_score": 17,
+    "byte_identical": true
+  },
+  {
+    "input": "benchmarks/sa_lp/inputs/input007.cbi",
+    "baseline_score": 77,
+    "without_final_delay_score": 77,
+    "byte_identical": true
+  },
+  {
+    "input": "issues/closed/017 \u5b8c\u6574refinement\u524d\u4f9d\u521d\u59cbScore\u6dd8\u6c70\u53ef\u6539\u5584\u5019\u9078/input001.cbi",
+    "baseline_score": 27,
+    "without_final_delay_score": 27,
+    "byte_identical": true
+  },
+  {
+    "input": "benchmarks/sa_lp/inputs/input027.cbi",
+    "baseline_score": 17,
+    "without_final_delay_score": 17,
+    "byte_identical": true
+  },
+  {
+    "input": "issues/closed/029 \u9577\u8ddd\u96e2\u6df7\u5408relay\u672a\u5229\u7528length\u516c\u56e0\u6578\u7e2e\u5c0fDP/repro/input002.cbi",
+    "baseline_score": 18,
+    "without_final_delay_score": 18,
+    "byte_identical": true
+  },
+  {
+    "input": "issues/closed/028 \u5de8\u5927\u6676\u7247\u5c3a\u5bf8\u4f7f\u8fd1\u539f\u9ede\u53ef\u8868\u793a\u5408\u6cd5\u89e3\u906d\u62d2/repro/input001.cbi",
+    "baseline_score": 1,
+    "without_final_delay_score": 1,
+    "byte_identical": true
+  },
+  {
+    "input": "issues/closed/007 \u5206\u652fbuffer\u56fa\u5b9a\u6700\u5927\u7dda\u9577\u6f0f\u6389\u5ec9\u50f9\u5206\u652f\u52a0relay/input001.cbi",
+    "baseline_score": 4,
+    "without_final_delay_score": 4,
+    "byte_identical": true
+  },
+  {
+    "input": "issues/closed/008 \u5c40\u90e8\u5b50\u6a39\u4ecd\u56fa\u5b9a\u4e8c\u5143\u5206\u652f\u6f0f\u6389\u591a\u8f38\u51fa\u5408\u4f75/input001.cbi",
+    "baseline_score": 20,
+    "without_final_delay_score": 20,
+    "byte_identical": true
+  },
+  {
+    "input": "benchmarks/sa_lp/inputs/input015.cbi",
+    "baseline_score": 46,
+    "without_final_delay_score": 46,
+    "byte_identical": true
+  },
+  {
+    "input": "issues/closed/002 \u908a\u754c\u540c\u8ef8\u9023\u7dda\u7f3a\u5c11\u5411\u5167\u7e5e\u884c\u7684relay/input001.cbi",
+    "baseline_score": 3,
+    "without_final_delay_score": 3,
+    "byte_identical": true
+  },
+  {
+    "input": "issues/closed/020 \u5bc6\u96c6\u6676\u7247\u4e8c\u5143\u5efa\u69cb\u6f0f\u6389\u5408\u6cd5\u4e09\u8f38\u51faforest/repro/input002.cbi",
+    "baseline_score": 203,
+    "without_final_delay_score": 203,
+    "byte_identical": true
+  },
+  {
+    "input": "example/input.cbi",
+    "baseline_score": 41,
+    "without_final_delay_score": 41,
+    "byte_identical": true
+  },
+  {
+    "input": "issues/closed/029 \u9577\u8ddd\u96e2\u6df7\u5408relay\u672a\u5229\u7528length\u516c\u56e0\u6578\u7e2e\u5c0fDP/repro/input003.cbi",
+    "baseline_score": 18,
+    "without_final_delay_score": 18,
+    "byte_identical": true
+  },
+  {
+    "input": "benchmarks/sa_lp/inputs/input008.cbi",
+    "baseline_score": 29,
+    "without_final_delay_score": 29,
+    "byte_identical": true
+  },
+  {
+    "input": "issues/closed/005 relay\u56fa\u5b9a\u6700\u5927\u7dda\u9577\u578b\u5225\u9020\u6210\u9ad8\u6210\u672c/input001.cbi",
+    "baseline_score": 6,
+    "without_final_delay_score": 6,
+    "byte_identical": true
+  },
+  {
+    "input": "benchmarks/sa_lp/inputs/input000.cbi",
+    "baseline_score": 26,
+    "without_final_delay_score": 26,
+    "byte_identical": true
+  },
+  {
+    "input": "issues/closed/004 hub\u9078\u9ede\u6f0f\u7b97SRC\u63a5\u5165relay\u6210\u672c/input001.cbi",
+    "baseline_score": 16,
+    "without_final_delay_score": 16,
+    "byte_identical": true
+  },
+  {
+    "input": "issues/closed/015 \u77ed\u8def\u5f91\u7f3a\u5c11\u5ef6\u9072relay\u63d2\u5165\u800c\u932f\u5931\u96f6skew/input001.cbi",
+    "baseline_score": 1,
+    "without_final_delay_score": 1,
+    "byte_identical": true
+  },
+  {
+    "input": "issues/closed/020 \u5bc6\u96c6\u6676\u7247\u4e8c\u5143\u5efa\u69cb\u6f0f\u6389\u5408\u6cd5\u4e09\u8f38\u51faforest/repro/input001.cbi",
+    "baseline_score": 102,
+    "without_final_delay_score": 102,
+    "byte_identical": true
+  },
+  {
+    "input": "benchmarks/sa_lp/inputs/input012.cbi",
+    "baseline_score": 107,
+    "without_final_delay_score": 107,
+    "byte_identical": true
+  },
+  {
+    "input": "benchmarks/sa_lp/inputs/input024.cbi",
+    "baseline_score": 64,
+    "without_final_delay_score": 64,
+    "byte_identical": true
+  },
+  {
+    "input": "issues/closed/014 \u7f3a\u5c11\u55ae\u4e00sink\u6539\u63a5\u4ee5\u4f7f\u7528\u5206\u652f\u5269\u9918\u5bb9\u91cf/input001.cbi",
+    "baseline_score": 16,
+    "without_final_delay_score": 16,
+    "byte_identical": true
+  },
+  {
+    "input": "benchmarks/sa_lp/inputs/input010.cbi",
+    "baseline_score": 360,
+    "without_final_delay_score": 360,
+    "byte_identical": true
+  },
+  {
+    "input": "issues/closed/011 \u56fa\u5b9a\u62d3\u6a38\u7f3a\u5c11buffer\u4f4d\u7f6e\u5fae\u8abf\u932f\u5931\u8f03\u4f4eskew/input001.cbi",
+    "baseline_score": 31,
+    "without_final_delay_score": 31,
+    "byte_identical": true
+  },
+  {
+    "input": "issues/closed/012 \u7f3a\u5c11\u8de8\u5206\u652fsink\u4ea4\u63db\u9020\u6210\u53ef\u907f\u514d\u7684skew/input001.cbi",
+    "baseline_score": 16,
+    "without_final_delay_score": 16,
+    "byte_identical": true
+  },
+  {
+    "input": "issues/closed/030 \u5bc6\u96c6forest\u50c5SRC\u76f4\u9023buffer\u6f0f\u6389\u968e\u5c64\u5408\u6cd5\u6a39/repro/input002.cbi",
+    "baseline_score": 8,
+    "without_final_delay_score": 8,
+    "byte_identical": true
+  },
+  {
+    "input": "issues/closed/006 relay\u9593\u8ddd\u653f\u7b56\u7f3a\u5c11\u4e2d\u6bb5\u6df7\u5408\u578b\u5225\u512a\u5316/input001.cbi",
+    "baseline_score": 13,
+    "without_final_delay_score": 13,
+    "byte_identical": true
+  },
+  {
+    "input": "benchmarks/sa_lp/inputs/input005.cbi",
+    "baseline_score": 45,
+    "without_final_delay_score": 45,
+    "byte_identical": true
+  },
+  {
+    "input": "benchmarks/sa_lp/inputs/input006.cbi",
+    "baseline_score": 112,
+    "without_final_delay_score": 112,
+    "byte_identical": true
+  },
+  {
+    "input": "benchmarks/sa_lp/inputs/input002.cbi",
+    "baseline_score": 20,
+    "without_final_delay_score": 20,
+    "byte_identical": true
+  },
+  {
+    "input": "issues/closed/019 \u5b50\u6a39\u8207sink\u4ea4\u63db\u53ef\u964d\u4f4ebuffer\u578b\u5225\u6210\u672c/repro/input001.cbi",
+    "baseline_score": 105,
+    "without_final_delay_score": 105,
+    "byte_identical": true
+  },
+  {
+    "input": "issues/closed/003 \u56fa\u5b9a\u4e8c\u5143\u6a39\u6f0f\u6389\u4f4e\u6210\u672c\u591a\u8f38\u51fa\u5408\u4f75/input001.cbi",
+    "baseline_score": 10,
+    "without_final_delay_score": 10,
+    "byte_identical": true
+  },
+  {
+    "input": "issues/closed/010 \u5206\u652f\u7e3d\u7dda\u9577\u5e73\u5747\u5206\u914d\u6f0f\u6389\u8f03\u4f4erelay\u6210\u672c/input001.cbi",
+    "baseline_score": 8,
+    "without_final_delay_score": 8,
+    "byte_identical": true
+  },
+  {
+    "input": "issues/closed/018 \u5927\u6a39\u8df3\u904e\u591a\u8f38\u51fa\u6539\u5584\u4fdd\u7559\u4e09\u500dbuffer\u6210\u672c/input001.cbi",
+    "baseline_score": 341,
+    "without_final_delay_score": 341,
+    "byte_identical": true
+  },
+  {
+    "input": "benchmarks/sa_lp/inputs/input013.cbi",
+    "baseline_score": 170,
+    "without_final_delay_score": 170,
+    "byte_identical": true
+  },
+  {
+    "input": "issues/closed/029 \u9577\u8ddd\u96e2\u6df7\u5408relay\u672a\u5229\u7528length\u516c\u56e0\u6578\u7e2e\u5c0fDP/repro/input001.cbi",
+    "baseline_score": 18,
+    "without_final_delay_score": 18,
+    "byte_identical": true
+  },
+  {
+    "input": "issues/closed/026 \u5206\u5c64ring\u5e03\u5c40\u4fdd\u7559\u516b\u5341\u4e8c\u81f3\u4e00\u767e\u4e8c\u5341\u4e5dbuffer\u6210\u672c/repro/input001.cbi",
+    "baseline_score": 5,
+    "without_final_delay_score": 5,
+    "byte_identical": true
+  },
+  {
+    "input": "issues/closed/016 \u5c40\u90e8\u5efa\u69cb\u5019\u9078\u7121\u56de\u9000\u6f0f\u6389\u5c0f\u578b\u5408\u6cd5\u6a39/input001.cbi",
+    "baseline_score": 102,
+    "without_final_delay_score": 102,
+    "byte_identical": true
+  },
+  {
+    "input": "benchmarks/sa_lp/inputs/input017.cbi",
+    "baseline_score": 39,
+    "without_final_delay_score": 39,
+    "byte_identical": true
+  },
+  {
+    "input": "benchmarks/sa_lp/inputs/input020.cbi",
+    "baseline_score": 28,
+    "without_final_delay_score": 28,
+    "byte_identical": true
+  },
+  {
+    "input": "benchmarks/sa_lp/inputs/input004.cbi",
+    "baseline_score": 11,
+    "without_final_delay_score": 11,
+    "byte_identical": true
+  },
+  {
+    "input": "issues/closed/023 \u5bc6\u96c6\u6676\u7247\u591a\u8f38\u51fa\u5efa\u69cb\u6f0f\u6389\u5341\u516dsink\u5408\u6cd5forest/repro/input001.cbi",
+    "baseline_score": 6,
+    "without_final_delay_score": 6,
+    "byte_identical": true
+  },
+  {
+    "input": "benchmarks/sa_lp/inputs/input025.cbi",
+    "baseline_score": 26,
+    "without_final_delay_score": 26,
+    "byte_identical": true
+  },
+  {
+    "input": "issues/closed/028 \u5de8\u5927\u6676\u7247\u5c3a\u5bf8\u4f7f\u8fd1\u539f\u9ede\u53ef\u8868\u793a\u5408\u6cd5\u89e3\u906d\u62d2/repro/input004.cbi",
+    "baseline_score": 1,
+    "without_final_delay_score": 1,
+    "byte_identical": true
+  },
+  {
+    "input": "issues/closed/024 hub\u53d6\u9ede\u6f0f\u6389SRC\u53ef\u9054\u5340\u57df\u8207sink\u5e73\u8861\u5ea7\u6a19\u4ea4\u9ede/repro/input002.cbi",
+    "baseline_score": 38,
+    "without_final_delay_score": 38,
+    "byte_identical": true
+  },
+  {
+    "input": "issues/closed/030 \u5bc6\u96c6forest\u50c5SRC\u76f4\u9023buffer\u6f0f\u6389\u968e\u5c64\u5408\u6cd5\u6a39/repro/input001.cbi",
+    "baseline_score": 9,
+    "without_final_delay_score": 9,
+    "byte_identical": true
+  },
+  {
+    "input": "benchmarks/sa_lp/inputs/input016.cbi",
+    "baseline_score": 133,
+    "without_final_delay_score": 133,
+    "byte_identical": true
+  },
+  {
+    "input": "issues/closed/021 \u56fa\u5b9a\u4e09\u6839merge\u6f0f\u6389\u5408\u6cd5\u56db\u4e94\u8f38\u51faforest/repro/input002.cbi",
+    "baseline_score": 102,
+    "without_final_delay_score": 102,
+    "byte_identical": true
+  },
+  {
+    "input": "issues/closed/026 \u5206\u5c64ring\u5e03\u5c40\u4fdd\u7559\u516b\u5341\u4e8c\u81f3\u4e00\u767e\u4e8c\u5341\u4e5dbuffer\u6210\u672c/repro/input002.cbi",
+    "baseline_score": 5,
+    "without_final_delay_score": 5,
+    "byte_identical": true
+  },
+  {
+    "input": "issues/closed/023 \u5bc6\u96c6\u6676\u7247\u591a\u8f38\u51fa\u5efa\u69cb\u6f0f\u6389\u5341\u516dsink\u5408\u6cd5forest/repro/input002.cbi",
+    "baseline_score": 8,
+    "without_final_delay_score": 8,
+    "byte_identical": true
+  },
+  {
+    "input": "benchmarks/sa_lp/inputs/input011.cbi",
+    "baseline_score": 25,
+    "without_final_delay_score": 25,
+    "byte_identical": true
+  },
+  {
+    "input": "benchmarks/sa_lp/inputs/input022.cbi",
+    "baseline_score": 59,
+    "without_final_delay_score": 59,
+    "byte_identical": true
+  },
+  {
+    "input": "issues/closed/001 \u55ae\u8f38\u51fabuffer\u5eab\u8aa4\u5224SRC\u53ef\u5206\u652f\u7684\u5408\u6cd5\u89e3/input002.cbi",
+    "baseline_score": 102,
+    "without_final_delay_score": 102,
+    "byte_identical": true
+  },
+  {
+    "input": "issues/closed/025 sink\u5206\u7d44\u8207buffer\u4f4d\u7f6e\u9700\u540c\u6b65\u6539\u52d5\u624d\u80fd\u964d\u4f4eskew/repro/input001.cbi",
+    "baseline_score": 9,
+    "without_final_delay_score": 9,
+    "byte_identical": true
+  },
+  {
+    "input": "issues/closed/027 bypass\u9700\u540c\u6b65\u91cd\u5b9a\u4f4d\u5b50buffer\u624d\u80fd\u4fdd\u6301\u96f6skew/repro/input001.cbi",
+    "baseline_score": 6,
+    "without_final_delay_score": 6,
+    "byte_identical": true
+  },
+  {
+    "input": "issues/closed/025 sink\u5206\u7d44\u8207buffer\u4f4d\u7f6e\u9700\u540c\u6b65\u6539\u52d5\u624d\u80fd\u964d\u4f4eskew/repro/input002.cbi",
+    "baseline_score": 9,
+    "without_final_delay_score": 9,
+    "byte_identical": true
+  },
+  {
+    "input": "issues/closed/015 \u77ed\u8def\u5f91\u7f3a\u5c11\u5ef6\u9072relay\u63d2\u5165\u800c\u932f\u5931\u96f6skew/input002.cbi",
+    "baseline_score": 101,
+    "without_final_delay_score": 101,
+    "byte_identical": true
+  },
+  {
+    "input": "benchmarks/sa_lp/inputs/input019.cbi",
+    "baseline_score": 7,
+    "without_final_delay_score": 7,
+    "byte_identical": true
+  },
+  {
+    "input": "issues/closed/028 \u5de8\u5927\u6676\u7247\u5c3a\u5bf8\u4f7f\u8fd1\u539f\u9ede\u53ef\u8868\u793a\u5408\u6cd5\u89e3\u906d\u62d2/repro/input003.cbi",
+    "baseline_score": 1,
+    "without_final_delay_score": 1,
+    "byte_identical": true
+  },
+  {
+    "input": "issues/closed/031 partial_hub\u9810\u7b97\u504f\u5411\u4f4e\u4f4dmask\u4f7fsink\u53cd\u5e8f\u6539\u8b8a\u6700\u512a\u7d50\u679c/repro/input001.cbi",
+    "baseline_score": 9,
+    "without_final_delay_score": 9,
+    "byte_identical": true
+  },
+  {
+    "input": "issues/closed/024 hub\u53d6\u9ede\u6f0f\u6389SRC\u53ef\u9054\u5340\u57df\u8207sink\u5e73\u8861\u5ea7\u6a19\u4ea4\u9ede/repro/input001.cbi",
+    "baseline_score": 38,
+    "without_final_delay_score": 38,
+    "byte_identical": true
+  },
+  {
+    "input": "benchmarks/sa_lp/inputs/input014.cbi",
+    "baseline_score": 44,
+    "without_final_delay_score": 44,
+    "byte_identical": true
+  },
+  {
+    "input": "issues/closed/028 \u5de8\u5927\u6676\u7247\u5c3a\u5bf8\u4f7f\u8fd1\u539f\u9ede\u53ef\u8868\u793a\u5408\u6cd5\u89e3\u906d\u62d2/repro/input002.cbi",
+    "baseline_score": 1,
+    "without_final_delay_score": 1,
+    "byte_identical": true
+  },
+  {
+    "input": "benchmarks/sa_lp/inputs/input028.cbi",
+    "baseline_score": 302,
+    "without_final_delay_score": 302,
+    "byte_identical": true
+  },
+  {
+    "input": "benchmarks/sa_lp/inputs/input023.cbi",
+    "baseline_score": 107,
+    "without_final_delay_score": 107,
+    "byte_identical": true
+  },
+  {
+    "input": "issues/closed/027 bypass\u9700\u540c\u6b65\u91cd\u5b9a\u4f4d\u5b50buffer\u624d\u80fd\u4fdd\u6301\u96f6skew/repro/input002.cbi",
+    "baseline_score": 6,
+    "without_final_delay_score": 6,
+    "byte_identical": true
+  },
+  {
+    "input": "benchmarks/sa_lp/inputs/input018.cbi",
+    "baseline_score": 10,
+    "without_final_delay_score": 10,
+    "byte_identical": true
+  },
+  {
+    "input": "benchmarks/sa_lp/inputs/input001.cbi",
+    "baseline_score": 107,
+    "without_final_delay_score": 107,
+    "byte_identical": true
+  },
+  {
+    "input": "benchmarks/sa_lp/inputs/input029.cbi",
+    "baseline_score": 61,
+    "without_final_delay_score": 61,
+    "byte_identical": true
+  },
+  {
+    "input": "issues/closed/021 \u56fa\u5b9a\u4e09\u6839merge\u6f0f\u6389\u5408\u6cd5\u56db\u4e94\u8f38\u51faforest/repro/input003.cbi",
+    "baseline_score": 203,
+    "without_final_delay_score": 203,
+    "byte_identical": true
+  },
+  {
+    "input": "benchmarks/sa_lp/inputs/input009.cbi",
+    "baseline_score": 20,
+    "without_final_delay_score": 20,
+    "byte_identical": true
+  },
+  {
+    "input": "issues/closed/031 partial_hub\u9810\u7b97\u504f\u5411\u4f4e\u4f4dmask\u4f7fsink\u53cd\u5e8f\u6539\u8b8a\u6700\u512a\u7d50\u679c/repro/input002.cbi",
+    "baseline_score": 9,
+    "without_final_delay_score": 9,
+    "byte_identical": true
+  },
+  {
+    "input": "benchmarks/ablation-holdout/inputs/input031.cbi",
+    "baseline_score": 44,
+    "without_final_delay_score": 44,
+    "byte_identical": true
+  },
+  {
+    "input": "benchmarks/ablation-holdout/inputs/input050.cbi",
+    "baseline_score": 110,
+    "without_final_delay_score": 110,
+    "byte_identical": true
+  },
+  {
+    "input": "benchmarks/ablation-holdout/inputs/input076.cbi",
+    "baseline_score": 23,
+    "without_final_delay_score": 23,
+    "byte_identical": true
+  },
+  {
+    "input": "benchmarks/ablation-holdout/inputs/input074.cbi",
+    "baseline_score": 130,
+    "without_final_delay_score": 130,
+    "byte_identical": true
+  },
+  {
+    "input": "benchmarks/ablation-holdout/inputs/input040.cbi",
+    "baseline_score": 187,
+    "without_final_delay_score": 187,
+    "byte_identical": true
+  },
+  {
+    "input": "benchmarks/ablation-holdout/inputs/input085.cbi",
+    "baseline_score": 155,
+    "without_final_delay_score": 155,
+    "byte_identical": true
+  },
+  {
+    "input": "benchmarks/ablation-holdout/inputs/large005.cbi",
+    "baseline_score": 1139,
+    "without_final_delay_score": 1139,
+    "byte_identical": true
+  },
+  {
+    "input": "benchmarks/ablation-holdout/inputs/input064.cbi",
+    "baseline_score": 20,
+    "without_final_delay_score": 20,
+    "byte_identical": true
+  },
+  {
+    "input": "benchmarks/ablation-holdout/inputs/input098.cbi",
+    "baseline_score": 25,
+    "without_final_delay_score": 25,
+    "byte_identical": true
+  },
+  {
+    "input": "benchmarks/ablation-holdout/inputs/input045.cbi",
+    "baseline_score": 9,
+    "without_final_delay_score": 9,
+    "byte_identical": true
+  },
+  {
+    "input": "benchmarks/ablation-holdout/inputs/input079.cbi",
+    "baseline_score": 136,
+    "without_final_delay_score": 136,
+    "byte_identical": true
+  },
+  {
+    "input": "benchmarks/ablation-holdout/inputs/input007.cbi",
+    "baseline_score": 2,
+    "without_final_delay_score": 2,
+    "byte_identical": true
+  },
+  {
+    "input": "benchmarks/ablation-holdout/inputs/input088.cbi",
+    "baseline_score": 210,
+    "without_final_delay_score": 210,
+    "byte_identical": true
+  },
+  {
+    "input": "benchmarks/ablation-holdout/inputs/input041.cbi",
+    "baseline_score": 37,
+    "without_final_delay_score": 37,
+    "byte_identical": true
+  },
+  {
+    "input": "benchmarks/ablation-holdout/inputs/input071.cbi",
+    "baseline_score": 112,
+    "without_final_delay_score": 112,
+    "byte_identical": true
+  },
+  {
+    "input": "benchmarks/ablation-holdout/inputs/input058.cbi",
+    "baseline_score": 20,
+    "without_final_delay_score": 20,
+    "byte_identical": true
+  },
+  {
+    "input": "benchmarks/ablation-holdout/inputs/input039.cbi",
+    "baseline_score": 248,
+    "without_final_delay_score": 248,
+    "byte_identical": true
+  },
+  {
+    "input": "benchmarks/ablation-holdout/inputs/input037.cbi",
+    "baseline_score": 144,
+    "without_final_delay_score": 144,
+    "byte_identical": true
+  },
+  {
+    "input": "benchmarks/ablation-holdout/inputs/large002.cbi",
+    "baseline_score": 2724,
+    "without_final_delay_score": 2724,
+    "byte_identical": true
+  },
+  {
+    "input": "benchmarks/ablation-holdout/inputs/input054.cbi",
+    "baseline_score": 14,
+    "without_final_delay_score": 14,
+    "byte_identical": true
+  },
+  {
+    "input": "benchmarks/ablation-holdout/inputs/input016.cbi",
+    "baseline_score": 56,
+    "without_final_delay_score": 56,
+    "byte_identical": true
+  },
+  {
+    "input": "benchmarks/ablation-holdout/inputs/input097.cbi",
+    "baseline_score": 10,
+    "without_final_delay_score": 10,
+    "byte_identical": true
+  },
+  {
+    "input": "benchmarks/ablation-holdout/inputs/input077.cbi",
+    "baseline_score": 17,
+    "without_final_delay_score": 17,
+    "byte_identical": true
+  },
+  {
+    "input": "benchmarks/ablation-holdout/inputs/input000.cbi",
+    "baseline_score": 47,
+    "without_final_delay_score": 47,
+    "byte_identical": true
+  },
+  {
+    "input": "benchmarks/ablation-holdout/inputs/large004.cbi",
+    "baseline_score": 1664,
+    "without_final_delay_score": 1664,
+    "byte_identical": true
+  },
+  {
+    "input": "benchmarks/ablation-holdout/inputs/large001.cbi",
+    "baseline_score": 1076,
+    "without_final_delay_score": 1076,
+    "byte_identical": true
+  },
+  {
+    "input": "benchmarks/ablation-holdout/inputs/input093.cbi",
+    "baseline_score": 66,
+    "without_final_delay_score": 66,
+    "byte_identical": true
+  },
+  {
+    "input": "benchmarks/ablation-holdout/inputs/input051.cbi",
+    "baseline_score": 118,
+    "without_final_delay_score": 118,
+    "byte_identical": true
+  },
+  {
+    "input": "benchmarks/ablation-holdout/inputs/input005.cbi",
+    "baseline_score": 24,
+    "without_final_delay_score": 24,
+    "byte_identical": true
+  },
+  {
+    "input": "benchmarks/ablation-holdout/inputs/input049.cbi",
+    "baseline_score": 11,
+    "without_final_delay_score": 11,
+    "byte_identical": true
+  },
+  {
+    "input": "benchmarks/ablation-holdout/inputs/input065.cbi",
+    "baseline_score": 27,
+    "without_final_delay_score": 27,
+    "byte_identical": true
+  },
+  {
+    "input": "benchmarks/ablation-holdout/inputs/input047.cbi",
+    "baseline_score": 4,
+    "without_final_delay_score": 4,
+    "byte_identical": true
+  },
+  {
+    "input": "benchmarks/ablation-holdout/inputs/input062.cbi",
+    "baseline_score": 49,
+    "without_final_delay_score": 49,
+    "byte_identical": true
+  },
+  {
+    "input": "benchmarks/ablation-holdout/inputs/input021.cbi",
+    "baseline_score": 134,
+    "without_final_delay_score": 134,
+    "byte_identical": true
+  },
+  {
+    "input": "benchmarks/ablation-holdout/inputs/input044.cbi",
+    "baseline_score": 124,
+    "without_final_delay_score": 124,
+    "byte_identical": true
+  },
+  {
+    "input": "benchmarks/ablation-holdout/inputs/input086.cbi",
+    "baseline_score": 142,
+    "without_final_delay_score": 142,
+    "byte_identical": true
+  },
+  {
+    "input": "benchmarks/ablation-holdout/inputs/input069.cbi",
+    "baseline_score": 16,
+    "without_final_delay_score": 16,
+    "byte_identical": true
+  },
+  {
+    "input": "benchmarks/ablation-holdout/inputs/input022.cbi",
+    "baseline_score": 19,
+    "without_final_delay_score": 19,
+    "byte_identical": true
+  },
+  {
+    "input": "benchmarks/ablation-holdout/inputs/input087.cbi",
+    "baseline_score": 3,
+    "without_final_delay_score": 3,
+    "byte_identical": true
+  },
+  {
+    "input": "benchmarks/ablation-holdout/inputs/large000.cbi",
+    "baseline_score": 1829,
+    "without_final_delay_score": 1829,
+    "byte_identical": true
+  },
+  {
+    "input": "benchmarks/ablation-holdout/inputs/input008.cbi",
+    "baseline_score": 232,
+    "without_final_delay_score": 232,
+    "byte_identical": true
+  },
+  {
+    "input": "benchmarks/ablation-holdout/inputs/input020.cbi",
+    "baseline_score": 140,
+    "without_final_delay_score": 140,
+    "byte_identical": true
+  },
+  {
+    "input": "benchmarks/ablation-holdout/inputs/input096.cbi",
+    "baseline_score": 112,
+    "without_final_delay_score": 112,
+    "byte_identical": true
+  },
+  {
+    "input": "benchmarks/ablation-holdout/inputs/input068.cbi",
+    "baseline_score": 156,
+    "without_final_delay_score": 156,
+    "byte_identical": true
+  },
+  {
+    "input": "benchmarks/ablation-holdout/inputs/input036.cbi",
+    "baseline_score": 164,
+    "without_final_delay_score": 164,
+    "byte_identical": true
+  },
+  {
+    "input": "benchmarks/ablation-holdout/inputs/input006.cbi",
+    "baseline_score": 244,
+    "without_final_delay_score": 244,
+    "byte_identical": true
+  },
+  {
+    "input": "benchmarks/ablation-holdout/inputs/input038.cbi",
+    "baseline_score": 24,
+    "without_final_delay_score": 24,
+    "byte_identical": true
+  },
+  {
+    "input": "benchmarks/ablation-holdout/inputs/input056.cbi",
+    "baseline_score": 3,
+    "without_final_delay_score": 3,
+    "byte_identical": true
+  },
+  {
+    "input": "benchmarks/ablation-holdout/inputs/input067.cbi",
+    "baseline_score": 36,
+    "without_final_delay_score": 36,
+    "byte_identical": true
+  },
+  {
+    "input": "benchmarks/ablation-holdout/inputs/input019.cbi",
+    "baseline_score": 37,
+    "without_final_delay_score": 37,
+    "byte_identical": true
+  },
+  {
+    "input": "benchmarks/ablation-holdout/inputs/input017.cbi",
+    "baseline_score": 32,
+    "without_final_delay_score": 32,
+    "byte_identical": true
+  },
+  {
+    "input": "benchmarks/ablation-holdout/inputs/input066.cbi",
+    "baseline_score": 116,
+    "without_final_delay_score": 116,
+    "byte_identical": true
+  },
+  {
+    "input": "benchmarks/ablation-holdout/inputs/input015.cbi",
+    "baseline_score": 16,
+    "without_final_delay_score": 16,
+    "byte_identical": true
+  },
+  {
+    "input": "benchmarks/ablation-holdout/inputs/input023.cbi",
+    "baseline_score": 112,
+    "without_final_delay_score": 112,
+    "byte_identical": true
+  },
+  {
+    "input": "benchmarks/ablation-holdout/inputs/input026.cbi",
+    "baseline_score": 198,
+    "without_final_delay_score": 198,
+    "byte_identical": true
+  },
+  {
+    "input": "benchmarks/ablation-holdout/inputs/input032.cbi",
+    "baseline_score": 78,
+    "without_final_delay_score": 78,
+    "byte_identical": true
+  },
+  {
+    "input": "benchmarks/ablation-holdout/inputs/input091.cbi",
+    "baseline_score": 43,
+    "without_final_delay_score": 43,
+    "byte_identical": true
+  },
+  {
+    "input": "benchmarks/ablation-holdout/inputs/input078.cbi",
+    "baseline_score": 29,
+    "without_final_delay_score": 29,
+    "byte_identical": true
+  },
+  {
+    "input": "benchmarks/ablation-holdout/inputs/input084.cbi",
+    "baseline_score": 15,
+    "without_final_delay_score": 15,
+    "byte_identical": true
+  },
+  {
+    "input": "benchmarks/ablation-holdout/inputs/input027.cbi",
+    "baseline_score": 121,
+    "without_final_delay_score": 121,
+    "byte_identical": true
+  },
+  {
+    "input": "benchmarks/ablation-holdout/inputs/input014.cbi",
+    "baseline_score": 101,
+    "without_final_delay_score": 101,
+    "byte_identical": true
+  },
+  {
+    "input": "benchmarks/ablation-holdout/inputs/input048.cbi",
+    "baseline_score": 61,
+    "without_final_delay_score": 61,
+    "byte_identical": true
+  },
+  {
+    "input": "benchmarks/ablation-holdout/inputs/input018.cbi",
+    "baseline_score": 6,
+    "without_final_delay_score": 6,
+    "byte_identical": true
+  },
+  {
+    "input": "benchmarks/ablation-holdout/inputs/input070.cbi",
+    "baseline_score": 6,
+    "without_final_delay_score": 6,
+    "byte_identical": true
+  },
+  {
+    "input": "benchmarks/ablation-holdout/inputs/input081.cbi",
+    "baseline_score": 15,
+    "without_final_delay_score": 15,
+    "byte_identical": true
+  },
+  {
+    "input": "benchmarks/ablation-holdout/inputs/input055.cbi",
+    "baseline_score": 208,
+    "without_final_delay_score": 208,
+    "byte_identical": true
+  },
+  {
+    "input": "benchmarks/ablation-holdout/inputs/input063.cbi",
+    "baseline_score": 9,
+    "without_final_delay_score": 9,
+    "byte_identical": true
+  },
+  {
+    "input": "benchmarks/ablation-holdout/inputs/input052.cbi",
+    "baseline_score": 42,
+    "without_final_delay_score": 42,
+    "byte_identical": true
+  },
+  {
+    "input": "benchmarks/ablation-holdout/inputs/input094.cbi",
+    "baseline_score": 156,
+    "without_final_delay_score": 156,
+    "byte_identical": true
+  },
+  {
+    "input": "benchmarks/ablation-holdout/inputs/input024.cbi",
+    "baseline_score": 43,
+    "without_final_delay_score": 43,
+    "byte_identical": true
+  },
+  {
+    "input": "benchmarks/ablation-holdout/inputs/input035.cbi",
+    "baseline_score": 117,
+    "without_final_delay_score": 117,
+    "byte_identical": true
+  },
+  {
+    "input": "benchmarks/ablation-holdout/inputs/input004.cbi",
+    "baseline_score": 128,
+    "without_final_delay_score": 128,
+    "byte_identical": true
+  },
+  {
+    "input": "benchmarks/ablation-holdout/inputs/input010.cbi",
+    "baseline_score": 12,
+    "without_final_delay_score": 12,
+    "byte_identical": true
+  },
+  {
+    "input": "benchmarks/ablation-holdout/inputs/input025.cbi",
+    "baseline_score": 140,
+    "without_final_delay_score": 140,
+    "byte_identical": true
+  },
+  {
+    "input": "benchmarks/ablation-holdout/inputs/input042.cbi",
+    "baseline_score": 110,
+    "without_final_delay_score": 110,
+    "byte_identical": true
+  },
+  {
+    "input": "benchmarks/ablation-holdout/inputs/input029.cbi",
+    "baseline_score": 152,
+    "without_final_delay_score": 152,
+    "byte_identical": true
+  },
+  {
+    "input": "benchmarks/ablation-holdout/inputs/input099.cbi",
+    "baseline_score": 115,
+    "without_final_delay_score": 115,
+    "byte_identical": true
+  },
+  {
+    "input": "benchmarks/ablation-holdout/inputs/input034.cbi",
+    "baseline_score": 9,
+    "without_final_delay_score": 9,
+    "byte_identical": true
+  },
+  {
+    "input": "benchmarks/ablation-holdout/inputs/input072.cbi",
+    "baseline_score": 43,
+    "without_final_delay_score": 43,
+    "byte_identical": true
+  },
+  {
+    "input": "benchmarks/ablation-holdout/inputs/input033.cbi",
+    "baseline_score": 128,
+    "without_final_delay_score": 128,
+    "byte_identical": true
+  },
+  {
+    "input": "benchmarks/ablation-holdout/inputs/input080.cbi",
+    "baseline_score": 4,
+    "without_final_delay_score": 4,
+    "byte_identical": true
+  },
+  {
+    "input": "benchmarks/ablation-holdout/inputs/input046.cbi",
+    "baseline_score": 21,
+    "without_final_delay_score": 21,
+    "byte_identical": true
+  },
+  {
+    "input": "benchmarks/ablation-holdout/inputs/input083.cbi",
+    "baseline_score": 139,
+    "without_final_delay_score": 139,
+    "byte_identical": true
+  },
+  {
+    "input": "benchmarks/ablation-holdout/inputs/input059.cbi",
+    "baseline_score": 230,
+    "without_final_delay_score": 230,
+    "byte_identical": true
+  },
+  {
+    "input": "benchmarks/ablation-holdout/inputs/input075.cbi",
+    "baseline_score": 23,
+    "without_final_delay_score": 23,
+    "byte_identical": true
+  },
+  {
+    "input": "benchmarks/ablation-holdout/inputs/large003.cbi",
+    "baseline_score": 2068,
+    "without_final_delay_score": 2068,
+    "byte_identical": true
+  },
+  {
+    "input": "benchmarks/ablation-holdout/inputs/input011.cbi",
+    "baseline_score": 23,
+    "without_final_delay_score": 23,
+    "byte_identical": true
+  },
+  {
+    "input": "benchmarks/ablation-holdout/inputs/input061.cbi",
+    "baseline_score": 397,
+    "without_final_delay_score": 397,
+    "byte_identical": true
+  },
+  {
+    "input": "benchmarks/ablation-holdout/inputs/input003.cbi",
+    "baseline_score": 5,
+    "without_final_delay_score": 5,
+    "byte_identical": true
+  },
+  {
+    "input": "benchmarks/ablation-holdout/inputs/input060.cbi",
+    "baseline_score": 52,
+    "without_final_delay_score": 52,
+    "byte_identical": true
+  },
+  {
+    "input": "benchmarks/ablation-holdout/inputs/input057.cbi",
+    "baseline_score": 102,
+    "without_final_delay_score": 102,
+    "byte_identical": true
+  },
+  {
+    "input": "benchmarks/ablation-holdout/inputs/input089.cbi",
+    "baseline_score": 19,
+    "without_final_delay_score": 19,
+    "byte_identical": true
+  },
+  {
+    "input": "benchmarks/ablation-holdout/inputs/input082.cbi",
+    "baseline_score": 208,
+    "without_final_delay_score": 208,
+    "byte_identical": true
+  },
+  {
+    "input": "benchmarks/ablation-holdout/inputs/input001.cbi",
+    "baseline_score": 108,
+    "without_final_delay_score": 108,
+    "byte_identical": true
+  },
+  {
+    "input": "benchmarks/ablation-holdout/inputs/input043.cbi",
+    "baseline_score": 30,
+    "without_final_delay_score": 30,
+    "byte_identical": true
+  },
+  {
+    "input": "benchmarks/ablation-holdout/inputs/input053.cbi",
+    "baseline_score": 53,
+    "without_final_delay_score": 53,
+    "byte_identical": true
+  },
+  {
+    "input": "benchmarks/ablation-holdout/inputs/input095.cbi",
+    "baseline_score": 560,
+    "without_final_delay_score": 560,
+    "byte_identical": true
+  },
+  {
+    "input": "benchmarks/ablation-holdout/inputs/input013.cbi",
+    "baseline_score": 17,
+    "without_final_delay_score": 17,
+    "byte_identical": true
+  },
+  {
+    "input": "benchmarks/ablation-holdout/inputs/input073.cbi",
+    "baseline_score": 71,
+    "without_final_delay_score": 71,
+    "byte_identical": true
+  },
+  {
+    "input": "benchmarks/ablation-holdout/inputs/input028.cbi",
+    "baseline_score": 11,
+    "without_final_delay_score": 11,
+    "byte_identical": true
+  },
+  {
+    "input": "benchmarks/ablation-holdout/inputs/input002.cbi",
+    "baseline_score": 111,
+    "without_final_delay_score": 111,
+    "byte_identical": true
+  },
+  {
+    "input": "benchmarks/ablation-holdout/inputs/input009.cbi",
+    "baseline_score": 168,
+    "without_final_delay_score": 168,
+    "byte_identical": true
+  },
+  {
+    "input": "benchmarks/ablation-holdout/inputs/input030.cbi",
+    "baseline_score": 53,
+    "without_final_delay_score": 53,
+    "byte_identical": true
+  },
+  {
+    "input": "benchmarks/ablation-holdout/inputs/input092.cbi",
+    "baseline_score": 270,
+    "without_final_delay_score": 270,
+    "byte_identical": true
+  },
+  {
+    "input": "benchmarks/ablation-holdout/inputs/input012.cbi",
+    "baseline_score": 53,
+    "without_final_delay_score": 53,
+    "byte_identical": true
+  },
+  {
+    "input": "benchmarks/ablation-holdout/inputs/input090.cbi",
+    "baseline_score": 150,
+    "without_final_delay_score": 150,
+    "byte_identical": true
+  }
+]

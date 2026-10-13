@@ -1,0 +1,195 @@
+{
+  "source_commit": "0772bcab83c0c09596c7d220f0248e7b209dd5d9",
+  "patches": {
+    "src/solver/legacy.cpp": {
+      "original_sha256": "fad36cb047e2513b4f514f39e4e6d261cbfb3e3023188ed37b706142ada3911c",
+      "instrumented_sha256": "c7ed26ed195c3f57de84bef480c7e327a3e8ad485d6e67eb9c56bcd262e1bd9e"
+    },
+    "src/construction/forest.cpp": {
+      "original_sha256": "4c9f57a0a8200ba21a9971cefd17eee716e9181c43d92c85d5ab9caf2677dad9",
+      "instrumented_sha256": "5b58d40985b45239f856d529bc5fb46eeaf66e62467b6d5f1b44d66b383cf814"
+    },
+    "src/search/local.cpp": {
+      "original_sha256": "4319aa2d455db9d7e65b12ab16878f7b5dc981b86d9a1618bc4bcc37e6ad0cb9",
+      "instrumented_sha256": "069c0f54d54f15e9e514bc66a59a18233df5149842e78fc8912d9cfed0cec54d"
+    },
+    "src/solver/strategy.cpp": {
+      "original_sha256": "baff08e25a7cfb3a3a881d3b77d937426d72dbfb01259ed9b8f1253d6eabc88f",
+      "instrumented_sha256": "f4062411fba10d1fcc2011deaded7873d8e98b359068bc0af53e520f18f12aba"
+    },
+    "src/search/annealing.cpp": {
+      "original_sha256": "3f769552e970cbcfe5b70d4bf612f78138aa2e93c24dbacba7b4a1b6a1e979e6",
+      "instrumented_sha256": "5ccf0399b29e4291451272e4f2aca54edc8d2f4d1815a0c1a5c5fbeb945c8608"
+    }
+  },
+  "seeds": [
+    1,
+    7,
+    17
+  ],
+  "legacy_gates": {
+    "baseline": [],
+    "no_layered": [
+      "layered"
+    ],
+    "no_compressed": [
+      "compressed"
+    ],
+    "no_multiway": [
+      "multiway"
+    ],
+    "no_reference_tree": [
+      "reference_tree"
+    ],
+    "no_dense": [
+      "dense"
+    ],
+    "no_small_forest": [
+      "small_forest"
+    ],
+    "no_local_search": [
+      "local_search"
+    ],
+    "no_adaptive": [
+      "adaptive"
+    ],
+    "no_final_delay": [
+      "final_delay"
+    ],
+    "no_joint_hub": [
+      "joint_hub"
+    ],
+    "no_joint_bypass": [
+      "joint_bypass"
+    ],
+    "no_large_contract": [
+      "large_contract"
+    ]
+  },
+  "search_variants": {
+    "baseline": [
+      [],
+      []
+    ],
+    "no_initial_pass": [
+      [
+        "initial_pass"
+      ],
+      []
+    ],
+    "no_reference_pass": [
+      [
+        "reference_pass"
+      ],
+      []
+    ],
+    "no_sa": [
+      [
+        "sa"
+      ],
+      []
+    ],
+    "no_lp": [
+      [
+        "lp"
+      ],
+      []
+    ],
+    "no_seed_lp": [
+      [
+        "seed_lp"
+      ],
+      []
+    ],
+    "no_capacity_retry": [
+      [
+        "capacity_retry"
+      ],
+      []
+    ],
+    "greedy": [
+      [
+        "uphill"
+      ],
+      []
+    ],
+    "no_structural_repair": [
+      [],
+      [
+        "--structural-repair",
+        "0"
+      ]
+    ],
+    "no_integer_repair": [
+      [],
+      [
+        "--repair-trials",
+        "0"
+      ]
+    ],
+    "no_locality": [
+      [],
+      [
+        "--locality",
+        "0"
+      ]
+    ],
+    "no_wire_lp": [
+      [],
+      [
+        "--wire-tiebreak",
+        "0"
+      ]
+    ],
+    "no_move_sink": [
+      [],
+      [
+        "--move-weights",
+        "0,15,15,10,20,10,5"
+      ]
+    ],
+    "no_swap_sinks": [
+      [],
+      [
+        "--move-weights",
+        "25,0,15,10,20,10,5"
+      ]
+    ],
+    "no_insert_buffer": [
+      [],
+      [
+        "--move-weights",
+        "25,15,0,10,20,10,5"
+      ]
+    ],
+    "no_delete_buffer": [
+      [],
+      [
+        "--move-weights",
+        "25,15,15,0,20,10,5"
+      ]
+    ],
+    "no_change_direction": [
+      [],
+      [
+        "--move-weights",
+        "25,15,15,10,0,10,5"
+      ]
+    ],
+    "no_change_type": [
+      [],
+      [
+        "--move-weights",
+        "25,15,15,10,20,0,5"
+      ]
+    ],
+    "no_move_subtree": [
+      [],
+      [
+        "--move-weights",
+        "25,15,15,10,20,10,0"
+      ]
+    ]
+  },
+  "purpose": "Temporary instrumentation only; no production source modifications"
+}

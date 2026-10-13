@@ -1,0 +1,44 @@
+benchmarks/sa_lp/inputs/input000.cbi
+benchmarks/sa_lp/inputs/input001.cbi
+benchmarks/sa_lp/inputs/input002.cbi
+benchmarks/sa_lp/inputs/input003.cbi
+benchmarks/sa_lp/inputs/input004.cbi
+benchmarks/sa_lp/inputs/input005.cbi
+benchmarks/sa_lp/inputs/input006.cbi
+benchmarks/sa_lp/inputs/input007.cbi
+benchmarks/sa_lp/inputs/input008.cbi
+benchmarks/sa_lp/inputs/input009.cbi
+benchmarks/sa_lp/inputs/input010.cbi
+benchmarks/sa_lp/inputs/input011.cbi
+benchmarks/sa_lp/inputs/input012.cbi
+benchmarks/sa_lp/inputs/input013.cbi
+benchmarks/sa_lp/inputs/input014.cbi
+example/input.cbi
+issues/closed/001 單輸出buffer庫誤判SRC可分支的合法解/input001.cbi
+issues/closed/001 單輸出buffer庫誤判SRC可分支的合法解/input002.cbi
+issues/closed/002 邊界同軸連線缺少向內繞行的relay/input001.cbi
+issues/closed/004 hub選點漏算SRC接入relay成本/input001.cbi
+issues/closed/005 relay固定最大線長型別造成高成本/input001.cbi
+issues/closed/006 relay間距政策缺少中段混合型別優化/input001.cbi
+issues/closed/007 分支buffer固定最大線長漏掉廉價分支加relay/input001.cbi
+issues/closed/010 分支總線長平均分配漏掉較低relay成本/input001.cbi
+issues/closed/012 缺少跨分支sink交換造成可避免的skew/input001.cbi
+issues/closed/014 缺少單一sink改接以使用分支剩餘容量/input001.cbi
+issues/closed/015 短路徑缺少延遲relay插入而錯失零skew/input001.cbi
+issues/closed/015 短路徑缺少延遲relay插入而錯失零skew/input002.cbi
+issues/closed/017 完整refinement前依初始Score淘汰可改善候選/input001.cbi
+issues/closed/019 子樹與sink交換可降低buffer型別成本/repro/input001.cbi
+issues/closed/020 密集晶片二元建構漏掉合法三輸出forest/repro/input002.cbi
+issues/closed/021 固定三根merge漏掉合法四五輸出forest/repro/input003.cbi
+issues/closed/022 最終結果漏掉既有delay改善/repro/input001.cbi
+issues/closed/023 密集晶片多輸出建構漏掉十六sink合法forest/repro/input001.cbi
+issues/closed/023 密集晶片多輸出建構漏掉十六sink合法forest/repro/input002.cbi
+issues/closed/024 hub取點漏掉SRC可達區域與sink平衡座標交點/repro/input001.cbi
+issues/closed/024 hub取點漏掉SRC可達區域與sink平衡座標交點/repro/input002.cbi
+issues/closed/027 bypass需同步重定位子buffer才能保持零skew/repro/input001.cbi
+issues/closed/027 bypass需同步重定位子buffer才能保持零skew/repro/input002.cbi
+issues/closed/029 長距離混合relay未利用length公因數縮小DP/repro/input001.cbi
+issues/closed/029 長距離混合relay未利用length公因數縮小DP/repro/input002.cbi
+issues/closed/029 長距離混合relay未利用length公因數縮小DP/repro/input003.cbi
+issues/closed/030 密集forest僅SRC直連buffer漏掉階層合法樹/repro/input001.cbi
+issues/closed/030 密集forest僅SRC直連buffer漏掉階層合法樹/repro/input002.cbi

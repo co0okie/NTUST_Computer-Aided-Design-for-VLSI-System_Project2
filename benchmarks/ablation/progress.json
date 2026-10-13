@@ -1,0 +1,13 @@
+{
+  "runs": 4182,
+  "legal": 4162,
+  "counts": {
+    "verify": 79,
+    "verify_sa": 6,
+    "legacy": 1027,
+    "screen": 2508,
+    "legacy_holdout": 424,
+    "confirm": 90,
+    "init_stress": 48
+  }
+}
