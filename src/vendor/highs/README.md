@@ -7,9 +7,11 @@ Source archive SHA-256:
 The checked-in x86-64 archives use the GNU C++11 ABI and libstdc++. They were
 built on Rocky Linux 9 (glibc 2.34), using Clang 21 and GCC 11's standard library,
 with portable CPU defaults and no LTO. They link successfully with GCC 11.
-Ubuntu 24.04 supplies newer glibc/libstdc++, but container execution is not
-available in the development environment; Ubuntu execution must be checked
-before claiming target-environment validation.
+Ubuntu 24.04 supplies newer glibc/libstdc++. On 2026-10-13, a network-disabled
+Ubuntu 24.04 Podman container linked these archives with GCC 13.3 and passed
+the project's LP, annealing, solver and CLI tests. See
+[environment validation](../../../docs/grader-environment.md) for conditions
+and the distinction between container validation and the actual grading VM.
 
 The default project configure/build only imports these libraries, with no
 network access or third-party compilation. `libhighs_extras.a` is the small API

@@ -43,6 +43,7 @@ endfunction()
 configure_cpp_target(cbi_core)
 configure_cpp_target(cbi)
 
+option(BUILD_TESTING "Build the project test executables" OFF)
 include(CTest)
 if(BUILD_TESTING)
     add_executable(search_tests tests/test_search.cpp)

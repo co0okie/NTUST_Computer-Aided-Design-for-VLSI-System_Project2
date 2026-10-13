@@ -142,7 +142,10 @@ operate under this environment's ptrace restrictions. The bundled HiGHS code is
 not sanitizer-instrumented. The grading archive was only read, never executed.
 A local GCC 11 configure plus serial default build took 13.24 seconds, including
 test executables.
-Ubuntu 24.04 VM execution is still unverified because Docker access is unavailable.
+Ubuntu 24.04 container compatibility was verified on 2026-10-13 using Podman,
+GCC 13.3, two CPUs, 8 GiB RAM and disabled networking; bundled HiGHS linked
+and all four project test suites passed. The actual grading VM remains untested.
+See [environment validation](grader-environment.md).
 
 Measured comparisons and parameter experiments are recorded in
 [the experiment report](../benchmarks/sa_lp/README.md).

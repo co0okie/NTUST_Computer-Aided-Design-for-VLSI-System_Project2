@@ -47,9 +47,21 @@ IO, construction, search and orchestration modules. It follows explicit ownershi
 value semantics, typed node roles/IDs, checked arithmetic and result-based search
 errors, retaining C++17.
 
-Run all tests with `ctest --test-dir build --output-on-failure`. For ASan/UBSan,
-configure a Debug build with `-DCBI_SANITIZERS=ON`; on ptrace-restricted environments
-use `ASAN_OPTIONS=detect_leaks=0` when running tests.
+The default build compiles only the solver, leaving headroom under the grader's
+60-second build limit. Enable tests explicitly:
+
+```sh
+cmake -S . -B build-tests -DBUILD_TESTING=ON
+cmake --build build-tests
+ctest --test-dir build-tests --output-on-failure
+```
+
+For ASan/UBSan, configure a Debug test build with
+`-DBUILD_TESTING=ON -DCBI_SANITIZERS=ON`; on ptrace-restricted environments use
+`ASAN_OPTIONS=detect_leaks=0` when running tests.
+
+Ubuntu 24.04 compatibility and build-time checks are documented in
+[environment validation](docs/grader-environment.md).
 
 ## Construction and optimization
 

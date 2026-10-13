@@ -44,8 +44,10 @@ selection does not make them a representative estimate of general improvement.
 The actual 1/5/15/30/55-second incumbent observations are in [curves.csv](curves.csv).
 Maximum measured process time across all runs was 55.111 seconds, and peak RSS
 was 27,588 KiB. Local configure plus serial default compilation took approximately
-13.24 seconds, including test binaries. Ubuntu 24.04 execution remains unverified
-because the development environment cannot access Docker.
+13.24 seconds, including test binaries. Subsequent Ubuntu 24.04 container validation used Podman and passed all four
+project test suites, including HiGHS LP execution. See
+[environment validation](../../docs/grader-environment.md) for the separate
+compatibility run; the measurements above remain the original Rocky Linux runs.
 
 ## Parameter experiments
 
