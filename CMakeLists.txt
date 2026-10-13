@@ -7,6 +7,12 @@ add_library(cbi_core STATIC
     src/construction/builder.cpp src/construction/forest.cpp
     src/search/local.cpp src/search/placement.cpp src/search/annealing.cpp
     src/solver/legacy.cpp src/solver/strategy.cpp)
+# The grader invokes a serial build. Compile the core sources together to
+# avoid reparsing their shared headers once per source file.
+option(CBI_UNITY_BUILD "Combine core sources to reduce clean build time" ON)
+set_target_properties(cbi_core PROPERTIES
+    UNITY_BUILD "${CBI_UNITY_BUILD}"
+    UNITY_BUILD_BATCH_SIZE 0)
 target_include_directories(cbi_core PUBLIC src)
 add_library(highs STATIC IMPORTED GLOBAL)
 set_target_properties(highs PROPERTIES
@@ -30,6 +36,7 @@ function(configure_cpp_target target)
 
     if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
         target_compile_options(${target} PRIVATE
+            -pipe
             -Wall
             -Wextra
             -Wpedantic

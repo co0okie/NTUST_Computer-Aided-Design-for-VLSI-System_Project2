@@ -47,8 +47,12 @@ IO, construction, search and orchestration modules. It follows explicit ownershi
 value semantics, typed node roles/IDs, checked arithmetic and result-based search
 errors, retaining C++17.
 
-The default build compiles only the solver, leaving headroom under the grader's
-60-second build limit. Enable tests explicitly:
+The default build compiles only the solver and combines the core sources into
+one translation unit to avoid repeatedly parsing shared headers. GNU/Clang
+builds use `-pipe` between compiler stages. Clean Ubuntu 24.04 serial builds
+measured 23.1–23.9 seconds under the grader-like 2-CPU/8-GiB limits. For separate
+source-file compilation during development, configure with
+`-DCBI_UNITY_BUILD=OFF`. Enable tests explicitly:
 
 ```sh
 cmake -S . -B build-tests -DBUILD_TESTING=ON

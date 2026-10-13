@@ -1,8 +1,9 @@
 # Ubuntu 24.04 environment validation
 
 Validated on 2026-10-13 against source commit
-`ead7a38abae096ed74039acb5f0503294390199e`, followed by the build-only change
-making `BUILD_TESTING` default to `OFF`. Solver source and bundled archives were
+`ead7a38abae096ed74039acb5f0503294390199e`, followed by build-only changes:
+`BUILD_TESTING` defaults to `OFF`, core sources use unity compilation, and
+GNU/Clang compiler stages use `-pipe`. Solver source and bundled archives were
 unchanged. The grading archive was read to identify its environment and commands;
 none of its programs were executed or imported.
 
@@ -41,6 +42,30 @@ compilation was serial. The initial build also compiled test executables and
 took 58.96 seconds. With tests made opt-in, a separate clean build took
 49.96 seconds: 1.22 seconds configuring and 48.74 seconds compiling/linking.
 The observed peak child RSS was approximately 246 MiB.
+
+A follow-up build change combines the eleven core source files into one
+translation unit, reducing repeated header parsing, and uses `-pipe` to pass
+compiler output directly to the assembler. Two separate, fully clean builds
+with this final configuration took **23.10 and 23.86 seconds**, including
+configure and linking. Neither used Release, parallel Make, cached objects,
+precompiled project libraries or precompiled headers. Peak compiler child
+RSS increased to approximately 453 MiB, within the 8-GiB limit. The bundled
+HiGHS archives remained unchanged. Separate translation units remain available
+with `-DCBI_UNITY_BUILD=OFF`.
+
+Intermediate experiments are recorded rather than hidden: unity without
+`-pipe` took 24.56 and 30.26 seconds; adding shared precompiled headers took
+28.91 and 34.27 seconds and was discarded. These repeated measurements motivate
+the final configuration; they do not guarantee every machine finishes under
+30 seconds.
+
+The final unity/pipe executable was compared against the earlier separate-file
+build on 85 executions: all 79 inputs with the current strategy, plus six
+fixed-seed/fixed-iteration SA and hybrid runs. Output files and stdout were
+byte-identical, and every output passed independent integer validation. All
+four CTest suites were then rerun with the final build configuration and passed
+in 164.56 seconds total. The solver's default execution budget remains 55 seconds;
+these changes affect compilation only.
 
 The default build now skips test executables. Existing build directories keep
 their cached `BUILD_TESTING` setting; tests remain available using
