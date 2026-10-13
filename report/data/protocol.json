@@ -1,0 +1,33 @@
+{
+  "source_commit": "2c35ad8",
+  "binary_sha256": "1886a5949fbf85b11e09ce202cd0dd7ab62f61e0cd1b1355f91fa698052be9e3",
+  "cases": [
+    [
+      "example",
+      "example/input.cbi"
+    ],
+    [
+      "random024",
+      "benchmarks/sa_lp/inputs/input024.cbi"
+    ],
+    [
+      "subtree",
+      "issues/closed/019 \u5b50\u6a39\u8207sink\u4ea4\u63db\u53ef\u964d\u4f4ebuffer\u578b\u5225\u6210\u672c/repro/input001.cbi"
+    ]
+  ],
+  "seeds": [
+    1,
+    7,
+    17,
+    31,
+    101
+  ],
+  "strategy": "hybrid",
+  "seconds": 25,
+  "purpose": "Illustrate stages on previously identified improvable cases; not an unbiased overall improvement estimate.",
+  "selection": "Within each case sort final Score then seed; take middle run. All stages use that same run.",
+  "cpu_affinity": [
+    0,
+    1
+  ]
+}

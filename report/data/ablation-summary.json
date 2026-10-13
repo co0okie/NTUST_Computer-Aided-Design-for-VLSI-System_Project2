@@ -1,0 +1,2533 @@
+{
+  "source_commit": "0772bcab83c0c09596c7d220f0248e7b209dd5d9",
+  "runs_csv": "benchmarks/ablation/runs.csv",
+  "runs_sha256": "ff98dca58b13acf43ac910c5965a5119a69b4dd0a42bd4f9db2d9f659d78fdce",
+  "comparison": "Per input compare median Score over all recorded seeds; failed outputs counted separately. Each phase has its own matched full baseline.",
+  "rows": [
+    {
+      "component": "基本局部搜尋",
+      "phase": "legacy",
+      "omission": "no_local_search",
+      "inputs": 79,
+      "sink_range": [
+        1,
+        1024
+      ],
+      "counts": {
+        "equal": 46,
+        "worse": 32,
+        "better": 1
+      },
+      "cases": [
+        {
+          "input": "benchmarks/sa_lp/inputs/input000.cbi",
+          "sinks": 8,
+          "baseline_score": 26,
+          "omitted_score": 26,
+          "seeds": [
+            7
+          ]
+        },
+        {
+          "input": "benchmarks/sa_lp/inputs/input001.cbi",
+          "sinks": 3,
+          "baseline_score": 107,
+          "omitted_score": 114,
+          "seeds": [
+            7
+          ]
+        },
+        {
+          "input": "benchmarks/sa_lp/inputs/input002.cbi",
+          "sinks": 17,
+          "baseline_score": 20,
+          "omitted_score": 21,
+          "seeds": [
+            7
+          ]
+        },
+        {
+          "input": "benchmarks/sa_lp/inputs/input003.cbi",
+          "sinks": 13,
+          "baseline_score": 38,
+          "omitted_score": 60,
+          "seeds": [
+            7
+          ]
+        },
+        {
+          "input": "benchmarks/sa_lp/inputs/input004.cbi",
+          "sinks": 4,
+          "baseline_score": 11,
+          "omitted_score": 11,
+          "seeds": [
+            7
+          ]
+        },
+        {
+          "input": "benchmarks/sa_lp/inputs/input005.cbi",
+          "sinks": 11,
+          "baseline_score": 45,
+          "omitted_score": 45,
+          "seeds": [
+            7
+          ]
+        },
+        {
+          "input": "benchmarks/sa_lp/inputs/input006.cbi",
+          "sinks": 4,
+          "baseline_score": 112,
+          "omitted_score": 118,
+          "seeds": [
+            7
+          ]
+        },
+        {
+          "input": "benchmarks/sa_lp/inputs/input007.cbi",
+          "sinks": 21,
+          "baseline_score": 77,
+          "omitted_score": 89,
+          "seeds": [
+            7
+          ]
+        },
+        {
+          "input": "benchmarks/sa_lp/inputs/input008.cbi",
+          "sinks": 15,
+          "baseline_score": 29,
+          "omitted_score": 43,
+          "seeds": [
+            7
+          ]
+        },
+        {
+          "input": "benchmarks/sa_lp/inputs/input009.cbi",
+          "sinks": 4,
+          "baseline_score": 20,
+          "omitted_score": 20,
+          "seeds": [
+            7
+          ]
+        },
+        {
+          "input": "benchmarks/sa_lp/inputs/input010.cbi",
+          "sinks": 19,
+          "baseline_score": 360,
+          "omitted_score": 390,
+          "seeds": [
+            7
+          ]
+        },
+        {
+          "input": "benchmarks/sa_lp/inputs/input011.cbi",
+          "sinks": 12,
+          "baseline_score": 25,
+          "omitted_score": 27,
+          "seeds": [
+            7
+          ]
+        },
+        {
+          "input": "benchmarks/sa_lp/inputs/input012.cbi",
+          "sinks": 3,
+          "baseline_score": 107,
+          "omitted_score": 107,
+          "seeds": [
+            7
+          ]
+        },
+        {
+          "input": "benchmarks/sa_lp/inputs/input013.cbi",
+          "sinks": 13,
+          "baseline_score": 170,
+          "omitted_score": 170,
+          "seeds": [
+            7
+          ]
+        },
+        {
+          "input": "benchmarks/sa_lp/inputs/input014.cbi",
+          "sinks": 14,
+          "baseline_score": 44,
+          "omitted_score": 44,
+          "seeds": [
+            7
+          ]
+        },
+        {
+          "input": "benchmarks/sa_lp/inputs/input015.cbi",
+          "sinks": 15,
+          "baseline_score": 46,
+          "omitted_score": 61,
+          "seeds": [
+            7
+          ]
+        },
+        {
+          "input": "benchmarks/sa_lp/inputs/input016.cbi",
+          "sinks": 6,
+          "baseline_score": 133,
+          "omitted_score": 142,
+          "seeds": [
+            7
+          ]
+        },
+        {
+          "input": "benchmarks/sa_lp/inputs/input017.cbi",
+          "sinks": 11,
+          "baseline_score": 39,
+          "omitted_score": 45,
+          "seeds": [
+            7
+          ]
+        },
+        {
+          "input": "benchmarks/sa_lp/inputs/input018.cbi",
+          "sinks": 4,
+          "baseline_score": 10,
+          "omitted_score": 14,
+          "seeds": [
+            7
+          ]
+        },
+        {
+          "input": "benchmarks/sa_lp/inputs/input019.cbi",
+          "sinks": 7,
+          "baseline_score": 7,
+          "omitted_score": 11,
+          "seeds": [
+            7
+          ]
+        },
+        {
+          "input": "benchmarks/sa_lp/inputs/input020.cbi",
+          "sinks": 4,
+          "baseline_score": 28,
+          "omitted_score": 28,
+          "seeds": [
+            7
+          ]
+        },
+        {
+          "input": "benchmarks/sa_lp/inputs/input021.cbi",
+          "sinks": 21,
+          "baseline_score": 17,
+          "omitted_score": 21,
+          "seeds": [
+            7
+          ]
+        },
+        {
+          "input": "benchmarks/sa_lp/inputs/input022.cbi",
+          "sinks": 13,
+          "baseline_score": 59,
+          "omitted_score": 75,
+          "seeds": [
+            7
+          ]
+        },
+        {
+          "input": "benchmarks/sa_lp/inputs/input023.cbi",
+          "sinks": 5,
+          "baseline_score": 107,
+          "omitted_score": 107,
+          "seeds": [
+            7
+          ]
+        },
+        {
+          "input": "benchmarks/sa_lp/inputs/input024.cbi",
+          "sinks": 18,
+          "baseline_score": 64,
+          "omitted_score": 71,
+          "seeds": [
+            7
+          ]
+        },
+        {
+          "input": "benchmarks/sa_lp/inputs/input025.cbi",
+          "sinks": 15,
+          "baseline_score": 26,
+          "omitted_score": 38,
+          "seeds": [
+            7
+          ]
+        },
+        {
+          "input": "benchmarks/sa_lp/inputs/input026.cbi",
+          "sinks": 17,
+          "baseline_score": 127,
+          "omitted_score": 131,
+          "seeds": [
+            7
+          ]
+        },
+        {
+          "input": "benchmarks/sa_lp/inputs/input027.cbi",
+          "sinks": 7,
+          "baseline_score": 17,
+          "omitted_score": 17,
+          "seeds": [
+            7
+          ]
+        },
+        {
+          "input": "benchmarks/sa_lp/inputs/input028.cbi",
+          "sinks": 15,
+          "baseline_score": 302,
+          "omitted_score": 304,
+          "seeds": [
+            7
+          ]
+        },
+        {
+          "input": "benchmarks/sa_lp/inputs/input029.cbi",
+          "sinks": 15,
+          "baseline_score": 61,
+          "omitted_score": 61,
+          "seeds": [
+            7
+          ]
+        },
+        {
+          "input": "example/input.cbi",
+          "sinks": 5,
+          "baseline_score": 41,
+          "omitted_score": 41,
+          "seeds": [
+            7
+          ]
+        },
+        {
+          "input": "issues/closed/001 單輸出buffer庫誤判SRC可分支的合法解/input001.cbi",
+          "sinks": 2,
+          "baseline_score": 2,
+          "omitted_score": 2,
+          "seeds": [
+            7
+          ]
+        },
+        {
+          "input": "issues/closed/001 單輸出buffer庫誤判SRC可分支的合法解/input002.cbi",
+          "sinks": 2,
+          "baseline_score": 102,
+          "omitted_score": 301,
+          "seeds": [
+            7
+          ]
+        },
+        {
+          "input": "issues/closed/002 邊界同軸連線缺少向內繞行的relay/input001.cbi",
+          "sinks": 1,
+          "baseline_score": 3,
+          "omitted_score": 3,
+          "seeds": [
+            7
+          ]
+        },
+        {
+          "input": "issues/closed/003 固定二元樹漏掉低成本多輸出合併/input001.cbi",
+          "sinks": 4,
+          "baseline_score": 10,
+          "omitted_score": 10,
+          "seeds": [
+            7
+          ]
+        },
+        {
+          "input": "issues/closed/004 hub選點漏算SRC接入relay成本/input001.cbi",
+          "sinks": 3,
+          "baseline_score": 16,
+          "omitted_score": 16,
+          "seeds": [
+            7
+          ]
+        },
+        {
+          "input": "issues/closed/005 relay固定最大線長型別造成高成本/input001.cbi",
+          "sinks": 1,
+          "baseline_score": 6,
+          "omitted_score": 6,
+          "seeds": [
+            7
+          ]
+        },
+        {
+          "input": "issues/closed/006 relay間距政策缺少中段混合型別優化/input001.cbi",
+          "sinks": 1,
+          "baseline_score": 13,
+          "omitted_score": 13,
+          "seeds": [
+            7
+          ]
+        },
+        {
+          "input": "issues/closed/007 分支buffer固定最大線長漏掉廉價分支加relay/input001.cbi",
+          "sinks": 2,
+          "baseline_score": 4,
+          "omitted_score": 4,
+          "seeds": [
+            7
+          ]
+        },
+        {
+          "input": "issues/closed/008 局部子樹仍固定二元分支漏掉多輸出合併/input001.cbi",
+          "sinks": 4,
+          "baseline_score": 20,
+          "omitted_score": 30,
+          "seeds": [
+            7
+          ]
+        },
+        {
+          "input": "issues/closed/009 建構同分候選提前丟棄錯失局部改善/input001.cbi",
+          "sinks": 8,
+          "baseline_score": 17,
+          "omitted_score": 17,
+          "seeds": [
+            7
+          ]
+        },
+        {
+          "input": "issues/closed/010 分支總線長平均分配漏掉較低relay成本/input001.cbi",
+          "sinks": 2,
+          "baseline_score": 8,
+          "omitted_score": 8,
+          "seeds": [
+            7
+          ]
+        },
+        {
+          "input": "issues/closed/011 固定拓樸缺少buffer位置微調錯失較低skew/input001.cbi",
+          "sinks": 4,
+          "baseline_score": 31,
+          "omitted_score": 41,
+          "seeds": [
+            7
+          ]
+        },
+        {
+          "input": "issues/closed/012 缺少跨分支sink交換造成可避免的skew/input001.cbi",
+          "sinks": 5,
+          "baseline_score": 16,
+          "omitted_score": 88,
+          "seeds": [
+            7
+          ]
+        },
+        {
+          "input": "issues/closed/013 後續位置與連線改善後未重試buffer合併/input001.cbi",
+          "sinks": 6,
+          "baseline_score": 17,
+          "omitted_score": 31,
+          "seeds": [
+            7
+          ]
+        },
+        {
+          "input": "issues/closed/014 缺少單一sink改接以使用分支剩餘容量/input001.cbi",
+          "sinks": 5,
+          "baseline_score": 16,
+          "omitted_score": 16,
+          "seeds": [
+            7
+          ]
+        },
+        {
+          "input": "issues/closed/015 短路徑缺少延遲relay插入而錯失零skew/input001.cbi",
+          "sinks": 2,
+          "baseline_score": 1,
+          "omitted_score": 200,
+          "seeds": [
+            7
+          ]
+        },
+        {
+          "input": "issues/closed/015 短路徑缺少延遲relay插入而錯失零skew/input002.cbi",
+          "sinks": 2,
+          "baseline_score": 101,
+          "omitted_score": 300,
+          "seeds": [
+            7
+          ]
+        },
+        {
+          "input": "issues/closed/016 局部建構候選無回退漏掉小型合法樹/input001.cbi",
+          "sinks": 4,
+          "baseline_score": 102,
+          "omitted_score": 102,
+          "seeds": [
+            7
+          ]
+        },
+        {
+          "input": "issues/closed/017 完整refinement前依初始Score淘汰可改善候選/input001.cbi",
+          "sinks": 3,
+          "baseline_score": 27,
+          "omitted_score": 26,
+          "seeds": [
+            7
+          ]
+        },
+        {
+          "input": "issues/closed/018 大樹跳過多輸出改善保留三倍buffer成本/input001.cbi",
+          "sinks": 1024,
+          "baseline_score": 341,
+          "omitted_score": 341,
+          "seeds": [
+            7
+          ]
+        },
+        {
+          "input": "issues/closed/019 子樹與sink交換可降低buffer型別成本/repro/input001.cbi",
+          "sinks": 8,
+          "baseline_score": 105,
+          "omitted_score": 112,
+          "seeds": [
+            7
+          ]
+        },
+        {
+          "input": "issues/closed/020 密集晶片二元建構漏掉合法三輸出forest/repro/input001.cbi",
+          "sinks": 6,
+          "baseline_score": 102,
+          "omitted_score": 102,
+          "seeds": [
+            7
+          ]
+        },
+        {
+          "input": "issues/closed/020 密集晶片二元建構漏掉合法三輸出forest/repro/input002.cbi",
+          "sinks": 9,
+          "baseline_score": 203,
+          "omitted_score": 203,
+          "seeds": [
+            7
+          ]
+        },
+        {
+          "input": "issues/closed/021 固定三根merge漏掉合法四五輸出forest/repro/input001.cbi",
+          "sinks": 8,
+          "baseline_score": 102,
+          "omitted_score": 102,
+          "seeds": [
+            7
+          ]
+        },
+        {
+          "input": "issues/closed/021 固定三根merge漏掉合法四五輸出forest/repro/input002.cbi",
+          "sinks": 10,
+          "baseline_score": 102,
+          "omitted_score": 102,
+          "seeds": [
+            7
+          ]
+        },
+        {
+          "input": "issues/closed/021 固定三根merge漏掉合法四五輸出forest/repro/input003.cbi",
+          "sinks": 12,
+          "baseline_score": 203,
+          "omitted_score": 203,
+          "seeds": [
+            7
+          ]
+        },
+        {
+          "input": "issues/closed/022 最終結果漏掉既有delay改善/repro/input001.cbi",
+          "sinks": 10,
+          "baseline_score": 34,
+          "omitted_score": 49,
+          "seeds": [
+            7
+          ]
+        },
+        {
+          "input": "issues/closed/023 密集晶片多輸出建構漏掉十六sink合法forest/repro/input001.cbi",
+          "sinks": 16,
+          "baseline_score": 6,
+          "omitted_score": 10,
+          "seeds": [
+            7
+          ]
+        },
+        {
+          "input": "issues/closed/023 密集晶片多輸出建構漏掉十六sink合法forest/repro/input002.cbi",
+          "sinks": 21,
+          "baseline_score": 8,
+          "omitted_score": 9,
+          "seeds": [
+            7
+          ]
+        },
+        {
+          "input": "issues/closed/024 hub取點漏掉SRC可達區域與sink平衡座標交點/repro/input001.cbi",
+          "sinks": 2,
+          "baseline_score": 38,
+          "omitted_score": 38,
+          "seeds": [
+            7
+          ]
+        },
+        {
+          "input": "issues/closed/024 hub取點漏掉SRC可達區域與sink平衡座標交點/repro/input002.cbi",
+          "sinks": 2,
+          "baseline_score": 38,
+          "omitted_score": 38,
+          "seeds": [
+            7
+          ]
+        },
+        {
+          "input": "issues/closed/025 sink分組與buffer位置需同步改動才能降低skew/repro/input001.cbi",
+          "sinks": 3,
+          "baseline_score": 9,
+          "omitted_score": 9,
+          "seeds": [
+            7
+          ]
+        },
+        {
+          "input": "issues/closed/025 sink分組與buffer位置需同步改動才能降低skew/repro/input002.cbi",
+          "sinks": 3,
+          "baseline_score": 9,
+          "omitted_score": 9,
+          "seeds": [
+            7
+          ]
+        },
+        {
+          "input": "issues/closed/026 分層ring布局保留八十二至一百二十九buffer成本/repro/input001.cbi",
+          "sinks": 128,
+          "baseline_score": 5,
+          "omitted_score": 5,
+          "seeds": [
+            7
+          ]
+        },
+        {
+          "input": "issues/closed/026 分層ring布局保留八十二至一百二十九buffer成本/repro/input002.cbi",
+          "sinks": 256,
+          "baseline_score": 5,
+          "omitted_score": 5,
+          "seeds": [
+            7
+          ]
+        },
+        {
+          "input": "issues/closed/027 bypass需同步重定位子buffer才能保持零skew/repro/input001.cbi",
+          "sinks": 4,
+          "baseline_score": 6,
+          "omitted_score": 6,
+          "seeds": [
+            7
+          ]
+        },
+        {
+          "input": "issues/closed/027 bypass需同步重定位子buffer才能保持零skew/repro/input002.cbi",
+          "sinks": 4,
+          "baseline_score": 6,
+          "omitted_score": 6,
+          "seeds": [
+            7
+          ]
+        },
+        {
+          "input": "issues/closed/028 巨大晶片尺寸使近原點可表示合法解遭拒/repro/input001.cbi",
+          "sinks": 13,
+          "baseline_score": 1,
+          "omitted_score": 1,
+          "seeds": [
+            7
+          ]
+        },
+        {
+          "input": "issues/closed/028 巨大晶片尺寸使近原點可表示合法解遭拒/repro/input002.cbi",
+          "sinks": 13,
+          "baseline_score": 1,
+          "omitted_score": 1,
+          "seeds": [
+            7
+          ]
+        },
+        {
+          "input": "issues/closed/028 巨大晶片尺寸使近原點可表示合法解遭拒/repro/input003.cbi",
+          "sinks": 13,
+          "baseline_score": 1,
+          "omitted_score": 1,
+          "seeds": [
+            7
+          ]
+        },
+        {
+          "input": "issues/closed/028 巨大晶片尺寸使近原點可表示合法解遭拒/repro/input004.cbi",
+          "sinks": 13,
+          "baseline_score": 1,
+          "omitted_score": 1,
+          "seeds": [
+            7
+          ]
+        },
+        {
+          "input": "issues/closed/029 長距離混合relay未利用length公因數縮小DP/repro/input001.cbi",
+          "sinks": 1,
+          "baseline_score": 18,
+          "omitted_score": 18,
+          "seeds": [
+            7
+          ]
+        },
+        {
+          "input": "issues/closed/029 長距離混合relay未利用length公因數縮小DP/repro/input002.cbi",
+          "sinks": 1,
+          "baseline_score": 18,
+          "omitted_score": 18,
+          "seeds": [
+            7
+          ]
+        },
+        {
+          "input": "issues/closed/029 長距離混合relay未利用length公因數縮小DP/repro/input003.cbi",
+          "sinks": 1,
+          "baseline_score": 18,
+          "omitted_score": 18,
+          "seeds": [
+            7
+          ]
+        },
+        {
+          "input": "issues/closed/030 密集forest僅SRC直連buffer漏掉階層合法樹/repro/input001.cbi",
+          "sinks": 21,
+          "baseline_score": 9,
+          "omitted_score": 10,
+          "seeds": [
+            7
+          ]
+        },
+        {
+          "input": "issues/closed/030 密集forest僅SRC直連buffer漏掉階層合法樹/repro/input002.cbi",
+          "sinks": 21,
+          "baseline_score": 8,
+          "omitted_score": 10,
+          "seeds": [
+            7
+          ]
+        },
+        {
+          "input": "issues/closed/031 partial_hub預算偏向低位mask使sink反序改變最優結果/repro/input001.cbi",
+          "sinks": 8,
+          "baseline_score": 9,
+          "omitted_score": 9,
+          "seeds": [
+            7
+          ]
+        },
+        {
+          "input": "issues/closed/031 partial_hub預算偏向低位mask使sink反序改變最優結果/repro/input002.cbi",
+          "sinks": 8,
+          "baseline_score": 9,
+          "omitted_score": 9,
+          "seeds": [
+            7
+          ]
+        }
+      ]
+    },
+    {
+      "component": "空位受限建樹",
+      "phase": "legacy",
+      "omission": "no_dense",
+      "inputs": 79,
+      "sink_range": [
+        1,
+        1024
+      ],
+      "counts": {
+        "equal": 75,
+        "worse": 1,
+        "failed": 3
+      },
+      "cases": [
+        {
+          "input": "benchmarks/sa_lp/inputs/input000.cbi",
+          "sinks": 8,
+          "baseline_score": 26,
+          "omitted_score": 26,
+          "seeds": [
+            7
+          ]
+        },
+        {
+          "input": "benchmarks/sa_lp/inputs/input001.cbi",
+          "sinks": 3,
+          "baseline_score": 107,
+          "omitted_score": 107,
+          "seeds": [
+            7
+          ]
+        },
+        {
+          "input": "benchmarks/sa_lp/inputs/input002.cbi",
+          "sinks": 17,
+          "baseline_score": 20,
+          "omitted_score": 20,
+          "seeds": [
+            7
+          ]
+        },
+        {
+          "input": "benchmarks/sa_lp/inputs/input003.cbi",
+          "sinks": 13,
+          "baseline_score": 38,
+          "omitted_score": 38,
+          "seeds": [
+            7
+          ]
+        },
+        {
+          "input": "benchmarks/sa_lp/inputs/input004.cbi",
+          "sinks": 4,
+          "baseline_score": 11,
+          "omitted_score": 11,
+          "seeds": [
+            7
+          ]
+        },
+        {
+          "input": "benchmarks/sa_lp/inputs/input005.cbi",
+          "sinks": 11,
+          "baseline_score": 45,
+          "omitted_score": 45,
+          "seeds": [
+            7
+          ]
+        },
+        {
+          "input": "benchmarks/sa_lp/inputs/input006.cbi",
+          "sinks": 4,
+          "baseline_score": 112,
+          "omitted_score": 112,
+          "seeds": [
+            7
+          ]
+        },
+        {
+          "input": "benchmarks/sa_lp/inputs/input007.cbi",
+          "sinks": 21,
+          "baseline_score": 77,
+          "omitted_score": 77,
+          "seeds": [
+            7
+          ]
+        },
+        {
+          "input": "benchmarks/sa_lp/inputs/input008.cbi",
+          "sinks": 15,
+          "baseline_score": 29,
+          "omitted_score": 29,
+          "seeds": [
+            7
+          ]
+        },
+        {
+          "input": "benchmarks/sa_lp/inputs/input009.cbi",
+          "sinks": 4,
+          "baseline_score": 20,
+          "omitted_score": 20,
+          "seeds": [
+            7
+          ]
+        },
+        {
+          "input": "benchmarks/sa_lp/inputs/input010.cbi",
+          "sinks": 19,
+          "baseline_score": 360,
+          "omitted_score": 360,
+          "seeds": [
+            7
+          ]
+        },
+        {
+          "input": "benchmarks/sa_lp/inputs/input011.cbi",
+          "sinks": 12,
+          "baseline_score": 25,
+          "omitted_score": 25,
+          "seeds": [
+            7
+          ]
+        },
+        {
+          "input": "benchmarks/sa_lp/inputs/input012.cbi",
+          "sinks": 3,
+          "baseline_score": 107,
+          "omitted_score": 107,
+          "seeds": [
+            7
+          ]
+        },
+        {
+          "input": "benchmarks/sa_lp/inputs/input013.cbi",
+          "sinks": 13,
+          "baseline_score": 170,
+          "omitted_score": 170,
+          "seeds": [
+            7
+          ]
+        },
+        {
+          "input": "benchmarks/sa_lp/inputs/input014.cbi",
+          "sinks": 14,
+          "baseline_score": 44,
+          "omitted_score": 44,
+          "seeds": [
+            7
+          ]
+        },
+        {
+          "input": "benchmarks/sa_lp/inputs/input015.cbi",
+          "sinks": 15,
+          "baseline_score": 46,
+          "omitted_score": 46,
+          "seeds": [
+            7
+          ]
+        },
+        {
+          "input": "benchmarks/sa_lp/inputs/input016.cbi",
+          "sinks": 6,
+          "baseline_score": 133,
+          "omitted_score": 133,
+          "seeds": [
+            7
+          ]
+        },
+        {
+          "input": "benchmarks/sa_lp/inputs/input017.cbi",
+          "sinks": 11,
+          "baseline_score": 39,
+          "omitted_score": 39,
+          "seeds": [
+            7
+          ]
+        },
+        {
+          "input": "benchmarks/sa_lp/inputs/input018.cbi",
+          "sinks": 4,
+          "baseline_score": 10,
+          "omitted_score": 10,
+          "seeds": [
+            7
+          ]
+        },
+        {
+          "input": "benchmarks/sa_lp/inputs/input019.cbi",
+          "sinks": 7,
+          "baseline_score": 7,
+          "omitted_score": 7,
+          "seeds": [
+            7
+          ]
+        },
+        {
+          "input": "benchmarks/sa_lp/inputs/input020.cbi",
+          "sinks": 4,
+          "baseline_score": 28,
+          "omitted_score": 28,
+          "seeds": [
+            7
+          ]
+        },
+        {
+          "input": "benchmarks/sa_lp/inputs/input021.cbi",
+          "sinks": 21,
+          "baseline_score": 17,
+          "omitted_score": 17,
+          "seeds": [
+            7
+          ]
+        },
+        {
+          "input": "benchmarks/sa_lp/inputs/input022.cbi",
+          "sinks": 13,
+          "baseline_score": 59,
+          "omitted_score": 59,
+          "seeds": [
+            7
+          ]
+        },
+        {
+          "input": "benchmarks/sa_lp/inputs/input023.cbi",
+          "sinks": 5,
+          "baseline_score": 107,
+          "omitted_score": 107,
+          "seeds": [
+            7
+          ]
+        },
+        {
+          "input": "benchmarks/sa_lp/inputs/input024.cbi",
+          "sinks": 18,
+          "baseline_score": 64,
+          "omitted_score": 64,
+          "seeds": [
+            7
+          ]
+        },
+        {
+          "input": "benchmarks/sa_lp/inputs/input025.cbi",
+          "sinks": 15,
+          "baseline_score": 26,
+          "omitted_score": 26,
+          "seeds": [
+            7
+          ]
+        },
+        {
+          "input": "benchmarks/sa_lp/inputs/input026.cbi",
+          "sinks": 17,
+          "baseline_score": 127,
+          "omitted_score": 127,
+          "seeds": [
+            7
+          ]
+        },
+        {
+          "input": "benchmarks/sa_lp/inputs/input027.cbi",
+          "sinks": 7,
+          "baseline_score": 17,
+          "omitted_score": 17,
+          "seeds": [
+            7
+          ]
+        },
+        {
+          "input": "benchmarks/sa_lp/inputs/input028.cbi",
+          "sinks": 15,
+          "baseline_score": 302,
+          "omitted_score": 302,
+          "seeds": [
+            7
+          ]
+        },
+        {
+          "input": "benchmarks/sa_lp/inputs/input029.cbi",
+          "sinks": 15,
+          "baseline_score": 61,
+          "omitted_score": 61,
+          "seeds": [
+            7
+          ]
+        },
+        {
+          "input": "example/input.cbi",
+          "sinks": 5,
+          "baseline_score": 41,
+          "omitted_score": 41,
+          "seeds": [
+            7
+          ]
+        },
+        {
+          "input": "issues/closed/001 單輸出buffer庫誤判SRC可分支的合法解/input001.cbi",
+          "sinks": 2,
+          "baseline_score": 2,
+          "omitted_score": 2,
+          "seeds": [
+            7
+          ]
+        },
+        {
+          "input": "issues/closed/001 單輸出buffer庫誤判SRC可分支的合法解/input002.cbi",
+          "sinks": 2,
+          "baseline_score": 102,
+          "omitted_score": 102,
+          "seeds": [
+            7
+          ]
+        },
+        {
+          "input": "issues/closed/002 邊界同軸連線缺少向內繞行的relay/input001.cbi",
+          "sinks": 1,
+          "baseline_score": 3,
+          "omitted_score": 3,
+          "seeds": [
+            7
+          ]
+        },
+        {
+          "input": "issues/closed/003 固定二元樹漏掉低成本多輸出合併/input001.cbi",
+          "sinks": 4,
+          "baseline_score": 10,
+          "omitted_score": 10,
+          "seeds": [
+            7
+          ]
+        },
+        {
+          "input": "issues/closed/004 hub選點漏算SRC接入relay成本/input001.cbi",
+          "sinks": 3,
+          "baseline_score": 16,
+          "omitted_score": 16,
+          "seeds": [
+            7
+          ]
+        },
+        {
+          "input": "issues/closed/005 relay固定最大線長型別造成高成本/input001.cbi",
+          "sinks": 1,
+          "baseline_score": 6,
+          "omitted_score": 6,
+          "seeds": [
+            7
+          ]
+        },
+        {
+          "input": "issues/closed/006 relay間距政策缺少中段混合型別優化/input001.cbi",
+          "sinks": 1,
+          "baseline_score": 13,
+          "omitted_score": 13,
+          "seeds": [
+            7
+          ]
+        },
+        {
+          "input": "issues/closed/007 分支buffer固定最大線長漏掉廉價分支加relay/input001.cbi",
+          "sinks": 2,
+          "baseline_score": 4,
+          "omitted_score": 4,
+          "seeds": [
+            7
+          ]
+        },
+        {
+          "input": "issues/closed/008 局部子樹仍固定二元分支漏掉多輸出合併/input001.cbi",
+          "sinks": 4,
+          "baseline_score": 20,
+          "omitted_score": 20,
+          "seeds": [
+            7
+          ]
+        },
+        {
+          "input": "issues/closed/009 建構同分候選提前丟棄錯失局部改善/input001.cbi",
+          "sinks": 8,
+          "baseline_score": 17,
+          "omitted_score": 17,
+          "seeds": [
+            7
+          ]
+        },
+        {
+          "input": "issues/closed/010 分支總線長平均分配漏掉較低relay成本/input001.cbi",
+          "sinks": 2,
+          "baseline_score": 8,
+          "omitted_score": 8,
+          "seeds": [
+            7
+          ]
+        },
+        {
+          "input": "issues/closed/011 固定拓樸缺少buffer位置微調錯失較低skew/input001.cbi",
+          "sinks": 4,
+          "baseline_score": 31,
+          "omitted_score": 31,
+          "seeds": [
+            7
+          ]
+        },
+        {
+          "input": "issues/closed/012 缺少跨分支sink交換造成可避免的skew/input001.cbi",
+          "sinks": 5,
+          "baseline_score": 16,
+          "omitted_score": 16,
+          "seeds": [
+            7
+          ]
+        },
+        {
+          "input": "issues/closed/013 後續位置與連線改善後未重試buffer合併/input001.cbi",
+          "sinks": 6,
+          "baseline_score": 17,
+          "omitted_score": 17,
+          "seeds": [
+            7
+          ]
+        },
+        {
+          "input": "issues/closed/014 缺少單一sink改接以使用分支剩餘容量/input001.cbi",
+          "sinks": 5,
+          "baseline_score": 16,
+          "omitted_score": 16,
+          "seeds": [
+            7
+          ]
+        },
+        {
+          "input": "issues/closed/015 短路徑缺少延遲relay插入而錯失零skew/input001.cbi",
+          "sinks": 2,
+          "baseline_score": 1,
+          "omitted_score": 1,
+          "seeds": [
+            7
+          ]
+        },
+        {
+          "input": "issues/closed/015 短路徑缺少延遲relay插入而錯失零skew/input002.cbi",
+          "sinks": 2,
+          "baseline_score": 101,
+          "omitted_score": 101,
+          "seeds": [
+            7
+          ]
+        },
+        {
+          "input": "issues/closed/016 局部建構候選無回退漏掉小型合法樹/input001.cbi",
+          "sinks": 4,
+          "baseline_score": 102,
+          "omitted_score": 102,
+          "seeds": [
+            7
+          ]
+        },
+        {
+          "input": "issues/closed/017 完整refinement前依初始Score淘汰可改善候選/input001.cbi",
+          "sinks": 3,
+          "baseline_score": 27,
+          "omitted_score": 27,
+          "seeds": [
+            7
+          ]
+        },
+        {
+          "input": "issues/closed/018 大樹跳過多輸出改善保留三倍buffer成本/input001.cbi",
+          "sinks": 1024,
+          "baseline_score": 341,
+          "omitted_score": 341,
+          "seeds": [
+            7
+          ]
+        },
+        {
+          "input": "issues/closed/019 子樹與sink交換可降低buffer型別成本/repro/input001.cbi",
+          "sinks": 8,
+          "baseline_score": 105,
+          "omitted_score": 105,
+          "seeds": [
+            7
+          ]
+        },
+        {
+          "input": "issues/closed/020 密集晶片二元建構漏掉合法三輸出forest/repro/input001.cbi",
+          "sinks": 6,
+          "baseline_score": 102,
+          "omitted_score": 102,
+          "seeds": [
+            7
+          ]
+        },
+        {
+          "input": "issues/closed/020 密集晶片二元建構漏掉合法三輸出forest/repro/input002.cbi",
+          "sinks": 9,
+          "baseline_score": 203,
+          "omitted_score": 203,
+          "seeds": [
+            7
+          ]
+        },
+        {
+          "input": "issues/closed/021 固定三根merge漏掉合法四五輸出forest/repro/input001.cbi",
+          "sinks": 8,
+          "baseline_score": 102,
+          "omitted_score": 102,
+          "seeds": [
+            7
+          ]
+        },
+        {
+          "input": "issues/closed/021 固定三根merge漏掉合法四五輸出forest/repro/input002.cbi",
+          "sinks": 10,
+          "baseline_score": 102,
+          "omitted_score": 102,
+          "seeds": [
+            7
+          ]
+        },
+        {
+          "input": "issues/closed/021 固定三根merge漏掉合法四五輸出forest/repro/input003.cbi",
+          "sinks": 12,
+          "baseline_score": 203,
+          "omitted_score": 203,
+          "seeds": [
+            7
+          ]
+        },
+        {
+          "input": "issues/closed/022 最終結果漏掉既有delay改善/repro/input001.cbi",
+          "sinks": 10,
+          "baseline_score": 34,
+          "omitted_score": 34,
+          "seeds": [
+            7
+          ]
+        },
+        {
+          "input": "issues/closed/023 密集晶片多輸出建構漏掉十六sink合法forest/repro/input001.cbi",
+          "sinks": 16,
+          "baseline_score": 6,
+          "omitted_score": 8,
+          "seeds": [
+            7
+          ]
+        },
+        {
+          "input": "issues/closed/023 密集晶片多輸出建構漏掉十六sink合法forest/repro/input002.cbi",
+          "sinks": 21,
+          "baseline_score": null,
+          "omitted_score": null,
+          "seeds": [
+            7
+          ]
+        },
+        {
+          "input": "issues/closed/024 hub取點漏掉SRC可達區域與sink平衡座標交點/repro/input001.cbi",
+          "sinks": 2,
+          "baseline_score": 38,
+          "omitted_score": 38,
+          "seeds": [
+            7
+          ]
+        },
+        {
+          "input": "issues/closed/024 hub取點漏掉SRC可達區域與sink平衡座標交點/repro/input002.cbi",
+          "sinks": 2,
+          "baseline_score": 38,
+          "omitted_score": 38,
+          "seeds": [
+            7
+          ]
+        },
+        {
+          "input": "issues/closed/025 sink分組與buffer位置需同步改動才能降低skew/repro/input001.cbi",
+          "sinks": 3,
+          "baseline_score": 9,
+          "omitted_score": 9,
+          "seeds": [
+            7
+          ]
+        },
+        {
+          "input": "issues/closed/025 sink分組與buffer位置需同步改動才能降低skew/repro/input002.cbi",
+          "sinks": 3,
+          "baseline_score": 9,
+          "omitted_score": 9,
+          "seeds": [
+            7
+          ]
+        },
+        {
+          "input": "issues/closed/026 分層ring布局保留八十二至一百二十九buffer成本/repro/input001.cbi",
+          "sinks": 128,
+          "baseline_score": 5,
+          "omitted_score": 5,
+          "seeds": [
+            7
+          ]
+        },
+        {
+          "input": "issues/closed/026 分層ring布局保留八十二至一百二十九buffer成本/repro/input002.cbi",
+          "sinks": 256,
+          "baseline_score": 5,
+          "omitted_score": 5,
+          "seeds": [
+            7
+          ]
+        },
+        {
+          "input": "issues/closed/027 bypass需同步重定位子buffer才能保持零skew/repro/input001.cbi",
+          "sinks": 4,
+          "baseline_score": 6,
+          "omitted_score": 6,
+          "seeds": [
+            7
+          ]
+        },
+        {
+          "input": "issues/closed/027 bypass需同步重定位子buffer才能保持零skew/repro/input002.cbi",
+          "sinks": 4,
+          "baseline_score": 6,
+          "omitted_score": 6,
+          "seeds": [
+            7
+          ]
+        },
+        {
+          "input": "issues/closed/028 巨大晶片尺寸使近原點可表示合法解遭拒/repro/input001.cbi",
+          "sinks": 13,
+          "baseline_score": 1,
+          "omitted_score": 1,
+          "seeds": [
+            7
+          ]
+        },
+        {
+          "input": "issues/closed/028 巨大晶片尺寸使近原點可表示合法解遭拒/repro/input002.cbi",
+          "sinks": 13,
+          "baseline_score": 1,
+          "omitted_score": 1,
+          "seeds": [
+            7
+          ]
+        },
+        {
+          "input": "issues/closed/028 巨大晶片尺寸使近原點可表示合法解遭拒/repro/input003.cbi",
+          "sinks": 13,
+          "baseline_score": 1,
+          "omitted_score": 1,
+          "seeds": [
+            7
+          ]
+        },
+        {
+          "input": "issues/closed/028 巨大晶片尺寸使近原點可表示合法解遭拒/repro/input004.cbi",
+          "sinks": 13,
+          "baseline_score": 1,
+          "omitted_score": 1,
+          "seeds": [
+            7
+          ]
+        },
+        {
+          "input": "issues/closed/029 長距離混合relay未利用length公因數縮小DP/repro/input001.cbi",
+          "sinks": 1,
+          "baseline_score": 18,
+          "omitted_score": 18,
+          "seeds": [
+            7
+          ]
+        },
+        {
+          "input": "issues/closed/029 長距離混合relay未利用length公因數縮小DP/repro/input002.cbi",
+          "sinks": 1,
+          "baseline_score": 18,
+          "omitted_score": 18,
+          "seeds": [
+            7
+          ]
+        },
+        {
+          "input": "issues/closed/029 長距離混合relay未利用length公因數縮小DP/repro/input003.cbi",
+          "sinks": 1,
+          "baseline_score": 18,
+          "omitted_score": 18,
+          "seeds": [
+            7
+          ]
+        },
+        {
+          "input": "issues/closed/030 密集forest僅SRC直連buffer漏掉階層合法樹/repro/input001.cbi",
+          "sinks": 21,
+          "baseline_score": null,
+          "omitted_score": null,
+          "seeds": [
+            7
+          ]
+        },
+        {
+          "input": "issues/closed/030 密集forest僅SRC直連buffer漏掉階層合法樹/repro/input002.cbi",
+          "sinks": 21,
+          "baseline_score": null,
+          "omitted_score": null,
+          "seeds": [
+            7
+          ]
+        },
+        {
+          "input": "issues/closed/031 partial_hub預算偏向低位mask使sink反序改變最優結果/repro/input001.cbi",
+          "sinks": 8,
+          "baseline_score": 9,
+          "omitted_score": 9,
+          "seeds": [
+            7
+          ]
+        },
+        {
+          "input": "issues/closed/031 partial_hub預算偏向低位mask使sink反序改變最優結果/repro/input002.cbi",
+          "sinks": 8,
+          "baseline_score": 9,
+          "omitted_score": 9,
+          "seeds": [
+            7
+          ]
+        }
+      ]
+    },
+    {
+      "component": "SA＋LP 階段",
+      "phase": "screen",
+      "omission": "no_sa",
+      "inputs": 44,
+      "sink_range": [
+        1,
+        21
+      ],
+      "counts": {
+        "equal": 37,
+        "worse": 7
+      },
+      "cases": [
+        {
+          "input": "benchmarks/sa_lp/inputs/input000.cbi",
+          "sinks": 8,
+          "baseline_score": 26,
+          "omitted_score": 26,
+          "seeds": [
+            1,
+            7,
+            17
+          ]
+        },
+        {
+          "input": "benchmarks/sa_lp/inputs/input001.cbi",
+          "sinks": 3,
+          "baseline_score": 107,
+          "omitted_score": 107,
+          "seeds": [
+            1,
+            7,
+            17
+          ]
+        },
+        {
+          "input": "benchmarks/sa_lp/inputs/input002.cbi",
+          "sinks": 17,
+          "baseline_score": 20,
+          "omitted_score": 20,
+          "seeds": [
+            1,
+            7,
+            17
+          ]
+        },
+        {
+          "input": "benchmarks/sa_lp/inputs/input003.cbi",
+          "sinks": 13,
+          "baseline_score": 38,
+          "omitted_score": 38,
+          "seeds": [
+            1,
+            7,
+            17
+          ]
+        },
+        {
+          "input": "benchmarks/sa_lp/inputs/input004.cbi",
+          "sinks": 4,
+          "baseline_score": 11,
+          "omitted_score": 11,
+          "seeds": [
+            1,
+            7,
+            17
+          ]
+        },
+        {
+          "input": "benchmarks/sa_lp/inputs/input005.cbi",
+          "sinks": 11,
+          "baseline_score": 45,
+          "omitted_score": 45,
+          "seeds": [
+            1,
+            7,
+            17
+          ]
+        },
+        {
+          "input": "benchmarks/sa_lp/inputs/input006.cbi",
+          "sinks": 4,
+          "baseline_score": 112,
+          "omitted_score": 112,
+          "seeds": [
+            1,
+            7,
+            17
+          ]
+        },
+        {
+          "input": "benchmarks/sa_lp/inputs/input007.cbi",
+          "sinks": 21,
+          "baseline_score": 76,
+          "omitted_score": 77,
+          "seeds": [
+            1,
+            7,
+            17
+          ]
+        },
+        {
+          "input": "benchmarks/sa_lp/inputs/input008.cbi",
+          "sinks": 15,
+          "baseline_score": 27,
+          "omitted_score": 29,
+          "seeds": [
+            1,
+            7,
+            17
+          ]
+        },
+        {
+          "input": "benchmarks/sa_lp/inputs/input009.cbi",
+          "sinks": 4,
+          "baseline_score": 15,
+          "omitted_score": 20,
+          "seeds": [
+            1,
+            7,
+            17
+          ]
+        },
+        {
+          "input": "benchmarks/sa_lp/inputs/input010.cbi",
+          "sinks": 19,
+          "baseline_score": 360,
+          "omitted_score": 360,
+          "seeds": [
+            1,
+            7,
+            17
+          ]
+        },
+        {
+          "input": "benchmarks/sa_lp/inputs/input011.cbi",
+          "sinks": 12,
+          "baseline_score": 25,
+          "omitted_score": 25,
+          "seeds": [
+            1,
+            7,
+            17
+          ]
+        },
+        {
+          "input": "benchmarks/sa_lp/inputs/input012.cbi",
+          "sinks": 3,
+          "baseline_score": 107,
+          "omitted_score": 107,
+          "seeds": [
+            1,
+            7,
+            17
+          ]
+        },
+        {
+          "input": "benchmarks/sa_lp/inputs/input013.cbi",
+          "sinks": 13,
+          "baseline_score": 170,
+          "omitted_score": 170,
+          "seeds": [
+            1,
+            7,
+            17
+          ]
+        },
+        {
+          "input": "benchmarks/sa_lp/inputs/input014.cbi",
+          "sinks": 14,
+          "baseline_score": 44,
+          "omitted_score": 44,
+          "seeds": [
+            1,
+            7,
+            17
+          ]
+        },
+        {
+          "input": "example/input.cbi",
+          "sinks": 5,
+          "baseline_score": 38,
+          "omitted_score": 41,
+          "seeds": [
+            1,
+            7,
+            17
+          ]
+        },
+        {
+          "input": "issues/closed/001 單輸出buffer庫誤判SRC可分支的合法解/input001.cbi",
+          "sinks": 2,
+          "baseline_score": 2,
+          "omitted_score": 2,
+          "seeds": [
+            1,
+            7,
+            17
+          ]
+        },
+        {
+          "input": "issues/closed/001 單輸出buffer庫誤判SRC可分支的合法解/input002.cbi",
+          "sinks": 2,
+          "baseline_score": 102,
+          "omitted_score": 102,
+          "seeds": [
+            1,
+            7,
+            17
+          ]
+        },
+        {
+          "input": "issues/closed/002 邊界同軸連線缺少向內繞行的relay/input001.cbi",
+          "sinks": 1,
+          "baseline_score": 3,
+          "omitted_score": 3,
+          "seeds": [
+            1,
+            7,
+            17
+          ]
+        },
+        {
+          "input": "issues/closed/004 hub選點漏算SRC接入relay成本/input001.cbi",
+          "sinks": 3,
+          "baseline_score": 16,
+          "omitted_score": 16,
+          "seeds": [
+            1,
+            7,
+            17
+          ]
+        },
+        {
+          "input": "issues/closed/005 relay固定最大線長型別造成高成本/input001.cbi",
+          "sinks": 1,
+          "baseline_score": 6,
+          "omitted_score": 6,
+          "seeds": [
+            1,
+            7,
+            17
+          ]
+        },
+        {
+          "input": "issues/closed/006 relay間距政策缺少中段混合型別優化/input001.cbi",
+          "sinks": 1,
+          "baseline_score": 13,
+          "omitted_score": 13,
+          "seeds": [
+            1,
+            7,
+            17
+          ]
+        },
+        {
+          "input": "issues/closed/007 分支buffer固定最大線長漏掉廉價分支加relay/input001.cbi",
+          "sinks": 2,
+          "baseline_score": 4,
+          "omitted_score": 4,
+          "seeds": [
+            1,
+            7,
+            17
+          ]
+        },
+        {
+          "input": "issues/closed/010 分支總線長平均分配漏掉較低relay成本/input001.cbi",
+          "sinks": 2,
+          "baseline_score": 8,
+          "omitted_score": 8,
+          "seeds": [
+            1,
+            7,
+            17
+          ]
+        },
+        {
+          "input": "issues/closed/012 缺少跨分支sink交換造成可避免的skew/input001.cbi",
+          "sinks": 5,
+          "baseline_score": 16,
+          "omitted_score": 16,
+          "seeds": [
+            1,
+            7,
+            17
+          ]
+        },
+        {
+          "input": "issues/closed/014 缺少單一sink改接以使用分支剩餘容量/input001.cbi",
+          "sinks": 5,
+          "baseline_score": 16,
+          "omitted_score": 16,
+          "seeds": [
+            1,
+            7,
+            17
+          ]
+        },
+        {
+          "input": "issues/closed/015 短路徑缺少延遲relay插入而錯失零skew/input001.cbi",
+          "sinks": 2,
+          "baseline_score": 1,
+          "omitted_score": 1,
+          "seeds": [
+            1,
+            7,
+            17
+          ]
+        },
+        {
+          "input": "issues/closed/015 短路徑缺少延遲relay插入而錯失零skew/input002.cbi",
+          "sinks": 2,
+          "baseline_score": 101,
+          "omitted_score": 101,
+          "seeds": [
+            1,
+            7,
+            17
+          ]
+        },
+        {
+          "input": "issues/closed/017 完整refinement前依初始Score淘汰可改善候選/input001.cbi",
+          "sinks": 3,
+          "baseline_score": 27,
+          "omitted_score": 27,
+          "seeds": [
+            1,
+            7,
+            17
+          ]
+        },
+        {
+          "input": "issues/closed/019 子樹與sink交換可降低buffer型別成本/repro/input001.cbi",
+          "sinks": 8,
+          "baseline_score": 90,
+          "omitted_score": 105,
+          "seeds": [
+            1,
+            7,
+            17
+          ]
+        },
+        {
+          "input": "issues/closed/020 密集晶片二元建構漏掉合法三輸出forest/repro/input002.cbi",
+          "sinks": 9,
+          "baseline_score": 203,
+          "omitted_score": 203,
+          "seeds": [
+            1,
+            7,
+            17
+          ]
+        },
+        {
+          "input": "issues/closed/021 固定三根merge漏掉合法四五輸出forest/repro/input003.cbi",
+          "sinks": 12,
+          "baseline_score": 203,
+          "omitted_score": 203,
+          "seeds": [
+            1,
+            7,
+            17
+          ]
+        },
+        {
+          "input": "issues/closed/022 最終結果漏掉既有delay改善/repro/input001.cbi",
+          "sinks": 10,
+          "baseline_score": 28,
+          "omitted_score": 34,
+          "seeds": [
+            1,
+            7,
+            17
+          ]
+        },
+        {
+          "input": "issues/closed/023 密集晶片多輸出建構漏掉十六sink合法forest/repro/input001.cbi",
+          "sinks": 16,
+          "baseline_score": 6,
+          "omitted_score": 6,
+          "seeds": [
+            1,
+            7,
+            17
+          ]
+        },
+        {
+          "input": "issues/closed/023 密集晶片多輸出建構漏掉十六sink合法forest/repro/input002.cbi",
+          "sinks": 21,
+          "baseline_score": 8,
+          "omitted_score": 8,
+          "seeds": [
+            1,
+            7,
+            17
+          ]
+        },
+        {
+          "input": "issues/closed/024 hub取點漏掉SRC可達區域與sink平衡座標交點/repro/input001.cbi",
+          "sinks": 2,
+          "baseline_score": 38,
+          "omitted_score": 38,
+          "seeds": [
+            1,
+            7,
+            17
+          ]
+        },
+        {
+          "input": "issues/closed/024 hub取點漏掉SRC可達區域與sink平衡座標交點/repro/input002.cbi",
+          "sinks": 2,
+          "baseline_score": 38,
+          "omitted_score": 38,
+          "seeds": [
+            1,
+            7,
+            17
+          ]
+        },
+        {
+          "input": "issues/closed/027 bypass需同步重定位子buffer才能保持零skew/repro/input001.cbi",
+          "sinks": 4,
+          "baseline_score": 6,
+          "omitted_score": 6,
+          "seeds": [
+            1,
+            7,
+            17
+          ]
+        },
+        {
+          "input": "issues/closed/027 bypass需同步重定位子buffer才能保持零skew/repro/input002.cbi",
+          "sinks": 4,
+          "baseline_score": 6,
+          "omitted_score": 6,
+          "seeds": [
+            1,
+            7,
+            17
+          ]
+        },
+        {
+          "input": "issues/closed/029 長距離混合relay未利用length公因數縮小DP/repro/input001.cbi",
+          "sinks": 1,
+          "baseline_score": 18,
+          "omitted_score": 18,
+          "seeds": [
+            1,
+            7,
+            17
+          ]
+        },
+        {
+          "input": "issues/closed/029 長距離混合relay未利用length公因數縮小DP/repro/input002.cbi",
+          "sinks": 1,
+          "baseline_score": 18,
+          "omitted_score": 18,
+          "seeds": [
+            1,
+            7,
+            17
+          ]
+        },
+        {
+          "input": "issues/closed/029 長距離混合relay未利用length公因數縮小DP/repro/input003.cbi",
+          "sinks": 1,
+          "baseline_score": 18,
+          "omitted_score": 18,
+          "seeds": [
+            1,
+            7,
+            17
+          ]
+        },
+        {
+          "input": "issues/closed/030 密集forest僅SRC直連buffer漏掉階層合法樹/repro/input001.cbi",
+          "sinks": 21,
+          "baseline_score": 8,
+          "omitted_score": 9,
+          "seeds": [
+            1,
+            7,
+            17
+          ]
+        },
+        {
+          "input": "issues/closed/030 密集forest僅SRC直連buffer漏掉階層合法樹/repro/input002.cbi",
+          "sinks": 21,
+          "baseline_score": 8,
+          "omitted_score": 8,
+          "seeds": [
+            1,
+            7,
+            17
+          ]
+        }
+      ]
+    },
+    {
+      "component": "LP 座標求解",
+      "phase": "screen",
+      "omission": "no_lp",
+      "inputs": 44,
+      "sink_range": [
+        1,
+        21
+      ],
+      "counts": {
+        "equal": 38,
+        "worse": 6
+      },
+      "cases": [
+        {
+          "input": "benchmarks/sa_lp/inputs/input000.cbi",
+          "sinks": 8,
+          "baseline_score": 26,
+          "omitted_score": 26,
+          "seeds": [
+            1,
+            7,
+            17
+          ]
+        },
+        {
+          "input": "benchmarks/sa_lp/inputs/input001.cbi",
+          "sinks": 3,
+          "baseline_score": 107,
+          "omitted_score": 107,
+          "seeds": [
+            1,
+            7,
+            17
+          ]
+        },
+        {
+          "input": "benchmarks/sa_lp/inputs/input002.cbi",
+          "sinks": 17,
+          "baseline_score": 20,
+          "omitted_score": 20,
+          "seeds": [
+            1,
+            7,
+            17
+          ]
+        },
+        {
+          "input": "benchmarks/sa_lp/inputs/input003.cbi",
+          "sinks": 13,
+          "baseline_score": 38,
+          "omitted_score": 38,
+          "seeds": [
+            1,
+            7,
+            17
+          ]
+        },
+        {
+          "input": "benchmarks/sa_lp/inputs/input004.cbi",
+          "sinks": 4,
+          "baseline_score": 11,
+          "omitted_score": 11,
+          "seeds": [
+            1,
+            7,
+            17
+          ]
+        },
+        {
+          "input": "benchmarks/sa_lp/inputs/input005.cbi",
+          "sinks": 11,
+          "baseline_score": 45,
+          "omitted_score": 45,
+          "seeds": [
+            1,
+            7,
+            17
+          ]
+        },
+        {
+          "input": "benchmarks/sa_lp/inputs/input006.cbi",
+          "sinks": 4,
+          "baseline_score": 112,
+          "omitted_score": 112,
+          "seeds": [
+            1,
+            7,
+            17
+          ]
+        },
+        {
+          "input": "benchmarks/sa_lp/inputs/input007.cbi",
+          "sinks": 21,
+          "baseline_score": 76,
+          "omitted_score": 77,
+          "seeds": [
+            1,
+            7,
+            17
+          ]
+        },
+        {
+          "input": "benchmarks/sa_lp/inputs/input008.cbi",
+          "sinks": 15,
+          "baseline_score": 27,
+          "omitted_score": 29,
+          "seeds": [
+            1,
+            7,
+            17
+          ]
+        },
+        {
+          "input": "benchmarks/sa_lp/inputs/input009.cbi",
+          "sinks": 4,
+          "baseline_score": 15,
+          "omitted_score": 20,
+          "seeds": [
+            1,
+            7,
+            17
+          ]
+        },
+        {
+          "input": "benchmarks/sa_lp/inputs/input010.cbi",
+          "sinks": 19,
+          "baseline_score": 360,
+          "omitted_score": 360,
+          "seeds": [
+            1,
+            7,
+            17
+          ]
+        },
+        {
+          "input": "benchmarks/sa_lp/inputs/input011.cbi",
+          "sinks": 12,
+          "baseline_score": 25,
+          "omitted_score": 25,
+          "seeds": [
+            1,
+            7,
+            17
+          ]
+        },
+        {
+          "input": "benchmarks/sa_lp/inputs/input012.cbi",
+          "sinks": 3,
+          "baseline_score": 107,
+          "omitted_score": 107,
+          "seeds": [
+            1,
+            7,
+            17
+          ]
+        },
+        {
+          "input": "benchmarks/sa_lp/inputs/input013.cbi",
+          "sinks": 13,
+          "baseline_score": 170,
+          "omitted_score": 170,
+          "seeds": [
+            1,
+            7,
+            17
+          ]
+        },
+        {
+          "input": "benchmarks/sa_lp/inputs/input014.cbi",
+          "sinks": 14,
+          "baseline_score": 44,
+          "omitted_score": 44,
+          "seeds": [
+            1,
+            7,
+            17
+          ]
+        },
+        {
+          "input": "example/input.cbi",
+          "sinks": 5,
+          "baseline_score": 38,
+          "omitted_score": 41,
+          "seeds": [
+            1,
+            7,
+            17
+          ]
+        },
+        {
+          "input": "issues/closed/001 單輸出buffer庫誤判SRC可分支的合法解/input001.cbi",
+          "sinks": 2,
+          "baseline_score": 2,
+          "omitted_score": 2,
+          "seeds": [
+            1,
+            7,
+            17
+          ]
+        },
+        {
+          "input": "issues/closed/001 單輸出buffer庫誤判SRC可分支的合法解/input002.cbi",
+          "sinks": 2,
+          "baseline_score": 102,
+          "omitted_score": 102,
+          "seeds": [
+            1,
+            7,
+            17
+          ]
+        },
+        {
+          "input": "issues/closed/002 邊界同軸連線缺少向內繞行的relay/input001.cbi",
+          "sinks": 1,
+          "baseline_score": 3,
+          "omitted_score": 3,
+          "seeds": [
+            1,
+            7,
+            17
+          ]
+        },
+        {
+          "input": "issues/closed/004 hub選點漏算SRC接入relay成本/input001.cbi",
+          "sinks": 3,
+          "baseline_score": 16,
+          "omitted_score": 16,
+          "seeds": [
+            1,
+            7,
+            17
+          ]
+        },
+        {
+          "input": "issues/closed/005 relay固定最大線長型別造成高成本/input001.cbi",
+          "sinks": 1,
+          "baseline_score": 6,
+          "omitted_score": 6,
+          "seeds": [
+            1,
+            7,
+            17
+          ]
+        },
+        {
+          "input": "issues/closed/006 relay間距政策缺少中段混合型別優化/input001.cbi",
+          "sinks": 1,
+          "baseline_score": 13,
+          "omitted_score": 13,
+          "seeds": [
+            1,
+            7,
+            17
+          ]
+        },
+        {
+          "input": "issues/closed/007 分支buffer固定最大線長漏掉廉價分支加relay/input001.cbi",
+          "sinks": 2,
+          "baseline_score": 4,
+          "omitted_score": 4,
+          "seeds": [
+            1,
+            7,
+            17
+          ]
+        },
+        {
+          "input": "issues/closed/010 分支總線長平均分配漏掉較低relay成本/input001.cbi",
+          "sinks": 2,
+          "baseline_score": 8,
+          "omitted_score": 8,
+          "seeds": [
+            1,
+            7,
+            17
+          ]
+        },
+        {
+          "input": "issues/closed/012 缺少跨分支sink交換造成可避免的skew/input001.cbi",
+          "sinks": 5,
+          "baseline_score": 16,
+          "omitted_score": 16,
+          "seeds": [
+            1,
+            7,
+            17
+          ]
+        },
+        {
+          "input": "issues/closed/014 缺少單一sink改接以使用分支剩餘容量/input001.cbi",
+          "sinks": 5,
+          "baseline_score": 16,
+          "omitted_score": 16,
+          "seeds": [
+            1,
+            7,
+            17
+          ]
+        },
+        {
+          "input": "issues/closed/015 短路徑缺少延遲relay插入而錯失零skew/input001.cbi",
+          "sinks": 2,
+          "baseline_score": 1,
+          "omitted_score": 1,
+          "seeds": [
+            1,
+            7,
+            17
+          ]
+        },
+        {
+          "input": "issues/closed/015 短路徑缺少延遲relay插入而錯失零skew/input002.cbi",
+          "sinks": 2,
+          "baseline_score": 101,
+          "omitted_score": 101,
+          "seeds": [
+            1,
+            7,
+            17
+          ]
+        },
+        {
+          "input": "issues/closed/017 完整refinement前依初始Score淘汰可改善候選/input001.cbi",
+          "sinks": 3,
+          "baseline_score": 27,
+          "omitted_score": 27,
+          "seeds": [
+            1,
+            7,
+            17
+          ]
+        },
+        {
+          "input": "issues/closed/019 子樹與sink交換可降低buffer型別成本/repro/input001.cbi",
+          "sinks": 8,
+          "baseline_score": 90,
+          "omitted_score": 105,
+          "seeds": [
+            1,
+            7,
+            17
+          ]
+        },
+        {
+          "input": "issues/closed/020 密集晶片二元建構漏掉合法三輸出forest/repro/input002.cbi",
+          "sinks": 9,
+          "baseline_score": 203,
+          "omitted_score": 203,
+          "seeds": [
+            1,
+            7,
+            17
+          ]
+        },
+        {
+          "input": "issues/closed/021 固定三根merge漏掉合法四五輸出forest/repro/input003.cbi",
+          "sinks": 12,
+          "baseline_score": 203,
+          "omitted_score": 203,
+          "seeds": [
+            1,
+            7,
+            17
+          ]
+        },
+        {
+          "input": "issues/closed/022 最終結果漏掉既有delay改善/repro/input001.cbi",
+          "sinks": 10,
+          "baseline_score": 28,
+          "omitted_score": 34,
+          "seeds": [
+            1,
+            7,
+            17
+          ]
+        },
+        {
+          "input": "issues/closed/023 密集晶片多輸出建構漏掉十六sink合法forest/repro/input001.cbi",
+          "sinks": 16,
+          "baseline_score": 6,
+          "omitted_score": 6,
+          "seeds": [
+            1,
+            7,
+            17
+          ]
+        },
+        {
+          "input": "issues/closed/023 密集晶片多輸出建構漏掉十六sink合法forest/repro/input002.cbi",
+          "sinks": 21,
+          "baseline_score": 8,
+          "omitted_score": 8,
+          "seeds": [
+            1,
+            7,
+            17
+          ]
+        },
+        {
+          "input": "issues/closed/024 hub取點漏掉SRC可達區域與sink平衡座標交點/repro/input001.cbi",
+          "sinks": 2,
+          "baseline_score": 38,
+          "omitted_score": 38,
+          "seeds": [
+            1,
+            7,
+            17
+          ]
+        },
+        {
+          "input": "issues/closed/024 hub取點漏掉SRC可達區域與sink平衡座標交點/repro/input002.cbi",
+          "sinks": 2,
+          "baseline_score": 38,
+          "omitted_score": 38,
+          "seeds": [
+            1,
+            7,
+            17
+          ]
+        },
+        {
+          "input": "issues/closed/027 bypass需同步重定位子buffer才能保持零skew/repro/input001.cbi",
+          "sinks": 4,
+          "baseline_score": 6,
+          "omitted_score": 6,
+          "seeds": [
+            1,
+            7,
+            17
+          ]
+        },
+        {
+          "input": "issues/closed/027 bypass需同步重定位子buffer才能保持零skew/repro/input002.cbi",
+          "sinks": 4,
+          "baseline_score": 6,
+          "omitted_score": 6,
+          "seeds": [
+            1,
+            7,
+            17
+          ]
+        },
+        {
+          "input": "issues/closed/029 長距離混合relay未利用length公因數縮小DP/repro/input001.cbi",
+          "sinks": 1,
+          "baseline_score": 18,
+          "omitted_score": 18,
+          "seeds": [
+            1,
+            7,
+            17
+          ]
+        },
+        {
+          "input": "issues/closed/029 長距離混合relay未利用length公因數縮小DP/repro/input002.cbi",
+          "sinks": 1,
+          "baseline_score": 18,
+          "omitted_score": 18,
+          "seeds": [
+            1,
+            7,
+            17
+          ]
+        },
+        {
+          "input": "issues/closed/029 長距離混合relay未利用length公因數縮小DP/repro/input003.cbi",
+          "sinks": 1,
+          "baseline_score": 18,
+          "omitted_score": 18,
+          "seeds": [
+            1,
+            7,
+            17
+          ]
+        },
+        {
+          "input": "issues/closed/030 密集forest僅SRC直連buffer漏掉階層合法樹/repro/input001.cbi",
+          "sinks": 21,
+          "baseline_score": 8,
+          "omitted_score": 8,
+          "seeds": [
+            1,
+            7,
+            17
+          ]
+        },
+        {
+          "input": "issues/closed/030 密集forest僅SRC直連buffer漏掉階層合法樹/repro/input002.cbi",
+          "sinks": 21,
+          "baseline_score": 8,
+          "omitted_score": 8,
+          "seeds": [
+            1,
+            7,
+            17
+          ]
+        }
+      ]
+    },
+    {
+      "component": "大樹 buffer 合併",
+      "phase": "legacy_holdout",
+      "omission": "no_large_contract",
+      "inputs": 6,
+      "sink_range": [
+        600,
+        1000
+      ],
+      "counts": {
+        "worse": 6
+      },
+      "cases": [
+        {
+          "input": "benchmarks/ablation-holdout/inputs/large000.cbi",
+          "sinks": 600,
+          "baseline_score": 1829,
+          "omitted_score": 1861,
+          "seeds": [
+            7
+          ]
+        },
+        {
+          "input": "benchmarks/ablation-holdout/inputs/large001.cbi",
+          "sinks": 600,
+          "baseline_score": 1076,
+          "omitted_score": 1137,
+          "seeds": [
+            7
+          ]
+        },
+        {
+          "input": "benchmarks/ablation-holdout/inputs/large002.cbi",
+          "sinks": 600,
+          "baseline_score": 2724,
+          "omitted_score": 2751,
+          "seeds": [
+            7
+          ]
+        },
+        {
+          "input": "benchmarks/ablation-holdout/inputs/large003.cbi",
+          "sinks": 1000,
+          "baseline_score": 2068,
+          "omitted_score": 2085,
+          "seeds": [
+            7
+          ]
+        },
+        {
+          "input": "benchmarks/ablation-holdout/inputs/large004.cbi",
+          "sinks": 1000,
+          "baseline_score": 1664,
+          "omitted_score": 1683,
+          "seeds": [
+            7
+          ]
+        },
+        {
+          "input": "benchmarks/ablation-holdout/inputs/large005.cbi",
+          "sinks": 1000,
+          "baseline_score": 1139,
+          "omitted_score": 1331,
+          "seeds": [
+            7
+          ]
+        }
+      ]
+    }
+  ]
+}

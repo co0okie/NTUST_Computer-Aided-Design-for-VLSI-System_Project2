@@ -1,0 +1,5 @@
+{
+"strategy":"hybrid","seed":7,"seconds":25.001770175,"termination":1,"score":105,"skew":3,"lp_calls":1750,"lp_feasible":1644,"lp_seconds":12.389082822,"repair_calls":1644,"repair_feasible":812,"repair_seconds":12.048751209,
+"moves":[{"name":"move_sink","attempts":371,"feasible":89,"accepted":52,"improvements":0,"seconds":3.158140143},{"name":"swap_sinks","attempts":203,"feasible":135,"accepted":70,"improvements":0,"seconds":4.936191649},{"name":"insert_buffer","attempts":214,"feasible":135,"accepted":91,"improvements":0,"seconds":5.936557834},{"name":"delete_buffer","attempts":148,"feasible":101,"accepted":87,"improvements":0,"seconds":1.99181647},{"name":"change_direction","attempts":298,"feasible":202,"accepted":145,"improvements":0,"seconds":6.434688829},{"name":"change_type","attempts":130,"feasible":128,"accepted":120,"improvements":0,"seconds":1.875877275},{"name":"move_subtree","attempts":81,"feasible":21,"accepted":10,"improvements":0,"seconds":0.487156197}],
+"checkpoints":[{"seconds":0.001737223,"score":142,"skew":5},{"seconds":0.171789118,"score":105,"skew":3},{"seconds":0.171796372,"score":105,"skew":3}]
+}

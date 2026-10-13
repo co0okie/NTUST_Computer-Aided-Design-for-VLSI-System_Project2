@@ -1,0 +1,66 @@
+{
+  "limits": {
+    "fanout": 2,
+    "length": 8,
+    ".dimx": 12,
+    ".dimy": 7
+  },
+  "library": {
+    "R": [
+      1,
+      3,
+      1
+    ],
+    "L": [
+      3,
+      8,
+      1
+    ],
+    "H": [
+      3,
+      6,
+      1
+    ]
+  },
+  "weight": 1,
+  "pins": [
+    [
+      5,
+      5
+    ],
+    [
+      1,
+      1
+    ],
+    [
+      2,
+      4
+    ],
+    [
+      3,
+      2
+    ],
+    [
+      8,
+      2
+    ],
+    [
+      9,
+      4
+    ],
+    [
+      10,
+      1
+    ]
+  ],
+  "output": ".buffer 3\nB1 R 4 4\nB2 L 1 4\nB3 H 9 3\n.e\n.level 3\n1 SRC:{B1 B3}\n2 B1:{B2} B3:{S4 S5 S6}\n3 B2:{S1 S2 S3}\n.e\n",
+  "metrics": {
+    "score": 6,
+    "skew": 3,
+    "cost": 3,
+    "buffers": 3
+  },
+  "direct_branch_source_length": 11,
+  "relay_source_length": 8,
+  "independently_legal": true
+}
