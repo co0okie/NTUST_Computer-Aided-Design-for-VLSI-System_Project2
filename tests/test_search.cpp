@@ -1,5 +1,6 @@
 #include "tree.hpp"
 
+#include <algorithm>
 #include <iostream>
 
 namespace {
