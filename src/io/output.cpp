@@ -1,6 +1,6 @@
 #include "io/output.hpp"
-#include <fstream>
 #include <algorithm>
+#include <fstream>
 #include <functional>
 #include <limits>
 #include <numeric>
@@ -10,20 +10,21 @@
 #include <stdexcept>
 #include <tuple>
 
-
 namespace cbi {
-std::string serialize_tree(Problem const& p, Tree const& tree) {
+std::string serialize_tree(Problem const &p, Tree const &tree) {
     std::vector<std::string> names(tree.size());
     std::size_t buffers = 0, sinks = 0;
     names[0] = "SRC";
     for (std::size_t i = 1; i < tree.size(); ++i)
-        names[i] = tree[i].is_sink() ? "S" + std::to_string(++sinks) : "B" + std::to_string(++buffers);
+        names[i] =
+            tree[i].is_sink() ? "S" + std::to_string(++sinks) : "B" + std::to_string(++buffers);
     std::ostringstream output;
     output << ".buffer " << buffers << '\n';
     for (std::size_t i = 1; i < tree.size(); ++i) {
-        if (!tree[i].is_buffer()) continue;
-        output << names[i] << ' ' << p.buffer_library[tree[i].type_index()].name
-               << ' ' << tree[i].position.x << ' ' << tree[i].position.y << '\n';
+        if (!tree[i].is_buffer())
+            continue;
+        output << names[i] << ' ' << p.buffer_library[tree[i].type_index()].name << ' '
+               << tree[i].position.x << ' ' << tree[i].position.y << '\n';
     }
     std::vector<std::size_t> queue{0};
     std::vector<std::size_t> depth(tree.size());
@@ -39,16 +40,19 @@ std::string serialize_tree(Problem const& p, Tree const& tree) {
     output << ".e\n\n.level " << max_depth << '\n';
     std::size_t current_level = 0;
     for (auto u : queue) {
-        if (tree[u].children.empty()) continue;
+        if (tree[u].children.empty())
+            continue;
         auto const level = depth[u] + 1;
         if (level != current_level) {
-            if (current_level != 0) output << '\n';
+            if (current_level != 0)
+                output << '\n';
             output << level;
             current_level = level;
         }
         output << ' ' << names[u] << ":{";
         for (std::size_t k = 0; k < tree[u].children.size(); ++k) {
-            if (k != 0) output << ' ';
+            if (k != 0)
+                output << ' ';
             output << names[tree[u].children[k]];
         }
         output << '}';
@@ -57,8 +61,7 @@ std::string serialize_tree(Problem const& p, Tree const& tree) {
     return output.str();
 }
 
-Expected<WriteSuccess> write_output(std::string const& output_path,
-                                    std::string const& contents) {
+Expected<WriteSuccess> write_output(std::string const &output_path, std::string const &contents) {
     std::ofstream output{output_path};
     if (!output) {
         return Error{"cannot open output file '" + output_path + "'"};
@@ -70,5 +73,4 @@ Expected<WriteSuccess> write_output(std::string const& output_path,
     return WriteSuccess{};
 }
 
-
-}
+} // namespace cbi

@@ -1,6 +1,8 @@
 #pragma once
 
+#include <chrono>
 #include <cstdint>
+#include <optional>
 #include <string>
 #include <variant>
 #include <vector>
@@ -14,11 +16,9 @@ struct Error {
     ErrorKind kind = ErrorKind::input;
 };
 
-template <typename T>
-using Expected = std::variant<T, Error>;
+template <typename T> using Expected = std::variant<T, Error>;
 
-template <typename T>
-bool is_error(Expected<T> const& value) {
+template <typename T> bool is_error(Expected<T> const &value) {
     return std::holds_alternative<Error>(value);
 }
 
@@ -51,6 +51,7 @@ struct Problem {
     std::int64_t skew_weight;
     Position source;
     std::vector<Position> sinks;
+    std::optional<std::chrono::steady_clock::time_point> search_deadline{};
 };
 
 struct Metrics {

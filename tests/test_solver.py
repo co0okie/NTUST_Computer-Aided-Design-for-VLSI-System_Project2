@@ -87,7 +87,7 @@ class SolverTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as folder:
             inp, out = pathlib.Path(folder) / 'input001.cbi', pathlib.Path(folder) / 'output001.cbi'
             inp.write_text(instance(pins, dim, source, library, weight))
-            result = subprocess.run([str(BINARY), str(inp), str(out)], capture_output=True, text=True, timeout=10)
+            result = subprocess.run([str(BINARY), str(inp), str(out), "--strategy", "current"], capture_output=True, text=True, timeout=10)
             self.assertEqual(result.returncode, 0, result.stderr)
             maximum, minimum, cost = check_output(out.read_text(), pins, dim, source, library)
             self.assertEqual(result.stdout.strip(),
@@ -672,7 +672,7 @@ class SolverTests(unittest.TestCase):
             for bad in bad_cases:
                 inp.write_text(bad)
                 out.write_text('preserve existing output')
-                result = subprocess.run([str(BINARY), str(inp), str(out)], capture_output=True, timeout=10)
+                result = subprocess.run([str(BINARY), str(inp), str(out), "--strategy", "current"], capture_output=True, timeout=10)
                 self.assertNotEqual(result.returncode, 0)
                 self.assertEqual(out.read_text(), 'preserve existing output')
 
